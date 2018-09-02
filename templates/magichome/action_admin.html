@@ -1,0 +1,68 @@
+<div>
+
+<style>
+.raz {
+  border-spacing: 12.5em 1.3em; /* border-collapse наследуется, применяется только к table или inline-table элементам с border-collapse: separate; */ 
+}
+.raz,
+.raz td {
+  border: 0px solid red;
+padding: .3em 1em
+}
+</style>
+
+
+
+<a href="https://www.milur.ru/"> 
+<img src="../img/modules/milandr.png" width="20%" height="20%"  > &nbsp;&nbsp; &nbsp;&nbsp;
+</a>&nbsp;&nbsp; &nbsp;&nbsp;
+ &nbsp;&nbsp;<a class="btn btn-default" href="?data_source=<#DATA_SOURCE#>&view_mode=get&tab=">GET DATA</a>
+
+&nbsp;&nbsp;&nbsp;&nbsp;	
+	[#if CYCLERUN==1#]
+		<span class="label label-success" title="Статус цикла">Цикл запущен</span>
+	[#else#]
+		<span class="label label-danger" title="Статус цикла">Цикл остановлен</span>
+	[#endif#]
+
+ &nbsp; 
+</div>
+
+
+
+	 <ul class="nav nav-tabs">
+
+<br>
+<li [#if TAB=="" || TAB=="info" #] class="active" [#endif#]><a href="?data_source=<#DATA_SOURCE#>&view_mode=&id=<#ID#>&tab=info"><span class="glyphicon glyphicon-list-alt"></span> Информация</a></li>
+<li [#if TAB=="config" #] class="active" [#endif#]><a href="?data_source=<#DATA_SOURCE#>&view_mode=&id=<#ID#>&tab=config"><span class="glyphicon glyphicon-cog"></span> Настройки</a></li>
+<li [#if TAB=="debug" #] class="active" [#endif#]><a href="?view_mode=&tab=debug"><span class="glyphicon glyphicon-inbox"></span> Отладка</a> </li>	
+<li [#if TAB=="help" #] class="active" [#endif#]><a href="?view_mode=&tab=help"><span class="glyphicon glyphicon-info-sign"></span> Помощь</a> </li>	
+</ul>
+
+[#if TAB="info"|| TAB==""#] [#inc info.html#] [#endif#]
+[#if TAB="config"#]
+<br>
+
+<table class="raz">
+<tr><td>
+ [#module name="settings"  action="admin"  filter_name="appmilur"#]
+</td><td>
+<img src="../img/modules/[#MODEL#].png"  align="right" > 
+</td></tr></table>
+
+
+
+
+ [#endif#]
+
+[#if TAB="debug"#]
+<br>
+Degug:
+<div>
+[#MSG_DEBUG#]
+
+</div>
+
+ [#endif#]
+
+[#if TAB="help"#] [#inc help.html#] [#endif#]
