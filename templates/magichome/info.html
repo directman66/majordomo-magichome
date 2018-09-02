@@ -1,0 +1,63 @@
+
+<br>
+<style>
+.raz {
+  border-spacing: 12.5em 1.3em; /* border-collapse наследуется, применяется только к table или inline-table элементам с border-collapse: separate; */ 
+}
+.raz,
+.raz td {
+  border: 0px solid red;
+padding: .3em 1em
+}
+</style>
+<table >
+<tr><td>
+<table class="raz">
+<tr>  
+<td ><b><a href="?data_source=<#DATA_SOURCE#>&view_mode=getpu&tab=" title="Нажмите, чтобы обновить">Обновлено:    [#TS#] </a><b></td>
+<td ><b><a href="?data_source=<#DATA_SOURCE#>&view_mode=getcounters&tab=" title="Нажмите, чтобы обновить">Показания: [#COUNTTS#]</a><b></td>
+
+<td><b>Расходы:<br></td>
+
+
+</tr>
+<tr>
+<td>Текущее значение мощности: <b>P= </b> [#P#] Вт </td>
+<td>Тариф1: [#S1#]  </td>
+<td> За день [#DAY_RUB#] руб./ [#DAY_WATT#] Вт </td>
+
+</tr>
+<tr>
+<td>Текущее значение напряжения: <b>U= </b> [#U#] В </td>
+<td>Тариф2: [#S2#] </td>
+<td> За месяц [#MONTH_RUB#] руб./ [#MONTH_WATT#] Вт </td>
+</tr>
+<tr>
+<td>Текущее значение силы тока: <b>I= </b>[#I#] А </td>
+<td>Общий счетчик: [#S0#] <br> </td>
+<td> За год [#YEAR_RUB#] руб./ [#YEAR_WATT#] Вт </td>
+</tr>
+
+
+</table>
+</td>
+<td>
+   <p><a href="/panel/linkedobject.html?op=redirect&object=[#MODEL#]&sub=properties"><img src="../img/modules/[#MODEL#].png" width="30%" 
+   height="30%" border="0" alt="[#MODEL#]" align="right"></a></p>
+
+</td>
+</tr>
+</table>
+
+<hr/>
+<table>
+<tr>
+<td>Мощность:</td>
+<td>Напряжение:</td>
+</tr><tr>
+<td><iframe src="/module/charts.html?id=config&period=24h&property=[#MODEL#].P&bg=light" width=600 height=400></iframe> </td>
+<td><iframe src="/module/charts.html?id=config&period=24h&property=[#MODEL#].U" width=600 height=400 bgcolor='red'></iframe> </td>
+</tr>
+</table>
+
+
