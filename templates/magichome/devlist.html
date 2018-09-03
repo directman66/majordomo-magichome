@@ -10,7 +10,7 @@
  [#begin DEVICES#]
  <tr>
   <td>[#TITLE#]</td>
-  <td>[#IPADRESS#]</td>
+  <td>[#IP#]</td>
   <td style="vertical-align:middle">
 	[#if ONLINE!=""#]
 		[#if ONLINE==1#]
@@ -22,8 +22,9 @@
 		&nbsp;
 	[#endif#]
  </td> 
-  <td>[#FIRST_FOUND#]</td>
-  <td>[#LAST_FOUND#]</td>
+  <td>[#PORT#]</td>
+  <td>[#MAC#]</td>
+  <td>[#FIND#]</td>
   <td>[#NAME#]&nbsp;</td>
   <td><a href="?view_mode=edit_btdevices&id=[#ID#]" class="btn btn-default" title="<#LANG_EDIT#>"><i class="glyphicon glyphicon-pencil"></i></a> 
   <a href="?view_mode=delete_btdevices&id=[#ID#]" onClick="return confirm('Are you sure? Please confirm.')" class="btn btn-default" title="<#LANG_DELETE#>"><i class="glyphicon glyphicon-remove"></i></a> 
