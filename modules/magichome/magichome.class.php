@@ -101,6 +101,7 @@ function run() {
   $out['MODE']=$this->mode;
   $out['ACTION']=$this->action;
   $out['TAB']=$this->tab;
+
   $this->data=$out;
 //  $this->checkSettings();
 
@@ -190,7 +191,24 @@ socket_recvfrom($sock, $buf, 5, 0, $ip, $port);
 
 //$msg = bytearray();
 //$lead_byte = #0x51
-sg('test.magichome',$buf .":".$ip.":".$port);
+//sg('test.magichome',$buf .":".$ip.":".$port);
+
+if ($ip) {
+
+  $mhdevices=SQLSelect("SELECT max(ID) ID FROM magichome_devices");
+  if ($mhdevices[0]['ID']) {
+   $id=$mhdevices[0]['ID']+1;} else $id=0;
+
+
+$par['ID'] = $id;
+$par['TITLE'] = 'RGB LED';
+$par['IP'] = $ip;
+$par['PORT'] = $port;
+$par['MAC'] = '';
+$par['FIND'] = date('m/d/Y H:i:s',time());		
+SQLInsert('magichome_devices', $par);		 
+}
+
 
 
 socket_close($sock);
