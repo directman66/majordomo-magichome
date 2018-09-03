@@ -214,11 +214,16 @@ do {
 
 if ($ip) {
 
-  $mhdevices=SQLSelect("SELECT max(ID) ID FROM magichome_devices");
+$par=explode(",",$buf);
+
+  $mhdevices=SQLSelect("SELECT * FROM magichome_devices where MAC='".$par[1]."'");
+  if ($mhdevices[0]['ID']) {} else 
+
+{  $mhdevices=SQLSelect("SELECT max(ID) ID FROM magichome_devices");
   if ($mhdevices[0]['ID']) {
    $id=$mhdevices[0]['ID']+1;} else $id=0;
 
-$par=explode(",",$buf);
+
 $par['ID'] = $id;
 //$par['TITLE'] = 'RGB LED';
 
@@ -228,6 +233,7 @@ $par['PORT'] = $port;
 $par['MAC'] = $par[1];
 $par['FIND'] = date('m/d/Y H:i:s',time());		
 SQLInsert('magichome_devices', $par);		 
+}
 }
 
 
