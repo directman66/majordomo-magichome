@@ -186,7 +186,7 @@ $str  = 'HF-A11ASSISTHREAD';
 $sock = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP); 
 socket_set_option($sock, SOL_SOCKET, SO_BROADCAST, 1); 
 socket_sendto($sock, $str, strlen($str), 0, $ip, $port);
-socket_recvfrom($sock, $buf, 5, 0, $ip, $port);
+socket_recvfrom($sock, $buf,100 , 0, $ip, $port);
 //echo "Messagge : < $buf > , $ip : $port <br>";
 
 //$msg = bytearray();
@@ -199,12 +199,14 @@ if ($ip) {
   if ($mhdevices[0]['ID']) {
    $id=$mhdevices[0]['ID']+1;} else $id=0;
 
-
+$par=explode(",",$buf);
 $par['ID'] = $id;
-$par['TITLE'] = 'RGB LED';
+//$par['TITLE'] = 'RGB LED';
+
+$par['TITLE'] = $par[2];
 $par['IP'] = $ip;
 $par['PORT'] = $port;
-$par['MAC'] = '';
+$par['MAC'] = $par[1];
 $par['FIND'] = date('m/d/Y H:i:s',time());		
 SQLInsert('magichome_devices', $par);		 
 }
