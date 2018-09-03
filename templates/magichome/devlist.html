@@ -1,16 +1,18 @@
 [#if VIEW_MODE=""#]
 <table align="center" class="table table-striped">
  <tr>
-  <td><b>Название</b></td>
+  <td><b>Модель</b></td>
   <td><b>IP-адрес</b></td>
   <td><b>Порт</b></td>
-  <td><b>&nbsp;</b></td>
+  <td><b>Online</b></td>
   <td><b>MAC адрес</b></td>
+  <td><b>Добавлено</b></td>
  </tr>
  [#begin DEVICES#]
  <tr>
   <td>[#TITLE#]</td>
   <td>[#IP#]</td>
+  <td>[#PORT#]</td>
   <td style="vertical-align:middle">
 	[#if ONLINE!=""#]
 		[#if ONLINE==1#]
@@ -22,12 +24,12 @@
 		&nbsp;
 	[#endif#]
  </td> 
-  <td>[#PORT#]</td>
+
   <td>[#MAC#]</td>
   <td>[#FIND#]</td>
   <td>[#NAME#]&nbsp;</td>
   <td><a href="?view_mode=edit_btdevices&id=[#ID#]" class="btn btn-default" title="<#LANG_EDIT#>"><i class="glyphicon glyphicon-pencil"></i></a> 
-  <a href="?view_mode=delete_btdevices&id=[#ID#]" onClick="return confirm('Are you sure? Please confirm.')" class="btn btn-default" title="<#LANG_DELETE#>"><i class="glyphicon glyphicon-remove"></i></a> 
+  <a href="?view_mode=delete_devices&id=[#ID#]" onClick="return confirm('Are you sure? Please confirm.')" class="btn btn-default" title="<#LANG_DELETE#>"><i class="glyphicon glyphicon-remove"></i></a> 
   </td>
  </tr>
  [#end DEVICES#]
