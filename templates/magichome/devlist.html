@@ -1,0 +1,92 @@
+[#if VIEW_MODE=""#]
+<table align="center" class="table table-striped">
+ <tr>
+  <td><b>Название</b></td>
+  <td><b>IP-адрес</b></td>
+  <td><b>Порт</b></td>
+  <td><b>&nbsp;</b></td>
+  <td><b>MAC адрес</b></td>
+ </tr>
+ [#begin DEVICES#]
+ <tr>
+  <td>[#TITLE#]</td>
+  <td>[#IPADRESS#]</td>
+  <td style="vertical-align:middle">
+	[#if ONLINE!=""#]
+		[#if ONLINE==1#]
+			<span class="label label-success" title="<#LANG_XIMI_APP_ONLINE#>">Online</span>
+		[#else#]
+			<span class="label label-warning" title="<#LANG_XIMI_APP_OFFLINE#>">Offline</span>
+		[#endif#]
+	[#else#]
+		&nbsp;
+	[#endif#]
+ </td> 
+  <td>[#FIRST_FOUND#]</td>
+  <td>[#LAST_FOUND#]</td>
+  <td>[#NAME#]&nbsp;</td>
+  <td><a href="?view_mode=edit_btdevices&id=[#ID#]" class="btn btn-default" title="<#LANG_EDIT#>"><i class="glyphicon glyphicon-pencil"></i></a> 
+  <a href="?view_mode=delete_btdevices&id=[#ID#]" onClick="return confirm('Are you sure? Please confirm.')" class="btn btn-default" title="<#LANG_DELETE#>"><i class="glyphicon glyphicon-remove"></i></a> 
+  </td>
+ </tr>
+ [#end DEVICES#]
+</table>
+[#else DEVICES#]
+<p>No devices discovered yet</p>
+[#endif DEVICES#]
+
+
+
+[#endif VIEW_MODE#]
+
+[#if VIEW_MODE="edit_btdevices"#]
+<p align="left"><a class="btn btn-default" href="?"><#LANG_BACK#></a></p>
+<form action="?" method="post" class="form-horizontal">
+<fieldset>
+<div class="form-group">
+ <label class="col-lg-3 control-label"[#if ERR_TITLE#] style="color:red;font-weight:bold"[#endif#]>
+ <#LANG_TITLE#>:
+ (*)
+ </label>
+ <div class="col-lg-8"><input type="text" class="form-control" name="title" value="[#TITLE#]" id="title"></div>
+</div>
+<div class="form-group">
+ <label class="col-lg-3 control-label"><#LANG_USER#>:
+ </label>
+ <div class="col-lg-8">
+  <select name="user_id" class="form-control">
+   <option value="0">n/a
+   [#begin USERS#]
+   <option value="[#ID#]"[#if ID="<#USER_ID#>"#] selected[#endif SELECTED#]>[#NAME#]
+   [#end USERS#]
+  </select></div>
+</div>
+<div class="form-group">
+ <label class="col-lg-3 control-label"><#LANG_CODE#>: </label>
+ <div class="col-lg-8">[#MAC#]</div>
+</div>
+<div class="form-group">
+ <label class="col-lg-3 control-label"><#LANG_FOUND_FIRST#>: </label>
+ <div class="col-lg-8">[#FIRST_FOUND#]</div>
+</div>
+<div class="form-group">
+ <label class="col-lg-3 control-label"><#LANG_FOUND_LAST#>: </label>
+ <div class="col-lg-8">[#LAST_FOUND#]</div>
+</div>
+<div class="form-group">
+ <label class="col-lg-3 control-label"><#LANG_HISTORY#>: </label>
+ <div class="col-lg-8">[#LOG#]</div>
+</div>
+
+<div class="form-group">
+ <div class="col-lg-offset-3 col-lg-8">
+ <button type="submit" name="submit" value="Submit" class="btn btn-primary"><#LANG_UPDATE#></button>
+ <a href="?data_source=<#DATA_SOURCE#>" class="btn btn-default "><#LANG_CANCEL#></a>
+ <input type="hidden" name="view_mode" value="<#VIEW_MODE#>">
+ <input type="hidden" name="id" value="[#ID#]">
+ <input type="hidden" name="mode" value="update">
+ </div>
+</div>
+</fieldset>
+</form>
+[#endif VIEW_MODE#]
