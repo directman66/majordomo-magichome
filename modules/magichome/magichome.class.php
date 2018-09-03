@@ -101,6 +101,8 @@ function run() {
   $out['MODE']=$this->mode;
   $out['ACTION']=$this->action;
   $out['TAB']=$this->tab;
+//$out['ONLINE']=1;
+
 
   $this->data=$out;
 //  $this->checkSettings();
@@ -120,7 +122,7 @@ function admin(&$out) {
 
  $this->getConfig();
 
-  if ($this->view_mode=='' || $this->view_mode=='search_btdevices') {
+  if ($this->view_mode=='' || $this->view_mode=='info') {
    $this->search_devices($out);
   }
 
@@ -136,7 +138,7 @@ $this->delete_once($this->id);
 
   if ($this->view_mode=='edit_magichome_devices') {
    $this->edit_magichome_devices($out, $this->id);
-  }
+    }
 
 
 
@@ -145,11 +147,29 @@ $this->delete_once($this->id);
 
  function search_devices(&$out) {
 
+$mhdevices=SQLSelect("SELECT * FROM magichome_devices");
+$total = count($mhdevices);
+for ($i = 0; $i < $total; $i++)
+{ 
+
+$ip=$mhdevices[$i]['IP'];
+$online=ping(processTitle($ip));
+    if ($online) 
+{SQLexec("update magichome_devices set ONLINE='1' where IP='$ip'");} 
+else 
+{SQLexec("update magichome_devices set ONLINE='0' where IP='$ip'");}
+}
+
+
   $mhdevices=SQLSelect("SELECT * FROM magichome_devices");
   if ($mhdevices[0]['ID']) {
-   $out['DEVICES']=$mhdevices;}
+   $out['DEVICES']=$mhdevices;
 
- }
+    }
+}   
+
+
+ 
 
   
  
@@ -221,7 +241,7 @@ if ($ip) {
 
 $par=explode(",",$buf);
 
-  $mhdevices=SQLSelect("SELECT * FROM magichome_devices where MAC='".$par[1]."'");
+  $mhdevices=SQLSelect("SELECT * FROM magichome_devices where MAC='".$par[1]."' and IP='$ip'");
   if ($mhdevices[0]['ID']) {} else 
 
 {  $mhdevices=SQLSelect("SELECT max(ID) ID FROM magichome_devices");
@@ -337,6 +357,7 @@ function delete_once($id) {
  magichome_devices: IP varchar(100) NOT NULL DEFAULT ''
  magichome_devices: PORT varchar(100) NOT NULL DEFAULT ''
  magichome_devices: MAC varchar(100) NOT NULL DEFAULT ''
+ magichome_devices: ONLINE varchar(100) NOT NULL DEFAULT ''
  magichome_devices: FIND varchar(100) NOT NULL DEFAULT ''
  magichome_devices: LINKED_OBJECT varchar(100) NOT NULL DEFAULT ''
  magichome_devices: LINKED_PROPERTY varchar(100) NOT NULL DEFAULT ''
@@ -361,20 +382,20 @@ EOD;
    parent::dbInstall($data);
 
 $par=array();		 
-$par['parametr'] = 'command';
-$par['value'] = "1";		 
+$par['TITLE'] = 'command';
+$par['ID'] = "1";		 
 SQLInsert('magichome_commands', $par);		 
 
-$par['parametr'] = 'color';
-$par['value'] = "2";		 
+$par['TITLE'] = 'color';
+$par['ID'] = "2";		 
 SQLInsert('magichome_commands', $par);		 
 
-$par['parametr'] = 'level';
-$par['value'] = "3";		 
+$par['TITLE'] = 'level';
+$par['ID'] = "3";		 
 SQLInsert('magichome_commands', $par);		 
 
-$par['parametr'] = 'status';
-$par['value'] = "4";		 
+$par['TITLE'] = 'status';
+$par['ID'] = "4";		 
 SQLInsert('magichome_commands', $par);		 
 
 
