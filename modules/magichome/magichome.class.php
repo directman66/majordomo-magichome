@@ -134,6 +134,11 @@ if ($this->view_mode=='delete_devices') {
 $this->delete_once($this->id);
 }  
 
+  if ($this->view_mode=='edit_magichome_devices') {
+   $this->edit_magichome_devices($out, $this->id);
+  }
+
+
 
 }  
  
@@ -242,6 +247,35 @@ socket_close($sock);
 
 }
 
+ function edit_magichome_devices(&$out, $id) {
+  require(DIR_MODULES.$this->name.'/magichome_devices_edit.inc.php');
+ }
+
+
+
+function setcolor($ip,$port, $color) {
+
+//0x31	command of setting color and color temperature	
+//Send	?0X31?+?8bit red data ?+?8bit green data?+?8bit blue data?+?8bit warm white data?+?8bit status sign?+?0xF0 remote,0x0F local?+?check digit?(length of command:8)
+
+//Return	Local(0x0F):no return
+//	Remote(0xF0):?0xF0 remote?+ ?0X31?+?0x00?+?check digit?                                                                Status sign:?0XF0? means changing RGB,?0X0F?means W	
+//	Note:phone send commands which control static color.Range of static color value is 00-0xff.When value is 0,PWM is 0%;when value is 0XFF,PWM is 100%;	
+
+
+
+
+$sock = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP); 
+socket_set_option($sock, SOL_SOCKET, SO_BROADCAST, 1); 
+socket_sendto($sock, $str, strlen($str), 0, $ip, $port);
+socket_recvfrom($sock, $buf,100 , 0, $ip, $port);
+
+sg('test.rgb', $buf);
+
+}
+
+
+
 function delete_once($id) {
   SQLExec("DELETE FROM magichome_devices WHERE id=".$id);
   $this->redirect("?");
@@ -280,6 +314,7 @@ function delete_once($id) {
  function uninstall() {
   SQLExec('DROP TABLE IF EXISTS magichome_devices');
   SQLExec('DROP TABLE IF EXISTS magichome_config');
+  SQLExec('DROP TABLE IF EXISTS magichome_commands');
   SQLExec('delete from settings where NAME like "%MAGICHOME%"');
 
 
@@ -305,6 +340,17 @@ function delete_once($id) {
  magichome_devices: FIND varchar(100) NOT NULL DEFAULT ''
  magichome_devices: LINKED_OBJECT varchar(100) NOT NULL DEFAULT ''
  magichome_devices: LINKED_PROPERTY varchar(100) NOT NULL DEFAULT ''
+
+ magichome_commands: ID int(10) unsigned NOT NULL auto_increment
+ magichome_commands: TITLE varchar(100) NOT NULL DEFAULT ''
+ magichome_commands: VALUE varchar(255) NOT NULL DEFAULT ''
+ magichome_commands: DEVICE_ID int(10) NOT NULL DEFAULT '0'
+ magichome_commands: LINKED_OBJECT varchar(100) NOT NULL DEFAULT ''
+ magichome_commands: LINKED_PROPERTY varchar(100) NOT NULL DEFAULT ''
+ magichome_commands: LINKED_METHOD varchar(100) NOT NULL DEFAULT '' 
+ magichome_commands: UPDATED datetime
+
+
 EOD;
   parent::dbInstall($data);
 
@@ -313,6 +359,23 @@ EOD;
  magichome_config: value varchar(10000)  
 EOD;
    parent::dbInstall($data);
+
+$par=array();		 
+$par['parametr'] = 'command';
+$par['value'] = "1";		 
+SQLInsert('magichome_commands', $par);		 
+
+$par['parametr'] = 'color';
+$par['value'] = "2";		 
+SQLInsert('magichome_commands', $par);		 
+
+$par['parametr'] = 'level';
+$par['value'] = "3";		 
+SQLInsert('magichome_commands', $par);		 
+
+$par['parametr'] = 'status';
+$par['value'] = "4";		 
+SQLInsert('magichome_commands', $par);		 
 
 
 
