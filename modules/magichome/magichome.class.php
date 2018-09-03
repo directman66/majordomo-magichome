@@ -126,10 +126,14 @@ function admin(&$out) {
 
 
 
-
 if ($this->view_mode=='scan') {
 $this->search();
 }  
+
+if ($this->view_mode=='delete_devices') {
+$this->delete_once($this->id);
+}  
+
 
 }  
  
@@ -187,6 +191,21 @@ $sock = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
 socket_set_option($sock, SOL_SOCKET, SO_BROADCAST, 1); 
 socket_sendto($sock, $str, strlen($str), 0, $ip, $port);
 socket_recvfrom($sock, $buf,100 , 0, $ip, $port);
+
+/*
+do {
+        $buf = null;
+        if (($len = @socket_recvfrom($socket, $buf, 1024, 0, $ip, $port)) == -1) {
+//            echo "socket_read() failed: " . socket_strerror(socket_last_error()) . "\n";
+        }
+        if(!is_null($buf)){
+            $data = $data + $buf;
+        }
+    } while(!is_null($buf));
+    socket_close($socket);
+
+*/
+
 //echo "Messagge : < $buf > , $ip : $port <br>";
 
 //$msg = bytearray();
@@ -216,6 +235,12 @@ SQLInsert('magichome_devices', $par);
 socket_close($sock);
 
 }
+
+function delete_once($id) {
+  SQLExec("DELETE FROM magichome_devices WHERE id=".$id);
+  $this->redirect("?");
+ }
+
 
 
 /**
