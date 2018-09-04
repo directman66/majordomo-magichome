@@ -141,6 +141,18 @@ $this->delete_once($this->id);
     }
 
 
+  if ($this->view_mode=='turnon') {
+   $this->turnon($this->id);
+    }
+
+
+  if ($this->view_mode=='turnoff') {
+   $this->turnoff($this->id);
+    }
+
+  if ($this->view_mode=='changerandom') {
+   $this->turnon($this->id);
+    }
 
 }  
  
@@ -153,11 +165,11 @@ for ($i = 0; $i < $total; $i++)
 { 
 
 $ip=$mhdevices[$i]['IP'];
-$online=ping(processTitle($ip));
+//$online=ping(processTitle($ip));
     if ($online) 
-{SQLexec("update magichome_devices set ONLINE='1' where IP='$ip'");} 
+{SQLexec("update magichome_devices set ONLINE='1', LASTPING=now() where IP='$ip'");} 
 else 
-{SQLexec("update magichome_devices set ONLINE='0' where IP='$ip'");}
+{SQLexec("update magichome_devices set ONLINE='0', LASTPING=now() where IP='$ip'");}
 }
 
 
@@ -303,6 +315,175 @@ function delete_once($id) {
 
 
 
+function turnon($id) {
+
+// sudo tcpdump  ip dst 192.168.1.82 and  ip src 192.168.1.39 -w dump.cap
+//1 1 1
+//31:01:01:01:00:f0:0f:33
+
+//вкл 71:23:0f:a3
+//выкл 71:24:0f:a4
+
+
+//0x71	command of setting key's value(switcher command) command
+//Send	?0X71?+?8bit value?+?0xF0remote,0x0F local?+?check digit?(length of command:4)	
+//Reurn	?0xF0remote,0x0F local?+ ?0X71?+?switcher status value?+?check digit?	
+//	Note:key value0x23 means "turn on",0x24 means "turn off"	
+//		POWER OFF				0x24
+
+
+
+
+$cmd_rec = SQLSelectOne("SELECT IP, PORT FROM magichome_devices WHERE id=".$id);
+$host=$cmd_rec['IP'];
+$port=$cmd_rec['PORT'];
+
+
+sg('test.rgb', $host.":".$port);
+
+      $sendStr = '71:23:0f:a3'; 
+
+   $socket = socket_create(AF_INET, SOCK_STREAM, getprotobyname("tcp"));  // Create Socket
+        if (socket_connect($socket, $host, $port)) {  //Connect
+
+  
+        $sendStrArray = str_split(str_replace(':', '', $sendStr), 2);  // The 16 binary data into a set of two arrays
+ 
+                    for ($j = 0; $j <count ($sendStrArray); $j++) {
+                           socket_write ($socket, Chr (hexdec ($sendStrArray[$j])));   // by group data transmission
+
+            }
+//        $command[] = 0x55; //last byte always 0x55, will appended to all commands
+//        $command[] = 0x710x240xF00x0F; //last byte always 0x55, will appended to all commands
+//        $message = vsprintf(str_repeat('%c', count($command)), $command);
+//        if ($socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP)) {
+//            socket_sendto($socket, $message, strlen($message), 0, $host, $port);
+            socket_close($socket);
+///            usleep($this->getDelay()); //wait 100ms before sending next command
+ 
+
+ }
+
+
+
+
+ }
+
+
+function turnoff($id) {
+
+// sudo tcpdump  ip dst 192.168.1.82 and  ip src 192.168.1.39 -w dump.cap
+//1 1 1
+//31:01:01:01:00:f0:0f:33
+
+//вкл 71:23:0f:a3
+//выкл 71:24:0f:a4
+
+
+//0x71	command of setting key's value(switcher command) command
+//Send	?0X71?+?8bit value?+?0xF0remote,0x0F local?+?check digit?(length of command:4)	
+//Reurn	?0xF0remote,0x0F local?+ ?0X71?+?switcher status value?+?check digit?	
+//	Note:key value0x23 means "turn on",0x24 means "turn off"	
+//		POWER OFF				0x24
+
+
+$cmd_rec = SQLSelectOne("SELECT IP, PORT FROM magichome_devices WHERE id=".$id);
+$host=$cmd_rec['IP'];
+$port=$cmd_rec['PORT'];
+
+
+sg('test.rgb', $host.":".$port);
+ $sendStr = '71:24:0f:a4'; 
+
+
+   $socket = socket_create(AF_INET, SOCK_STREAM, getprotobyname("tcp"));  // Create Socket
+        if (socket_connect($socket, $host, $port)) {  //Connect
+
+
+        $sendStrArray = str_split(str_replace(':', '', $sendStr), 2);  // The 16 binary data into a set of two arrays
+ 
+                    for ($j = 0; $j <count ($sendStrArray); $j++) {
+                           socket_write ($socket, Chr (hexdec ($sendStrArray[$j])));   // by group data transmission
+
+            }
+
+
+
+//        $command[] = 0x55; //last byte always 0x55, will appended to all commands
+//        $command[] = 0x710x240xF00x0F; //last byte always 0x55, will appended to all commands
+//        $message = vsprintf(str_repeat('%c', count($command)), $command);
+//        if ($socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP)) {
+//            socket_sendto($socket, $message, strlen($message), 0, $host, $port);
+//            socket_close($socket);
+///            usleep($this->getDelay()); //wait 100ms before sending next command
+ 
+
+ }
+}
+
+
+
+
+function getinfo2($id) {
+
+//0x81	command of requesting devices'status	
+//Send	?0X81?+?0X8A?+?0X8B?+?check digit?(length of comman:4)
+
+//Return	?0X81?+?8bit device name?+?8bit turn on/off?+?8bit mode value?+?8bit run/pause?+ ?8bit speed value?+?8bit red value?+?8bit green data?+?8bit blue data?+  ?8bit warm white data?+?version NO?+?8bit cool white data?+?8bit status sign?+?check digit?(length of command:14)	
+///	"Note:when module received command of checking devices's status,module will reply,
+//	?8bit turn on/off?:0x23 means  turn on;0x24 means  turn off
+//	?8bit run/pause status?:0x20 means  status in present,0x21 means  pause status,it is unuseful in this item
+//	?8bit speed value?means speed value of dynamic model,range:0x01-0x1f,0x01 is the fast
+//	Status sign:?0XF0?means RGB,?0X0F?means W"	
+
+
+$cmd_rec = SQLSelectOne("SELECT IP, PORT FROM magichome_devices WHERE id=".$id);
+$host=$cmd_rec['IP'];
+$port=$cmd_rec['PORT'];
+
+
+//sg('test.rgb', $host.":".$port);
+ $sendStr = '81:8a:8b:a4'; 
+
+
+   $socket = socket_create(AF_INET, SOCK_STREAM, getprotobyname("tcp"));  // Create Socket
+        if (socket_connect($socket, $host, $port)) {  //Connect
+
+
+        $sendStrArray = str_split(str_replace(':', '', $sendStr), 2);  // The 16 binary data into a set of two arrays
+ 
+                    for ($j = 0; $j <count ($sendStrArray); $j++) {
+                           socket_write ($socket, Chr (hexdec ($sendStrArray[$j])));   // by group data transmission
+
+            }
+
+
+
+//        $command[] = 0x55; //last byte always 0x55, will appended to all commands
+//        $command[] = 0x710x240xF00x0F; //last byte always 0x55, will appended to all commands
+//        $message = vsprintf(str_repeat('%c', count($command)), $command);
+//        if ($socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP)) {
+//            socket_sendto($socket, $message, strlen($message), 0, $host, $port);
+//            socket_close($socket);
+///            usleep($this->getDelay()); //wait 100ms before sending next command
+ 
+
+ }
+
+SQLexec("update magichome_devices set CURRENTCOLOR='$msg' where id='$id'");
+}
+
+
+
+
+
+
+
+function changerandom($id) {
+ }
+
+
+
 /**
 *
 * @access public
@@ -358,6 +539,8 @@ function delete_once($id) {
  magichome_devices: PORT varchar(100) NOT NULL DEFAULT ''
  magichome_devices: MAC varchar(100) NOT NULL DEFAULT ''
  magichome_devices: ONLINE varchar(100) NOT NULL DEFAULT ''
+ magichome_devices: LASTPING varchar(100) NOT NULL DEFAULT ''
+ magichome_devices: CURRENTCOLOR varchar(100) NOT NULL DEFAULT ''
  magichome_devices: FIND varchar(100) NOT NULL DEFAULT ''
  magichome_devices: LINKED_OBJECT varchar(100) NOT NULL DEFAULT ''
  magichome_devices: LINKED_PROPERTY varchar(100) NOT NULL DEFAULT ''
