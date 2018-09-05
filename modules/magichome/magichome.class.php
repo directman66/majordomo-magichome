@@ -156,7 +156,7 @@ $this->delete_once($this->id);
 
 
   if ($this->view_mode=='getinfo') {
-   $this->turnon($this->getinfo2);
+   $this->getinfo2($this->id);
     }
 
 
@@ -478,6 +478,12 @@ $port=$cmd_rec['PORT'];
  $sendStr = '81:8a:8b:a4'; 
 
 
+$sock = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP); 
+socket_set_option($sock, SOL_SOCKET, SO_BROADCAST, 1); 
+//socket_sendto($sock, $str, strlen($str), 0, $ip, $port);
+//socket_recvfrom($sock, $buf,100 , 0, $ip, $port);
+//socket_close($sock);
+
    $socket = socket_create(AF_INET, SOCK_STREAM, getprotobyname("tcp"));  // Create Socket
         if (socket_connect($socket, $host, $port)) {  //Connect
 
@@ -488,6 +494,9 @@ $port=$cmd_rec['PORT'];
                            socket_write ($socket, Chr (hexdec ($sendStrArray[$j])));   // by group data transmission
 
             }
+socket_recvfrom($sock, $buf,100 , 0, $ip, $port);
+socket_close($sock);
+
 
 
 
@@ -501,8 +510,8 @@ $port=$cmd_rec['PORT'];
  
 
  }
-
-SQLexec("update magichome_devices set CURRENTCOLOR='$msg' where id='$id'");
+sg('test.rgbbuf', $buf);
+SQLexec("update magichome_devices set CURRENTCOLOR='$buf' where id='$id'");
 
 }
 
