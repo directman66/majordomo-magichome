@@ -154,6 +154,12 @@ $this->delete_once($this->id);
    $this->turnon($this->id);
     }
 
+
+  if ($this->view_mode=='getinfo') {
+   $this->turnon($this->getinfo2);
+    }
+
+
 }  
  
 
@@ -228,26 +234,45 @@ $sock = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
 socket_set_option($sock, SOL_SOCKET, SO_BROADCAST, 1); 
 socket_sendto($sock, $str, strlen($str), 0, $ip, $port);
 socket_recvfrom($sock, $buf,100 , 0, $ip, $port);
+socket_close($sock);
 
-/*
-do {
-        $buf = null;
-        if (($len = @socket_recvfrom($socket, $buf, 1024, 0, $ip, $port)) == -1) {
+//        $buf = null;
+//        $data = null;
+//        if ($socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP)) {
+//            socket_set_option($socket, SOL_SOCKET, SO_BROADCAST, 1); 
+//            socket_sendto($socket, $str, strlen($str), 0, $ip, $port);
+//while (($buffer = socket_read($socket, 1024))!=false) {
+//          $data = $data + $buffer;
+//    echo("Data sent was: time\nResponse was:" . $buffer . "\n");
+
+//}
+socket_close($socket);
+
+
+//}
+
+
+
+//$data="";
+//do {
+//        $buf = null;
+//        if (($len = @socket_recvfrom($sock, $buf, 1024, 0, $ip, $port)) == -1) {
 //            echo "socket_read() failed: " . socket_strerror(socket_last_error()) . "\n";
-        }
-        if(!is_null($buf)){
-            $data = $data + $buf;
-        }
-    } while(!is_null($buf));
-    socket_close($socket);
+//        }
+//        if(!is_null($buf)){
+//            $data = $data + $buf;
+//        }
+//    } while(!is_null($buf));
+//    socket_close($sock);
 
-*/
+
 
 //echo "Messagge : < $buf > , $ip : $port <br>";
+//$buf=$data;
 
 //$msg = bytearray();
 //$lead_byte = #0x51
-//sg('test.magichome',$buf .":".$ip.":".$port);
+sg('test.magichome',$buf .":".$ip.":".$port);
 
 if ($ip) {
 
@@ -275,7 +300,7 @@ SQLInsert('magichome_devices', $par);
 
 
 
-socket_close($sock);
+
 
 }
 
@@ -286,7 +311,7 @@ socket_close($sock);
 
 
 function setcolor($ip,$port, $color) {
-
+/*
 //0x31	command of setting color and color temperature	
 //Send	?0X31?+?8bit red data ?+?8bit green data?+?8bit blue data?+?8bit warm white data?+?8bit status sign?+?0xF0 remote,0x0F local?+?check digit?(length of command:8)
 
@@ -303,6 +328,7 @@ socket_sendto($sock, $str, strlen($str), 0, $ip, $port);
 socket_recvfrom($sock, $buf,100 , 0, $ip, $port);
 
 sg('test.rgb', $buf);
+*/
 
 }
 
@@ -316,13 +342,13 @@ function delete_once($id) {
 
 
 function turnon($id) {
-
+/*
 // sudo tcpdump  ip dst 192.168.1.82 and  ip src 192.168.1.39 -w dump.cap
 //1 1 1
 //31:01:01:01:00:f0:0f:33
 
-//вкл 71:23:0f:a3
-//выкл 71:24:0f:a4
+//РІРєР» 71:23:0f:a3
+//РІС‹РєР» 71:24:0f:a4
 
 
 //0x71	command of setting key's value(switcher command) command
@@ -364,6 +390,8 @@ sg('test.rgb', $host.":".$port);
 
  }
 
+*/
+
 
 
 
@@ -371,13 +399,13 @@ sg('test.rgb', $host.":".$port);
 
 
 function turnoff($id) {
-
+/*
 // sudo tcpdump  ip dst 192.168.1.82 and  ip src 192.168.1.39 -w dump.cap
 //1 1 1
 //31:01:01:01:00:f0:0f:33
 
-//вкл 71:23:0f:a3
-//выкл 71:24:0f:a4
+//РІРєР» 71:23:0f:a3
+//РІС‹РєР» 71:24:0f:a4
 
 
 //0x71	command of setting key's value(switcher command) command
@@ -419,13 +447,14 @@ sg('test.rgb', $host.":".$port);
  
 
  }
+*/
 }
 
 
 
 
 function getinfo2($id) {
-
+/*
 //0x81	command of requesting devices'status	
 //Send	?0X81?+?0X8A?+?0X8B?+?check digit?(length of comman:4)
 
@@ -471,6 +500,8 @@ $port=$cmd_rec['PORT'];
  }
 
 SQLexec("update magichome_devices set CURRENTCOLOR='$msg' where id='$id'");
+
+*/
 }
 
 
