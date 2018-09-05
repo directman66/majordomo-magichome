@@ -171,12 +171,14 @@ for ($i = 0; $i < $total; $i++)
 { 
 
 $ip=$mhdevices[$i]['IP'];
-//$online=ping(processTitle($ip));
+$lastping=$mhdevices[$i]['IP'];
+if (time()-$lastping>300) {
+$online=ping(processTitle($ip));
     if ($online) 
 {SQLexec("update magichome_devices set ONLINE='1', LASTPING=now() where IP='$ip'");} 
 else 
 {SQLexec("update magichome_devices set ONLINE='0', LASTPING=now() where IP='$ip'");}
-}
+}}
 
 
   $mhdevices=SQLSelect("SELECT * FROM magichome_devices");
@@ -464,6 +466,7 @@ function getinfo2($id) {
 //	?8bit run/pause status?:0x20 means  status in present,0x21 means  pause status,it is unuseful in this item
 //	?8bit speed value?means speed value of dynamic model,range:0x01-0x1f,0x01 is the fast
 //	Status sign:?0XF0?means RGB,?0X0F?means W"	
+*/
 
 
 $cmd_rec = SQLSelectOne("SELECT IP, PORT FROM magichome_devices WHERE id=".$id);
@@ -501,7 +504,6 @@ $port=$cmd_rec['PORT'];
 
 SQLexec("update magichome_devices set CURRENTCOLOR='$msg' where id='$id'");
 
-*/
 }
 
 
