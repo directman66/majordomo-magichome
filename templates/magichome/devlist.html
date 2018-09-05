@@ -7,6 +7,7 @@
   <td><b>Online</b></td>
   <td><b>MAC адрес</b></td>
   <td><b>Добавлено</b></td>
+  <td><b>Состояние</b></td>
  </tr>
  [#begin DEVICES#]
  <tr>
@@ -28,7 +29,14 @@
 
   <td>[#MAC#]</td>
   <td>[#FIND#]</td>
-  <td>[#NAME#]&nbsp;</td>
+  <td>
+[#if CURRENTCOLOR!=""#]
+[#CURRENTCOLOR#]
+[#else#]offline
+	[#endif#]
+
+</td>
+&nbsp;&nbsp;
   <td><a href="?view_mode=turnon&id=[#ID#]" class="btn btn-default" title="Включить"><i class="glyphicon glyphicon-ok"></i></a> 
   <a href="?view_mode=turnoff&id=[#ID#]" class="btn btn-default" title="Выключить"><i class="glyphicon glyphicon-remove"></i></a> 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
