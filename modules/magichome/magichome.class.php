@@ -101,7 +101,13 @@ function run() {
   $out['MODE']=$this->mode;
   $out['ACTION']=$this->action;
   $out['TAB']=$this->tab;
-//$out['ONLINE']=1;
+
+
+$cmd_rec = SQLSelectOne("SELECT VALUE FROM magichome_config where parametr='DEBUG'");
+$debug=$cmd_rec['VALUE'];
+
+$out['MSG_DEBUG']=$debug;
+//$out['MSG_DEBUG']='123123';
 
 
   $this->data=$out;
@@ -156,7 +162,8 @@ $this->delete_once($this->id);
 
 
   if ($this->view_mode=='getinfo') {
-   $this->getinfo2($this->id);
+   $this->getinfo2($this->id, $debug);
+//out['DEBUG']=$debug;
     }
 
 
@@ -349,8 +356,8 @@ function turnon($id) {
 //1 1 1
 //31:01:01:01:00:f0:0f:33
 
-//РІРєР» 71:23:0f:a3
-//РІС‹РєР» 71:24:0f:a4
+//вкл 71:23:0f:a3
+//выкл 71:24:0f:a4
 
 
 //0x71	command of setting key's value(switcher command) command
@@ -406,8 +413,8 @@ function turnoff($id) {
 //1 1 1
 //31:01:01:01:00:f0:0f:33
 
-//РІРєР» 71:23:0f:a3
-//РІС‹РєР» 71:24:0f:a4
+//вкл 71:23:0f:a3
+//выкл 71:24:0f:a4
 
 
 //0x71	command of setting key's value(switcher command) command
@@ -455,7 +462,7 @@ sg('test.rgb', $host.":".$port);
 
 
 
-function getinfo2($id) {
+function getinfo2($id, &$debug) {
 /*
 //0x81	command of requesting devices'status	
 //Send	?0X81?+?0X8A?+?0X8B?+?check digit?(length of comman:4)
@@ -471,31 +478,144 @@ function getinfo2($id) {
 
 $cmd_rec = SQLSelectOne("SELECT IP, PORT FROM magichome_devices WHERE id=".$id);
 $host=$cmd_rec['IP'];
-$port=$cmd_rec['PORT'];
+//$port=$cmd_rec['PORT'];
 
+$port=5577;
 
+//81:8a:8b:96
 //sg('test.rgb', $host.":".$port);
- $sendStr = '81:8a:8b:a4'; 
+//  '\x0B\x84\x31\x32\x33\x34\x35\x36\x37\x38\x00'
+// $sendStr = '\x81\x8a\x8b\x96'; 
 
 
-$sock = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP); 
-socket_set_option($sock, SOL_SOCKET, SO_BROADCAST, 1); 
-//socket_sendto($sock, $str, strlen($str), 0, $ip, $port);
-//socket_recvfrom($sock, $buf,100 , 0, $ip, $port);
-//socket_close($sock);
 
-   $socket = socket_create(AF_INET, SOCK_STREAM, getprotobyname("tcp"));  // Create Socket
+
+
+//$message = '\x81\x8a\x8b\x96';
+
+$debug="";
+
+
+if(!($sock = socket_create(AF_INET, SOCK_STREAM, getprotobyname("tcp"))))
+{
+    $errorcode = socket_last_error();
+    $errormsg = socket_strerror($errorcode);
+
+    die("Couldn't create socket: [$errorcode] $errormsg \n");
+}
+
+$debug.= "Socket created <br>";
+
+//Connect socket to remote server
+if(!socket_connect($sock , $host , $port))
+{
+    $errorcode = socket_last_error();
+    $errormsg = socket_strerror($errorcode);
+
+$debug.="Could not connect: $host:$port [$errorcode] $errormsg <br>";
+}
+
+$debug.="Connection established $host:$port <br>";
+//Is this proper representation of the hexadecimal data
+
+
+//Send the message to the server
+//if( ! socket_send ( $sock , $message , strlen($message) , 0))
+//{
+//    $errorcode = socket_last_error();
+//    $errormsg = socket_strerror($errorcode);
+
+// $debug.= "Could not send data: [$errorcode] $errormsg <br>";
+//}
+
+        $sendStr = '81:8a:8b:96'; 
+        $sendStrArray = str_split(str_replace(':', '', $sendStr), 2);  // The 16 binary data into a set of two arrays
+
+//            $message="";
+//                      for ($j = 0; $j <count ($sendStrArray); $j++) {
+//                              socket_send ($sock, Chr (hexdec ($sendStrArray[$j])),8);   // by group data transmission
+//                              socket_write ($sock, Chr (hexdec ($sendStrArray[$j])));   // by group data transmission
+////                              socket_write ($sock, $sendStrArray[$j]);   // by group data transmission
+//            $message.= $sendStrArray[$j];
+///            }
+
+        $broadcast_string = chr(0x81).chr(0x8a).chr(0x8b).chr(0x96);
+
+        socket_sendto($sock, $broadcast_string, strlen($broadcast_string), 0, $host, $port);
+//        usleep(100);
+///
+
+        do
+        {
+                $pkt = fread($sock, 10);
+                if ( !empty($pkt) && ord($pkt[0]) == 0xAA )
+                echo ord($pkt[1]).".".ord($pkt[2]).".".ord($pkt[3]).".".ord($pkt[4])."\n";
+        }
+        while ( $pkt != false );
+
+  
+
+
+
+//$debug.="Message [$broadcast_string] send successfully <br>";
+
+//$receiveStr = socket_read($socket, 1024, PHP_BINARY_READ);  // The 2 band data received 
+$receiveStrHex = bin2hex ($pkt);   // the 2 hexadecimal data convert 16 hex
+
+//$receiveStrHex = ord($pkt[1]).".".ord($pkt[2]).".".ord($pkt[3]).".".ord($pkt[4]);
+
+ $debug.= "Received message [$receiveStr] <br>";
+
+
+SQLexec("update magichome_config set value='$debug' where parametr='DEBUG'");
+
+socket_close($sock);
+
+
+
+
+
+
+// $sendStr = '81:8a:8b:96'; 
+//        $sendStrArray = str_split(str_replace(':', '', $sendStr), 2);  // The 16 binary data into a set of two arrays
+/*
+//   $socket = socket_create(AF_INET, SOCK_STREAM, getprotobyname("tcp"));  // Create Socket
         if (socket_connect($socket, $host, $port)) {  //Connect
 
-
         $sendStrArray = str_split(str_replace(':', '', $sendStr), 2);  // The 16 binary data into a set of two arrays
- 
-                    for ($j = 0; $j <count ($sendStrArray); $j++) {
-                           socket_write ($socket, Chr (hexdec ($sendStrArray[$j])));   // by group data transmission
-
+     
+                      for ($j = 0; $j <count ($sendStrArray); $j++) {
+                              socket_write ($socket, Chr (hexdec ($sendStrArray[$j])));   // by group data transmission
             }
-socket_recvfrom($sock, $buf,100 , 0, $ip, $port);
+            $receiveStr = "";
+            $receiveStr = socket_read($socket, 1024, PHP_BINARY_READ);  // The 2 band data received 
+                      $receiveStrHex = bin2hex ($receiveStr);   // the 2 hexadecimal data convert 16 hex
+
 socket_close($sock);
+}
+*/
+
+//$buf=$receiveStr;
+$buf= $receiveStrHex;
+
+
+//$sock = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP); 
+//socket_sendto($sock,  $sendStr, strlen( $sendStr), 0, $host, $port);
+//socket_recvfrom($sock, $buf,100 , 0, $host, $port);
+//socket_close($sock);
+
+//   $socket = socket_create(AF_INET, SOCK_STREAM, getprotobyname("tcp"));  // Create Socket
+//        if (socket_connect($socket, $host, $port)) {  //Connect
+
+
+//        $sendStrArray = str_split(str_replace(':', '', $sendStr), 2);  // The 16 binary data into a set of two arrays
+ 
+//                    for ($j = 0; $j <count ($sendStrArray); $j++) {
+//                           socket_write ($socket, Chr (hexdec ($sendStrArray[$j])));   // by group data transmission
+
+//            }
+//socket_recvfrom($sock, $buf,100 , 0, $ip, $port);
+//socket_close($sock);
 
 
 
@@ -509,8 +629,8 @@ socket_close($sock);
 ///            usleep($this->getDelay()); //wait 100ms before sending next command
  
 
- }
-sg('test.rgbbuf', $buf);
+// }
+sg('test.rgbbuf', $host.":".$port.":".$buf);
 SQLexec("update magichome_devices set CURRENTCOLOR='$buf' where id='$id'");
 
 }
@@ -601,7 +721,7 @@ EOD;
   parent::dbInstall($data);
 
   $data = <<<EOD
- magichome_config: parametr varchar(300)
+ magichome_config: parametr unsigned varchar(300)
  magichome_config: value varchar(10000)  
 EOD;
    parent::dbInstall($data);
@@ -624,6 +744,12 @@ $par['ID'] = "4";
 SQLInsert('magichome_commands', $par);		 
 
 
+$par2=array();		 
+$par2['parametr'] = 'DEBUG';
+$par2['value'] = "";		 
+SQLInsert('magichome_config', $par2);		 
+
+
 
  }
 }
@@ -637,4 +763,11 @@ SQLInsert('magichome_commands', $par);
 *
 */
 
+
+//info          81:8a:8b:96
+//вкл 		71:23:0f:a3
+//выкл 		71:24:0f:a4
+//color         1 1 1 	31:01:01:01:00:f0:0f:33
+
+// sudo tcpdump  ip dst 192.168.1.82 and  ip src 192.168.1.39 -w dump.cap
 
