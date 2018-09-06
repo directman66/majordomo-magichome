@@ -240,7 +240,7 @@ $this->brightness($this->id, $brightness);
 
  function search_devices(&$out) {
 
-$mhdevices=SQLSelect("SELECT *, substr(CURRENTCOLOR,17) CCOLOR FROM magichome_devices");
+$mhdevices=SQLSelect("SELECT * FROM magichome_devices");
 $total = count($mhdevices);
 for ($i = 0; $i < $total; $i++)
 { 
@@ -256,7 +256,7 @@ else
 }}
 
 
-  $mhdevices=SQLSelect("SELECT *, substr(CURRENTCOLOR,13,6) CCOLOR, substr(CURRENTCOLOR,11,2) BR FROM magichome_devices");
+  $mhdevices=SQLSelect("SELECT *, substr(CURRENTCOLOR,13,6) CCOLOR, substr(CURRENTCOLOR,11,2) BR, substr(CURRENTCOLOR,5,2) TURN FROM magichome_devices");
   if ($mhdevices[0]['ID']) {
    $out['DEVICES']=$mhdevices;
 
