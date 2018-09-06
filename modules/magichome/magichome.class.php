@@ -103,11 +103,15 @@ function run() {
   $out['TAB']=$this->tab;
 
 
+
 $cmd_rec = SQLSelectOne("SELECT VALUE FROM magichome_config where parametr='DEBUG'");
 $debug=$cmd_rec['VALUE'];
 
 $out['MSG_DEBUG']=$debug;
-//$out['MSG_DEBUG']='123123';
+
+
+
+ $this->search_devices($out);
 
 
   $this->data=$out;
@@ -127,15 +131,18 @@ $out['MSG_DEBUG']=$debug;
 function admin(&$out) {
 
  $this->getConfig();
+// $this->search_devices($out);
 
   if ($this->view_mode=='' || $this->view_mode=='info') {
-   $this->search_devices($out);
+$this->search_devices($out);
   }
 
 
 
 if ($this->view_mode=='scan') {
+
 $this->search();
+//   $this->search_devices($out);
 }  
 
 if ($this->view_mode=='delete_devices') {
@@ -149,6 +156,7 @@ $this->delete_once($this->id);
 
   if ($this->view_mode=='turnon') {
    $this->turnon($this->id);
+
     }
 
 
@@ -160,10 +168,43 @@ $this->delete_once($this->id);
    $this->turnon($this->id);
     }
 
+  if ($this->view_mode=='changeсolorred') {
+   $this->set_color($this->id, 255,0,0);
+    }
+
+  if ($this->view_mode=='changeсolorgreen') {
+   $this->set_color($this->id, 0,255,0);
+    }
+
+  if ($this->view_mode=='changeсolorblue') {
+   $this->set_color($this->id, 0,0,255);
+    }
+
+  if ($this->view_mode=='changeсolorwhite') {
+   $this->set_color($this->id, 255,255,255);
+    }
+
+  if ($this->view_mode=='changeсoloryellow') {
+   $this->set_color($this->id, 255,255,0);
+    }
+
+  if ($this->view_mode=='changeсolorwhite') {
+   $this->set_color($this->id, 255,255,255);
+    }
+
+  if ($this->view_mode=='changeсolorlightblue') {
+   $this->set_color($this->id, 0,255,255);
+    }
+
+
+
+
+
+
+
 
   if ($this->view_mode=='getinfo') {
    $this->getinfo2($this->id, $debug);
-//out['DEBUG']=$debug;
     }
 
 
@@ -176,7 +217,6 @@ $mhdevices=SQLSelect("SELECT * FROM magichome_devices");
 $total = count($mhdevices);
 for ($i = 0; $i < $total; $i++)
 { 
-
 $ip=$mhdevices[$i]['IP'];
 $lastping=$mhdevices[$i]['IP'];
 if (time()-$lastping>300) {
@@ -193,6 +233,7 @@ else
    $out['DEVICES']=$mhdevices;
 
     }
+
 }   
 
 
@@ -210,9 +251,10 @@ else
 */
 function usual(&$out) {
  $this->admin($out);
+
 }
 /**
-* milur_devices search
+
 *
 * @access public
 */
@@ -319,27 +361,6 @@ SQLInsert('magichome_devices', $par);
 
 
 
-function setcolor($ip,$port, $color) {
-/*
-//0x31	command of setting color and color temperature	
-//Send	?0X31?+?8bit red data ?+?8bit green data?+?8bit blue data?+?8bit warm white data?+?8bit status sign?+?0xF0 remote,0x0F local?+?check digit?(length of command:8)
-
-//Return	Local(0x0F):no return
-//	Remote(0xF0):?0xF0 remote?+ ?0X31?+?0x00?+?check digit?                                                                Status sign:?0XF0? means changing RGB,?0X0F?means W	
-//	Note:phone send commands which control static color.Range of static color value is 00-0xff.When value is 0,PWM is 0%;when value is 0XFF,PWM is 100%;	
-
-
-
-
-$sock = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP); 
-socket_set_option($sock, SOL_SOCKET, SO_BROADCAST, 1); 
-socket_sendto($sock, $str, strlen($str), 0, $ip, $port);
-socket_recvfrom($sock, $buf,100 , 0, $ip, $port);
-
-sg('test.rgb', $buf);
-*/
-
-}
 
 
 
@@ -351,55 +372,36 @@ function delete_once($id) {
 
 
 function turnon($id) {
-/*
-// sudo tcpdump  ip dst 192.168.1.82 and  ip src 192.168.1.39 -w dump.cap
-//1 1 1
-//31:01:01:01:00:f0:0f:33
-
-//вкл 71:23:0f:a3
-//выкл 71:24:0f:a4
-
-
-//0x71	command of setting key's value(switcher command) command
-//Send	?0X71?+?8bit value?+?0xF0remote,0x0F local?+?check digit?(length of command:4)	
-//Reurn	?0xF0remote,0x0F local?+ ?0X71?+?switcher status value?+?check digit?	
-//	Note:key value0x23 means "turn on",0x24 means "turn off"	
-//		POWER OFF				0x24
-
-
-
-
 $cmd_rec = SQLSelectOne("SELECT IP, PORT FROM magichome_devices WHERE id=".$id);
 $host=$cmd_rec['IP'];
-$port=$cmd_rec['PORT'];
+
+$port=5577;
 
 
-sg('test.rgb', $host.":".$port);
+$debug="";
 
-      $sendStr = '71:23:0f:a3'; 
 
-   $socket = socket_create(AF_INET, SOCK_STREAM, getprotobyname("tcp"));  // Create Socket
-        if (socket_connect($socket, $host, $port)) {  //Connect
+if(!($sock = socket_create(AF_INET, SOCK_STREAM, getprotobyname("tcp"))))
+{
+    $errorcode = socket_last_error();
+    $errormsg = socket_strerror($errorcode);
 
-  
-        $sendStrArray = str_split(str_replace(':', '', $sendStr), 2);  // The 16 binary data into a set of two arrays
- 
-                    for ($j = 0; $j <count ($sendStrArray); $j++) {
-                           socket_write ($socket, Chr (hexdec ($sendStrArray[$j])));   // by group data transmission
+    die("Couldn't create socket: [$errorcode] $errormsg \n");
+}
 
-            }
-//        $command[] = 0x55; //last byte always 0x55, will appended to all commands
-//        $command[] = 0x710x240xF00x0F; //last byte always 0x55, will appended to all commands
-//        $message = vsprintf(str_repeat('%c', count($command)), $command);
-//        if ($socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP)) {
-//            socket_sendto($socket, $message, strlen($message), 0, $host, $port);
-            socket_close($socket);
-///            usleep($this->getDelay()); //wait 100ms before sending next command
- 
+//Connect socket to remote server
+if(!socket_connect($sock , $host , $port))
+{
+    $errorcode = socket_last_error();
+    $errormsg = socket_strerror($errorcode);
 
- }
 
-*/
+}
+
+//71:23:0f:a3
+        $broadcast_string = chr(0x71).chr(0x23).chr(0x0f).chr(0xa3);
+
+        socket_sendto($sock, $broadcast_string, strlen($broadcast_string), 0, $host, $port);
 
 
 
@@ -408,56 +410,90 @@ sg('test.rgb', $host.":".$port);
 
 
 function turnoff($id) {
-/*
-// sudo tcpdump  ip dst 192.168.1.82 and  ip src 192.168.1.39 -w dump.cap
-//1 1 1
-//31:01:01:01:00:f0:0f:33
-
-//вкл 71:23:0f:a3
-//выкл 71:24:0f:a4
-
-
-//0x71	command of setting key's value(switcher command) command
-//Send	?0X71?+?8bit value?+?0xF0remote,0x0F local?+?check digit?(length of command:4)	
-//Reurn	?0xF0remote,0x0F local?+ ?0X71?+?switcher status value?+?check digit?	
-//	Note:key value0x23 means "turn on",0x24 means "turn off"	
-//		POWER OFF				0x24
-
 
 $cmd_rec = SQLSelectOne("SELECT IP, PORT FROM magichome_devices WHERE id=".$id);
 $host=$cmd_rec['IP'];
-$port=$cmd_rec['PORT'];
+
+$port=5577;
 
 
-sg('test.rgb', $host.":".$port);
- $sendStr = '71:24:0f:a4'; 
+if(!($sock = socket_create(AF_INET, SOCK_STREAM, getprotobyname("tcp"))))
+{
+    $errorcode = socket_last_error();
+    $errormsg = socket_strerror($errorcode);
 
-
-   $socket = socket_create(AF_INET, SOCK_STREAM, getprotobyname("tcp"));  // Create Socket
-        if (socket_connect($socket, $host, $port)) {  //Connect
-
-
-        $sendStrArray = str_split(str_replace(':', '', $sendStr), 2);  // The 16 binary data into a set of two arrays
- 
-                    for ($j = 0; $j <count ($sendStrArray); $j++) {
-                           socket_write ($socket, Chr (hexdec ($sendStrArray[$j])));   // by group data transmission
-
-            }
-
-
-
-//        $command[] = 0x55; //last byte always 0x55, will appended to all commands
-//        $command[] = 0x710x240xF00x0F; //last byte always 0x55, will appended to all commands
-//        $message = vsprintf(str_repeat('%c', count($command)), $command);
-//        if ($socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP)) {
-//            socket_sendto($socket, $message, strlen($message), 0, $host, $port);
-//            socket_close($socket);
-///            usleep($this->getDelay()); //wait 100ms before sending next command
- 
-
- }
-*/
+    die("Couldn't create socket: [$errorcode] $errormsg \n");
 }
+
+//Connect socket to remote server
+if(!socket_connect($sock , $host , $port))
+{
+    $errorcode = socket_last_error();
+    $errormsg = socket_strerror($errorcode);
+
+
+}
+
+//71:24:0f:a4
+
+        $broadcast_string = chr(0x71).chr(0x24).chr(0x0f).chr(0xa4);
+
+        socket_sendto($sock, $broadcast_string, strlen($broadcast_string), 0, $host, $port);
+}
+
+
+function set_color($id, $R,$G,$B) {
+//color         1 1 1 	31:01:01:01:00:f0:0f:33
+
+$cmd_rec = SQLSelectOne("SELECT IP, PORT FROM magichome_devices WHERE id=".$id);
+$host=$cmd_rec['IP'];
+
+$port=5577;
+
+
+if(!($sock = socket_create(AF_INET, SOCK_STREAM, getprotobyname("tcp"))))
+{
+    $errorcode = socket_last_error();
+    $errormsg = socket_strerror($errorcode);
+
+    die("Couldn't create socket: [$errorcode] $errormsg \n");
+}
+
+//Connect socket to remote server
+if(!socket_connect($sock , $host , $port))
+{
+    $errorcode = socket_last_error();
+    $errormsg = socket_strerror($errorcode);
+
+
+}
+
+//71:24:0f:a4
+
+//        $broadcast_string = chr(0x71).chr(0x24).chr(0x0f).chr(0xa4);
+
+//color         1 1 1 	31:01:01:01:00:f0:0f:33
+//str_pad (27, 5,"0",STR_PAD_LEFT); 
+$HR=str_pad(dechex($R),2,"0");
+$HG=str_pad(dechex($G),2,"0");
+$HB=str_pad(dechex($B),2,"0");
+
+
+//$HG=dechex($G);
+//$HB=dechex($B);
+
+//$message="31:01:01:01:00:f0:0f";
+$message="31:$HR:$HG:$HB:00:f0:0f";
+$message=str_replace(":","",$message);
+$message=$message.$this->csum($message);
+sg('test.message', $message);
+$hexmessage=hex2bin($message);
+
+        socket_sendto($sock, $hexmessage, strlen($hexmessage), 0, $host, $port);
+        usleep(100);
+socket_close($sock);
+}
+
 
 
 
@@ -752,6 +788,22 @@ SQLInsert('magichome_config', $par2);
 
 
  }
+
+function csum($str)
+{
+$ar=str_split ($str,2);
+
+ $csum=0;
+ for ($j = 0; $j <count ($ar); $j++) {
+ $csum=$csum+hexdec($ar[$j]);
+ }
+return substr(dechex($csum),-2);
+}
+
+
+
+
+
 }
 // --------------------------------------------------------------------
 	
@@ -765,8 +817,8 @@ SQLInsert('magichome_config', $par2);
 
 
 //info          81:8a:8b:96
-//вкл 		71:23:0f:a3
-//выкл 		71:24:0f:a4
+//РІРєР» 		71:23:0f:a3
+//РІС‹РєР» 		71:24:0f:a4
 //color         1 1 1 	31:01:01:01:00:f0:0f:33
 
 // sudo tcpdump  ip dst 192.168.1.82 and  ip src 192.168.1.39 -w dump.cap
