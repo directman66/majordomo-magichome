@@ -3,9 +3,8 @@
  <tr>
   <td><b>Модель</b></td>
   <td><b>IP-адрес</b></td>
-  <td><b>Порт</b></td>
   <td><b>Online</b></td>
-  <td><b>MAC адрес</b></td>
+  <td><b>SN</b></td>
   <td><b>Добавлено</b></td>
   <td><b>Состояние</b></td>
  </tr>
@@ -14,7 +13,6 @@
  <tr>
   <td>[#TITLE#]</td>
   <td>[#IP#]</td>
-  <td>[#PORT#]</td>
 
   <td style="vertical-align:middle">
 	[#if ONLINE!=""#]
@@ -42,7 +40,10 @@
 </a>
 
 </td>
-  <td>[#BR#]</td>
+  <td>
+
+[#if TURN="23"#]on[#else#]off[#endif#]
+</td>
 
 &nbsp;&nbsp;
   <td><a href="?view_mode=turnon&id=[#ID#]&tab=info" class="btn btn-default" title="Включить"><i class="glyphicon glyphicon-ok"></i></a> 
@@ -66,7 +67,7 @@
                 <link rel='stylesheet' href='<#ROOTHTML#>js/spectrum/spectrum.min.css' />
                 <script src='<#ROOTHTML#>js/spectrum/spectrum.min.js'></script>
                 <link rel='stylesheet' href='?view_mode=changeсolor_[#VALUE#]&id=[#ID#]&tab=info' />
-                <input type="text" value="[#VALUE#]" name="[#PARAM_NAME#]_value" class="form-control" id="[#PARAM_NAME#]_value">
+                <input type="text" value="[#CCOLOR#]" name="[#PARAM_NAME#]_value" class="form-control" id="[#PARAM_NAME#]_value">
                 <script type="text/javascript">
                     $("#[#PARAM_NAME#]_value").spectrum({
                         preferredFormat: "hex",
