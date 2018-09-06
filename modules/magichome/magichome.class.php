@@ -757,7 +757,7 @@ EOD;
   parent::dbInstall($data);
 
   $data = <<<EOD
- magichome_config: parametr unsigned varchar(300)
+ magichome_config: parametr varchar(300)
  magichome_config: value varchar(10000)  
 EOD;
    parent::dbInstall($data);
