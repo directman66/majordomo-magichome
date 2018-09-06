@@ -164,36 +164,52 @@ $this->delete_once($this->id);
    $this->turnoff($this->id);
     }
 
+
+
   if ($this->view_mode=='changerandom') {
    $this->turnon($this->id);
     }
 
-  if ($this->view_mode=='changeсolorred') {
+  if ($this->view_mode=='cс_red') {
+
    $this->set_color($this->id, 255,0,0);
     }
 
-  if ($this->view_mode=='changeсolorgreen') {
+  if ($this->view_mode=='cc_green') {
    $this->set_color($this->id, 0,255,0);
     }
 
-  if ($this->view_mode=='changeсolorblue') {
+  if ($this->view_mode=='cc_blue') {
    $this->set_color($this->id, 0,0,255);
     }
 
-  if ($this->view_mode=='changeсolorwhite') {
+  if ($this->view_mode=='cc_white') {
    $this->set_color($this->id, 255,255,255);
     }
 
-  if ($this->view_mode=='changeсoloryellow') {
+  if ($this->view_mode=='cc_yellow') {
    $this->set_color($this->id, 255,255,0);
     }
 
-  if ($this->view_mode=='changeсolorwhite') {
-   $this->set_color($this->id, 255,255,255);
+  if ($this->view_mode=='cc_lightblue') {
+   $this->set_color($this->id, 0,255,255);
     }
 
-  if ($this->view_mode=='changeсolorlightblue') {
-   $this->set_color($this->id, 0,255,255);
+
+  if (substr($this->view_mode,0,6)=='custom') {
+$color=substr($this->view_mode,6);
+
+$ar=explode("@",$color);
+   $this->set_color($this->id, $ar[0],$ar[1],$ar[2]);
+    }
+
+//sg('test.br', substr($this->view_mode,0,10));
+  if (substr($this->view_mode,0,10)=='brightness') {
+
+$brightness=substr($this->view_mode,10);
+//sg('test.br', $brightness);
+
+$this->brightness($this->id, $brightness);
     }
 
 
@@ -219,7 +235,7 @@ for ($i = 0; $i < $total; $i++)
 { 
 $ip=$mhdevices[$i]['IP'];
 $lastping=$mhdevices[$i]['LASTPING'];
-echo time()-$lastping;
+//echo time()-$lastping;
 if (time()-$lastping>300) {
 $online=ping(processTitle($ip));
     if ($online) 
@@ -479,7 +495,7 @@ $HR=str_pad(dechex($R),2,"0");
 $HG=str_pad(dechex($G),2,"0");
 $HB=str_pad(dechex($B),2,"0");
 
-
+//$HR=dechex($R);
 //$HG=dechex($G);
 //$HB=dechex($B);
 
@@ -496,41 +512,13 @@ socket_close($sock);
 }
 
 
-
-
-
-function getinfo2($id, &$debug) {
-/*
-//0x81	command of requesting devices'status	
-//Send	?0X81?+?0X8A?+?0X8B?+?check digit?(length of comman:4)
-
-//Return	?0X81?+?8bit device name?+?8bit turn on/off?+?8bit mode value?+?8bit run/pause?+ ?8bit speed value?+?8bit red value?+?8bit green data?+?8bit blue data?+  ?8bit warm white data?+?version NO?+?8bit cool white data?+?8bit status sign?+?check digit?(length of command:14)	
-///	"Note:when module received command of checking devices's status,module will reply,
-//	?8bit turn on/off?:0x23 means  turn on;0x24 means  turn off
-//	?8bit run/pause status?:0x20 means  status in present,0x21 means  pause status,it is unuseful in this item
-//	?8bit speed value?means speed value of dynamic model,range:0x01-0x1f,0x01 is the fast
-//	Status sign:?0XF0?means RGB,?0X0F?means W"	
-*/
-
+function brightness($id, $brightness) {
+//color         1 1 1 	31:01:01:01:00:f0:0f:33
 
 $cmd_rec = SQLSelectOne("SELECT IP, PORT FROM magichome_devices WHERE id=".$id);
 $host=$cmd_rec['IP'];
-//$port=$cmd_rec['PORT'];
 
 $port=5577;
-
-//81:8a:8b:96
-//sg('test.rgb', $host.":".$port);
-//  '\x0B\x84\x31\x32\x33\x34\x35\x36\x37\x38\x00'
-// $sendStr = '\x81\x8a\x8b\x96'; 
-
-
-
-
-
-//$message = '\x81\x8a\x8b\x96';
-
-$debug="";
 
 
 if(!($sock = socket_create(AF_INET, SOCK_STREAM, getprotobyname("tcp"))))
@@ -541,7 +529,59 @@ if(!($sock = socket_create(AF_INET, SOCK_STREAM, getprotobyname("tcp"))))
     die("Couldn't create socket: [$errorcode] $errormsg \n");
 }
 
-$debug.= "Socket created <br>";
+//Connect socket to remote server
+if(!socket_connect($sock , $host , $port))
+{
+    $errorcode = socket_last_error();
+    $errormsg = socket_strerror($errorcode);
+
+
+}
+
+//31:00:00:00:05:0f:0f:54 //1%
+//31:00:00:00:7f:0f:0f:ce //50%
+//31:00:00:00:ff:0f:0f:4e //100 %
+
+
+//        $broadcast_string = chr(0x71).chr(0x24).chr(0x0f).chr(0xa4);
+
+//color         1 1 1 	31:01:01:01:00:f0:0f:33
+//str_pad (27, 5,"0",STR_PAD_LEFT); 
+$BR=str_pad(dechex($brightness),2,"0");
+
+//$HR=dechex($R);
+//$HG=dechex($G);
+//$HB=dechex($B);
+
+//$message="31:01:01:01:00:f0:0f";
+$message="31:00:00:00:".$BR.":f0:0f";
+$message=str_replace(":","",$message);
+$message=$message.$this->csum($message);
+sg('test.message', $message);
+$hexmessage=hex2bin($message);
+
+        socket_sendto($sock, $hexmessage, strlen($hexmessage), 0, $host, $port);
+        usleep(100);
+socket_close($sock);
+}
+
+
+
+
+function getinfo2($id) {
+$cmd_rec = SQLSelectOne("SELECT IP, PORT FROM magichome_devices WHERE id=".$id);
+$host=$cmd_rec['IP'];
+
+$port=5577;
+
+
+if(!($sock = socket_create(AF_INET, SOCK_STREAM, getprotobyname("tcp"))))
+{
+    $errorcode = socket_last_error();
+    $errormsg = socket_strerror($errorcode);
+
+    die("Couldn't create socket: [$errorcode] $errormsg \n");
+}
 
 //Connect socket to remote server
 if(!socket_connect($sock , $host , $port))
@@ -549,39 +589,18 @@ if(!socket_connect($sock , $host , $port))
     $errorcode = socket_last_error();
     $errormsg = socket_strerror($errorcode);
 
-$debug.="Could not connect: $host:$port [$errorcode] $errormsg <br>";
+
 }
+//81:8a:8b:96
+$message="81:8a:8b";
+$message=str_replace(":","",$message);
+$message=$message.$this->csum($message);
+sg('test.message', $message);
+$hexmessage=hex2bin($message);
 
-$debug.="Connection established $host:$port <br>";
-//Is this proper representation of the hexadecimal data
-
-
-//Send the message to the server
-//if( ! socket_send ( $sock , $message , strlen($message) , 0))
-//{
-//    $errorcode = socket_last_error();
-//    $errormsg = socket_strerror($errorcode);
-
-// $debug.= "Could not send data: [$errorcode] $errormsg <br>";
-//}
-
-        $sendStr = '81:8a:8b:96'; 
-        $sendStrArray = str_split(str_replace(':', '', $sendStr), 2);  // The 16 binary data into a set of two arrays
-
-//            $message="";
-//                      for ($j = 0; $j <count ($sendStrArray); $j++) {
-//                              socket_send ($sock, Chr (hexdec ($sendStrArray[$j])),8);   // by group data transmission
-//                              socket_write ($sock, Chr (hexdec ($sendStrArray[$j])));   // by group data transmission
-////                              socket_write ($sock, $sendStrArray[$j]);   // by group data transmission
-//            $message.= $sendStrArray[$j];
-///            }
-
-        $broadcast_string = chr(0x81).chr(0x8a).chr(0x8b).chr(0x96);
-
-        socket_sendto($sock, $broadcast_string, strlen($broadcast_string), 0, $host, $port);
+        socket_sendto($sock, $hexmessage, strlen($hexmessage), 0, $host, $port);
 //        usleep(100);
-///
-
+/*
         do
         {
                 $pkt = fread($sock, 10);
@@ -589,22 +608,28 @@ $debug.="Connection established $host:$port <br>";
                 echo ord($pkt[1]).".".ord($pkt[2]).".".ord($pkt[3]).".".ord($pkt[4])."\n";
         }
         while ( $pkt != false );
+*/
 
-  
+            $receiveStr = "";
+            $receiveStr = socket_read($sock, 1024, PHP_BINARY_READ);  // The 2 band data received 
+                      $receiveStrHex = bin2hex ($receiveStr);   // the 2 hexadecimal data convert 16 hex
+
 
 
 
 //$debug.="Message [$broadcast_string] send successfully <br>";
 
 //$receiveStr = socket_read($socket, 1024, PHP_BINARY_READ);  // The 2 band data received 
-$receiveStrHex = bin2hex ($pkt);   // the 2 hexadecimal data convert 16 hex
+//$receiveStrHex = bin2hex ($pkt);   // the 2 hexadecimal data convert 16 hex
+//$receiveStrHex =  ($pkt);   // the 2 hexadecimal data convert 16 hex
 
 //$receiveStrHex = ord($pkt[1]).".".ord($pkt[2]).".".ord($pkt[3]).".".ord($pkt[4]);
 
- $debug.= "Received message [$receiveStr] <br>";
+// $debug.= "Received message [$receiveStr] <br>";
+sg('test.answ',  $receiveStrHex);
 
 
-SQLexec("update magichome_config set value='$debug' where parametr='DEBUG'");
+SQLexec("update magichome_config set value='$receiveStrHex' where parametr='DEBUG'");
 
 socket_close($sock);
 
@@ -818,9 +843,23 @@ return substr(dechex($csum),-2);
 
 
 //info          81:8a:8b:96
-//РІРєР» 		71:23:0f:a3
-//РІС‹РєР» 		71:24:0f:a4
+//вкл 		71:23:0f:a3
+//выкл 		71:24:0f:a4
 //color         1 1 1 	31:01:01:01:00:f0:0f:33
+//3100:00:00:00:f0:0f:30
+//3100ff0000f00f2f
+//  3100ff0000f00f2f
+//  3100ff0000f00f2f
+//31ff:ff:ff:00:f0:0f:2d
+//31ff:00:ff:00:f0:0f:2e
+//31ff:ff:00:00:f0:0f:2e
+	
+
+//level
+//31:00:00:00:05:0f:0f:54 //1%
+//31:00:00:00:7f:0f:0f:ce //50%
+//31:00:00:00:ff:0f:0f:4e //100 %
+
 
 // sudo tcpdump  ip dst 192.168.1.82 and  ip src 192.168.1.39 -w dump.cap
 
