@@ -256,7 +256,7 @@ else
 }}
 
 
-  $mhdevices=SQLSelect("SELECT *, substr(CURRENTCOLOR,13,6) CCOLOR, substr(CURRENTCOLOR,11,2) BR, substr(CURRENTCOLOR,5,2) TURN FROM magichome_devices");
+  $mhdevices=SQLSelect("SELECT *, substr(CURRENTCOLOR,13,6) CCOLOR, substr(CURRENTCOLOR,10,2) BR, substr(CURRENTCOLOR,5,2) TURN FROM magichome_devices");
   if ($mhdevices[0]['ID']) {
    $out['DEVICES']=$mhdevices;
 
