@@ -156,43 +156,52 @@ $this->delete_once($this->id);
 
   if ($this->view_mode=='turnon') {
    $this->turnon($this->id);
+   $this->getinfo2($this->id, $debug);
 
     }
 
 
   if ($this->view_mode=='turnoff') {
    $this->turnoff($this->id);
+   $this->getinfo2($this->id, $debug);
     }
 
 
 
   if ($this->view_mode=='changerandom') {
    $this->turnon($this->id);
+   $this->getinfo2($this->id, $debug);
     }
 
   if ($this->view_mode=='cс_red') {
 
    $this->set_color($this->id, 255,0,0);
+   $this->getinfo2($this->id, $debug);
     }
 
   if ($this->view_mode=='cc_green') {
    $this->set_color($this->id, 0,255,0);
+   $this->getinfo2($this->id, $debug);
     }
 
   if ($this->view_mode=='cc_blue') {
    $this->set_color($this->id, 0,0,255);
+   $this->getinfo2($this->id, $debug);
     }
 
   if ($this->view_mode=='cc_white') {
    $this->set_color($this->id, 255,255,255);
+   $this->getinfo2($this->id, $debug);
     }
 
   if ($this->view_mode=='cc_yellow') {
    $this->set_color($this->id, 255,255,0);
+   $this->getinfo2($this->id, $debug);
     }
 
   if ($this->view_mode=='cc_lightblue') {
    $this->set_color($this->id, 0,255,255);
+   $this->getinfo2($this->id, $debug);
     }
 
 
@@ -201,6 +210,7 @@ $color=substr($this->view_mode,6);
 
 $ar=explode("@",$color);
    $this->set_color($this->id, $ar[0],$ar[1],$ar[2]);
+   $this->getinfo2($this->id, $debug);
     }
 
 //sg('test.br', substr($this->view_mode,0,10));
@@ -210,6 +220,7 @@ $brightness=substr($this->view_mode,10);
 //sg('test.br', $brightness);
 
 $this->brightness($this->id, $brightness);
+   $this->getinfo2($this->id, $debug);
     }
 
 
@@ -229,7 +240,7 @@ $this->brightness($this->id, $brightness);
 
  function search_devices(&$out) {
 
-$mhdevices=SQLSelect("SELECT * FROM magichome_devices");
+$mhdevices=SQLSelect("SELECT *, substr(CURRENTCOLOR,17) CCOLOR FROM magichome_devices");
 $total = count($mhdevices);
 for ($i = 0; $i < $total; $i++)
 { 
@@ -245,7 +256,7 @@ else
 }}
 
 
-  $mhdevices=SQLSelect("SELECT * FROM magichome_devices");
+  $mhdevices=SQLSelect("SELECT *, substr(CURRENTCOLOR,13,6) CCOLOR, substr(CURRENTCOLOR,11,2) BR FROM magichome_devices");
   if ($mhdevices[0]['ID']) {
    $out['DEVICES']=$mhdevices;
 
@@ -628,6 +639,10 @@ $hexmessage=hex2bin($message);
 // $debug.= "Received message [$receiveStr] <br>";
 //sg('test.answ',  $receiveStrHex);
 
+
+//	813323612105ff00000003000060 //R
+//	81332361210500ff000003000060    //G
+//	8133236121050000ff0003000060       //B
 
 SQLexec("update magichome_config set value='$receiveStrHex' where parametr='DEBUG'");
 
