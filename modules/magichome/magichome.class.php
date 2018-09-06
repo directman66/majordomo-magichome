@@ -340,7 +340,7 @@ socket_close($socket);
 
 //$msg = bytearray();
 //$lead_byte = #0x51
-sg('test.magichome',$buf .":".$ip.":".$port);
+//sg('test.magichome',$buf .":".$ip.":".$port);
 
 if ($ip) {
 
@@ -503,7 +503,7 @@ $HB=str_pad(dechex($B),2,"0");
 $message="31:$HR:$HG:$HB:00:f0:0f";
 $message=str_replace(":","",$message);
 $message=$message.$this->csum($message);
-sg('test.message', $message);
+//sg('test.message', $message);
 $hexmessage=hex2bin($message);
 
         socket_sendto($sock, $hexmessage, strlen($hexmessage), 0, $host, $port);
@@ -557,7 +557,7 @@ $BR=str_pad(dechex($brightness),2,"0");
 $message="31:00:00:00:".$BR.":f0:0f";
 $message=str_replace(":","",$message);
 $message=$message.$this->csum($message);
-sg('test.message', $message);
+//sg('test.message', $message);
 $hexmessage=hex2bin($message);
 
         socket_sendto($sock, $hexmessage, strlen($hexmessage), 0, $host, $port);
@@ -595,7 +595,7 @@ if(!socket_connect($sock , $host , $port))
 $message="81:8a:8b";
 $message=str_replace(":","",$message);
 $message=$message.$this->csum($message);
-sg('test.message', $message);
+//sg('test.message', $message);
 $hexmessage=hex2bin($message);
 
         socket_sendto($sock, $hexmessage, strlen($hexmessage), 0, $host, $port);
@@ -626,7 +626,7 @@ $hexmessage=hex2bin($message);
 //$receiveStrHex = ord($pkt[1]).".".ord($pkt[2]).".".ord($pkt[3]).".".ord($pkt[4]);
 
 // $debug.= "Received message [$receiveStr] <br>";
-sg('test.answ',  $receiveStrHex);
+//sg('test.answ',  $receiveStrHex);
 
 
 SQLexec("update magichome_config set value='$receiveStrHex' where parametr='DEBUG'");
@@ -692,7 +692,7 @@ $buf= $receiveStrHex;
  
 
 // }
-sg('test.rgbbuf', $host.":".$port.":".$buf);
+//sg('test.rgbbuf', $host.":".$port.":".$buf);
 SQLexec("update magichome_devices set CURRENTCOLOR='$buf' where id='$id'");
 
 }
