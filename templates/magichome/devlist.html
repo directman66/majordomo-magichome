@@ -43,9 +43,9 @@
   <a href="?view_mode=turnoff&id=[#ID#]&tab=info" class="btn btn-default" title="Выключить"><i class="glyphicon glyphicon-remove"></i></a> 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-
+<!--                <link rel='stylesheet' href='<#ROOTHTML#>js/spectrum/spectrum.min.css' />
                 <script src='<#ROOTHTML#>js/spectrum/spectrum.min.js'></script>
-                <link rel='stylesheet' href='<#ROOTHTML#>js/spectrum/spectrum.min.css' />
+                <link rel='stylesheet' href='?view_mode=changeсolor_[#VALUE#]&id=[#ID#]&tab=info' />
                 <input type="text" value="[#VALUE#]" name="[#PARAM_NAME#]_value" class="form-control" id="[#PARAM_NAME#]_value">
                 <script type="text/javascript">
                     $("#[#PARAM_NAME#]_value").spectrum({
@@ -56,13 +56,31 @@
                     });
                 </script>
 
+-->
+                <link rel='stylesheet' href='<#ROOTHTML#>js/spectrum/spectrum.min.css' />
+                <script src='<#ROOTHTML#>js/spectrum/spectrum.min.js'></script>
+                <link rel='stylesheet' href='?view_mode=changeсolor_[#VALUE#]&id=[#ID#]&tab=info' />
+                <input type="text" value="[#VALUE#]" name="[#PARAM_NAME#]_value" class="form-control" id="[#PARAM_NAME#]_value">
+                <script type="text/javascript">
+                    $("#[#PARAM_NAME#]_value").spectrum({
+                        preferredFormat: "hex",
+                        showInput: true,
+                        chooseText: "OK",
+                        cancelText: "<#LANG_CANCEL#>"
+                    });
+                </script>
+  <a href="?view_mode=custom50@50@50&id=[#ID#]"class="btn btn-default" title="Custom color"><i class="glyphicon glyphicon"></i></a> 
+  <a href="?view_mode=brightness50&id=[#ID#]"class="btn btn-default" title="50% brightness"><i class="glyphicon glyphicon"></i></a> 
+  <a href="?view_mode=brightness100&id=[#ID#]"class="btn btn-default" title="100% brightness"><i class="glyphicon glyphicon"></i></a> 
+
+
 &nbsp;&nbsp;&nbsp;&nbsp;
-  <a href="?view_mode=changeсolorred&id=[#ID#]&tab=info" class="btn btn-danger" color="red" title="Сменить цвет на красный"><i class="glyphicon glyphicon-asterisk"></i></a> 
-  <a href="?view_mode=changeсolorgreen&id=[#ID#]&tab=info" class="btn btn-success" title="Сменить цвет на зеленый"><i class="glyphicon glyphicon-asterisk"></i></a> 
-  <a href="?view_mode=changeсolorblue&id=[#ID#]&tab=info" class="btn btn-primary" title="Сменить цвет на синий"><i class="glyphicon glyphicon-asterisk"></i></a> 
-  <a href="?view_mode=changecolorwhite&id=[#ID#]&tab=info" class="btn btn-default" title="Сменить цвет на белый"><i class="glyphicon glyphicon-asterisk"></i></a> 
-  <a href="?view_mode=changeсoloryellow&id=[#ID#]&tab=info" class="btn btn-warning" title="Сменить цвет на желтый"><i class="glyphicon glyphicon-asterisk"></i></a> 
-  <a href="?view_mode=changeсolorlightblue&id=[#ID#]&tab=info" class="btn btn-info" title="Сменить цвет на голубой"><i class="glyphicon glyphicon-asterisk"></i></a> 
+  <a href="?view_mode=cс_red&id=[#ID#]&tab=info" class="btn btn-danger" color="red" title="Сменить цвет на красный"><i class="glyphicon glyphicon-asterisk"></i></a> 
+  <a href="?view_mode=cc_green&id=[#ID#]&tab=info" class="btn btn-success" title="Сменить цвет на зеленый"><i class="glyphicon glyphicon-asterisk"></i></a> 
+  <a href="?view_mode=cc_blue&id=[#ID#]&tab=info" class="btn btn-primary" title="Сменить цвет на синий"><i class="glyphicon glyphicon-asterisk"></i></a> 
+  <a href="?view_mode=cc_white&id=[#ID#]&tab=info" class="btn btn-default" title="Сменить цвет на белый"><i class="glyphicon glyphicon-asterisk"></i></a> 
+  <a href="?view_mode=cc_yellow&id=[#ID#]&tab=info" class="btn btn-warning" title="Сменить цвет на желтый"><i class="glyphicon glyphicon-asterisk"></i></a> 
+  <a href="?view_mode=cc_lightblue&id=[#ID#]&tab=info" class="btn btn-info" title="Сменить цвет на голубой"><i class="glyphicon glyphicon-asterisk"></i></a> 
 
 
 
