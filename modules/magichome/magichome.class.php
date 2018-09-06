@@ -743,7 +743,7 @@ function changerandom($id) {
  magichome_devices: LINKED_OBJECT varchar(100) NOT NULL DEFAULT ''
  magichome_devices: LINKED_PROPERTY varchar(100) NOT NULL DEFAULT ''
 
- magichome_commands: ID int(10) unsigned NOT NULL auto_increment
+ magichome_commands: ID int(10)  NOT NULL auto_increment
  magichome_commands: TITLE varchar(100) NOT NULL DEFAULT ''
  magichome_commands: VALUE varchar(255) NOT NULL DEFAULT ''
  magichome_commands: DEVICE_ID int(10) NOT NULL DEFAULT '0'
