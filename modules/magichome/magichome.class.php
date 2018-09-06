@@ -218,13 +218,14 @@ $total = count($mhdevices);
 for ($i = 0; $i < $total; $i++)
 { 
 $ip=$mhdevices[$i]['IP'];
-$lastping=$mhdevices[$i]['IP'];
+$lastping=$mhdevices[$i]['LASTPING'];
+echo time()-$lastping;
 if (time()-$lastping>300) {
 $online=ping(processTitle($ip));
     if ($online) 
-{SQLexec("update magichome_devices set ONLINE='1', LASTPING=now() where IP='$ip'");} 
+{SQLexec("update magichome_devices set ONLINE='1', LASTPING=".time()." where IP='$ip'");} 
 else 
-{SQLexec("update magichome_devices set ONLINE='0', LASTPING=now() where IP='$ip'");}
+{SQLexec("update magichome_devices set ONLINE='0', LASTPING=".time()." where IP='$ip'");}
 }}
 
 
@@ -743,7 +744,7 @@ function changerandom($id) {
  magichome_devices: LINKED_OBJECT varchar(100) NOT NULL DEFAULT ''
  magichome_devices: LINKED_PROPERTY varchar(100) NOT NULL DEFAULT ''
 
- magichome_commands: ID int(10)  NOT NULL auto_increment
+ magichome_commands: ID int(10) unsigned NOT NULL auto_increment
  magichome_commands: TITLE varchar(100) NOT NULL DEFAULT ''
  magichome_commands: VALUE varchar(255) NOT NULL DEFAULT ''
  magichome_commands: DEVICE_ID int(10) NOT NULL DEFAULT '0'
@@ -757,7 +758,7 @@ EOD;
   parent::dbInstall($data);
 
   $data = <<<EOD
- magichome_config: parametr varchar(300)
+ magichome_config: parametr unsigned varchar(300)
  magichome_config: value varchar(10000)  
 EOD;
    parent::dbInstall($data);
