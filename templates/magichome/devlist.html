@@ -31,13 +31,19 @@
   <td>[#MAC#]</td>
   <td>[#FIND#]</td>
   <td>
+
 <a href="?view_mode=getinfo&id=[#ID#]" title="Обновить текущую информацию">
 [#if CURRENTCOLOR!=""#]
+<font color="#[#CCOLOR#]" title="#[#CCOLOR#]">
 [#CURRENTCOLOR#]
+</font>
 [#else#]n/a
 	[#endif#]
 </a>
+
 </td>
+  <td>[#BR#]</td>
+
 &nbsp;&nbsp;
   <td><a href="?view_mode=turnon&id=[#ID#]&tab=info" class="btn btn-default" title="Включить"><i class="glyphicon glyphicon-ok"></i></a> 
   <a href="?view_mode=turnoff&id=[#ID#]&tab=info" class="btn btn-default" title="Выключить"><i class="glyphicon glyphicon-remove"></i></a> 
