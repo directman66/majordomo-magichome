@@ -782,7 +782,7 @@ function changerandom($id) {
  magichome_devices: FIND varchar(100) NOT NULL DEFAULT ''
  magichome_devices: LINKED_OBJECT varchar(100) NOT NULL DEFAULT ''
  magichome_devices: LINKED_PROPERTY varchar(100) NOT NULL DEFAULT ''
- EOD;
+EOD;
   parent::dbInstall($data);
 
 
@@ -795,13 +795,13 @@ function changerandom($id) {
  magichome_commands: LINKED_PROPERTY varchar(100) NOT NULL DEFAULT ''
  magichome_commands: LINKED_METHOD varchar(100) NOT NULL DEFAULT '' 
  magichome_commands: UPDATED datetime
- EOD;
+EOD;
   parent::dbInstall($data);
 
  $data = <<<EOD
  magichome_config: parametr  varchar(300) 
  magichome_config: value varchar(10000)  
- EOD;
+EOD;
   parent::dbInstall($data);
 
 $par=array();		 
