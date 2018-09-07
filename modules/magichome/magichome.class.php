@@ -770,7 +770,7 @@ function changerandom($id) {
 */
  function dbInstall($data = '') {
 
-  $data = <<<EOD
+ $data = <<<EOD
  magichome_devices: ID int(10) unsigned NOT NULL auto_increment
  magichome_devices: TITLE varchar(100) NOT NULL DEFAULT ''
  magichome_devices: IP varchar(100) NOT NULL DEFAULT ''
@@ -782,7 +782,11 @@ function changerandom($id) {
  magichome_devices: FIND varchar(100) NOT NULL DEFAULT ''
  magichome_devices: LINKED_OBJECT varchar(100) NOT NULL DEFAULT ''
  magichome_devices: LINKED_PROPERTY varchar(100) NOT NULL DEFAULT ''
+ EOD;
+  parent::dbInstall($data);
 
+
+ $data = <<<EOD
  magichome_commands: ID int(10) unsigned NOT NULL auto_increment
  magichome_commands: TITLE varchar(100) NOT NULL DEFAULT ''
  magichome_commands: VALUE varchar(255) NOT NULL DEFAULT ''
@@ -791,14 +795,14 @@ function changerandom($id) {
  magichome_commands: LINKED_PROPERTY varchar(100) NOT NULL DEFAULT ''
  magichome_commands: LINKED_METHOD varchar(100) NOT NULL DEFAULT '' 
  magichome_commands: UPDATED datetime
-
- magichome_config: parametr  varchar(300) 
- magichome_config: value varchar(10000)  
-
-
-EOD;
+ EOD;
   parent::dbInstall($data);
 
+ $data = <<<EOD
+ magichome_config: parametr  varchar(300) 
+ magichome_config: value varchar(10000)  
+ EOD;
+  parent::dbInstall($data);
 
 $par=array();		 
 $par['TITLE'] = 'command';
