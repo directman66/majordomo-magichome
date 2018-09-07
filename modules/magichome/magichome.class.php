@@ -309,12 +309,65 @@ $port = 48899;
 $str  = 'HF-A11ASSISTHREAD';
 
 
-$sock = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP); 
-socket_set_option($sock, SOL_SOCKET, SO_BROADCAST, 1); 
-socket_sendto($sock, $str, strlen($str), 0, $ip, $port);
-socket_recvfrom($sock, $buf,100 , 0, $ip, $port);
-usleep(100);
-socket_close($sock);
+		$cs = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
+
+		if(!$cs){
+echo "error socket";
+		}
+
+		socket_set_option($cs, SOL_SOCKET, SO_REUSEADDR, 1);
+		socket_set_option($cs, SOL_SOCKET, SO_BROADCAST, 1);
+		socket_set_option($cs, SOL_SOCKET, SO_RCVTIMEO, array('sec'=>1, 'usec'=>0));
+		socket_bind($cs, 0, 0);
+
+socket_sendto($cs, $str, strlen($str), 0, $ip, $port);
+                    //socket_recvfrom($sock, $buf,100, 0, $ip, $port);
+		while(socket_recvfrom($cs, $buf, 2048, 0, $ip, $port)){
+
+sg('test.buf',$buf);
+
+
+
+			if($buf != NULL){
+if ($ip) {
+
+$par=explode(",",$buf);
+
+  $mhdevices=SQLSelect("SELECT * FROM magichome_devices where MAC='".$par[1]."' and IP='$ip'");
+  if ($mhdevices[0]['ID']) {} else 
+
+{  $mhdevices=SQLSelect("SELECT max(ID) ID FROM magichome_devices");
+  if ($mhdevices[0]['ID']) {
+   $id=$mhdevices[0]['ID']+1;} else $id=0;
+
+
+$par['ID'] = $id;
+//$par['TITLE'] = 'RGB LED';
+
+$par['TITLE'] = $par[2];
+$par['IP'] = $ip;
+$par['PORT'] = $port;
+$par['MAC'] = $par[1];
+$par['FIND'] = date('m/d/Y H:i:s',time());		
+SQLInsert('magichome_devices', $par);		 
+}
+}
+ 			}
+		}
+
+		@socket_shutdown($cs, 2);
+		socket_close($cs);
+
+
+
+
+
+//$sock = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP); 
+//socket_set_option($sock, SOL_SOCKET, SO_BROADCAST, 1); 
+//socket_sendto($sock, $str, strlen($str), 0, $ip, $port);
+//socket_recvfrom($sock, $buf,100 , 0, $ip, $port);
+//usleep(100);
+//socket_close($sock);
 
 //        $buf = null;
 //        $data = null;
@@ -355,6 +408,7 @@ socket_close($sock);
 //$lead_byte = #0x51
 //sg('test.magichome',$buf .":".$ip.":".$port);
 
+/*
 if ($ip) {
 
 $par=explode(",",$buf);
@@ -378,7 +432,7 @@ $par['FIND'] = date('m/d/Y H:i:s',time());
 SQLInsert('magichome_devices', $par);		 
 }
 }
-
+ */
 
 
 
