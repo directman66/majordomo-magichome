@@ -793,7 +793,7 @@ function changerandom($id) {
  magichome_commands: LINKED_METHOD varchar(100) NOT NULL DEFAULT '' 
  magichome_commands: UPDATED datetime
 
- magichome_config: parametr  varchar(300) unsigned
+ magichome_config: parametr  varchar(300) 
  magichome_config: value varchar(10000)  
 
 
