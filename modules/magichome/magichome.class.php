@@ -804,6 +804,11 @@ EOD;
 EOD;
   parent::dbInstall($data);
 
+  $mhdevices=SQLSelect("SELECT *  FROM magichome_commands");
+  if ($mhdevices[0]['ID']) 
+
+{}else{
+
 $par=array();		 
 $par['TITLE'] = 'command';
 $par['ID'] = "1";		 
@@ -812,7 +817,7 @@ SQLInsert('magichome_commands', $par);
 $par['TITLE'] = 'color';
 $par['ID'] = "2";		 
 SQLInsert('magichome_commands', $par);		 
-
+                	
 $par['TITLE'] = 'level';
 $par['ID'] = "3";		 
 SQLInsert('magichome_commands', $par);		 
@@ -826,7 +831,7 @@ $par2=array();
 $par2['parametr'] = 'DEBUG';
 $par2['value'] = "";		 
 SQLInsert('magichome_config', $par2);		 
-
+}
 
 
  }
