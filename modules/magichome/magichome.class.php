@@ -141,7 +141,7 @@ $this->search_devices($out);
 
 if ($this->view_mode=='scan') {
 
-$this->search();
+$this->scan();
 //   $this->search_devices($out);
 }  
 
@@ -301,7 +301,7 @@ function checkSettings() {
 //////////////////////////////////////////////
 //////////////////////////////////////////////
 //////////////////////////////////////////////
- function search() {
+ function scan() {
 
 $ip = "255.255.255.255";
 $port = 48899;
@@ -313,6 +313,7 @@ $sock = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
 socket_set_option($sock, SOL_SOCKET, SO_BROADCAST, 1); 
 socket_sendto($sock, $str, strlen($str), 0, $ip, $port);
 socket_recvfrom($sock, $buf,100 , 0, $ip, $port);
+usleep(100);
 socket_close($sock);
 
 //        $buf = null;
@@ -325,7 +326,8 @@ socket_close($sock);
 //    echo("Data sent was: time\nResponse was:" . $buffer . "\n");
 
 //}
-socket_close($socket);
+	 
+
 
 
 //}
