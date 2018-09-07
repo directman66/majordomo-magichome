@@ -754,15 +754,12 @@ function changerandom($id) {
 * @access public
 */
  function uninstall() {
+   parent::uninstall();
   SQLExec('DROP TABLE IF EXISTS magichome_devices');
   SQLExec('DROP TABLE IF EXISTS magichome_config');
   SQLExec('DROP TABLE IF EXISTS magichome_commands');
   SQLExec('delete from settings where NAME like "%MAGICHOME%"');
 
-
-
-
-  parent::uninstall();
  }
 /**
 * dbInstall
