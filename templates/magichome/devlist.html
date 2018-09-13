@@ -1,4 +1,12 @@
+
+
 [#if VIEW_MODE=""#]
+
+<script src="<#ROOTHTML#>templates/magichome/jscolor.js"></script>
+
+
+
+
 <table align="center" class="table table-striped">
  <tr>
   <td><b>Модель</b></td>
@@ -8,7 +16,36 @@
   <td><b>Добавлено</b></td>
   <td><b>Состояние</b></td>
  </tr>
+
+
+
+
+
 [#begin DEVICES#]
+                <script type="text/javascript">
+ function selectServers(){
+   var types = $('select[name="selectType"]').val();
+    $.ajax({
+            type: "POST",
+            url: "/modules/devices/SMediaRenderer_urllist.php",
+            data: {action: 'SERVERS', types: types },
+            cache: false,
+            success: function(responce){ $('div[name="selectDataServer"]').html(responce); }
+            });
+ };
+                </script>
+
+                <script type="text/javascript">
+                    $("#[#PARAM_NAME#]_value").spectrum({
+                        preferredFormat: "hex",
+                        showInput: true,
+                        chooseText: "OK",
+                        cancelText: "<#LANG_CANCEL#>"
+                    });
+
+
+
+                </script>
 
  <tr>
   <td>[#TITLE#]</td>
@@ -52,7 +89,35 @@
   <a href="?view_mode=turnoff&id=[#ID#]&tab=info" class="btn btn-default" title="Выключить"><i class="glyphicon glyphicon-remove"></i></a> 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-<!--                <link rel='stylesheet' href='<#ROOTHTML#>js/spectrum/spectrum.min.css' />
+
+<input class="jscolor" onchange="update(this.jscolor)" value="[#CCOLOR#]" size="5">
+
+<!--
+alert('?view_mode=customhex_'+jscolor+'&id=[#ID#]')
+document.location.href = '?data_source=<#DATA_SOURCE#>&view_mode=customhex_'+jscolor+'&id=[#ID#]&tab=info';
+window.document.location.href='?data_source=<#DATA_SOURCE#>&view_mode=customhex_'+jscolor+'&id=[#ID#]&tab=info'
+window.document.location.href='?data_source=<#DATA_SOURCE#>&view_mode=customhex_'+jscolor+'&id=[#ID#]&tab=info'
+-->
+
+
+<script>
+
+function update(jscolor) {
+window.document.location.href='?action=magichome&data_source=<#DATA_SOURCE#>&view_mode=customhex_'+jscolor+'&id=[#ID#]&tab=info'
+}
+</script>
+
+
+
+
+<!--               
+                <link rel='stylesheet' href='<#ROOTHTML#>js/spectrum/spectrum.min.css' />
+                <script src='<#ROOTHTML#>js/spectrum/spectrum.min.js'></script>
+                <input type="text" value="[#VALUE#]" name="[#PARAM_NAME#]_value" class="form-control" id="[#PARAM_NAME#]_value">
+<!--               
+<select size="1" name="selectType"  onChange="selectServers()" style="width:160px;">
+
+                <link rel='stylesheet' href='<#ROOTHTML#>js/spectrum/spectrum.min.css' />
                 <script src='<#ROOTHTML#>js/spectrum/spectrum.min.js'></script>
                 <link rel='stylesheet' href='?view_mode=changeсolor_[#VALUE#]&id=[#ID#]&tab=info' />
                 <input type="text" value="[#VALUE#]" name="[#PARAM_NAME#]_value" class="form-control" id="[#PARAM_NAME#]_value">
@@ -64,12 +129,15 @@
                         cancelText: "<#LANG_CANCEL#>"
                     });
                 </script>
-
--->
+$page = file_get_contents("http://www.domain.com/filename");
+<input type="text" value="[#CCOLOR#]" name="[#PARAM_NAME#]_value" class="form-control" id="[#PARAM_NAME#]_value" onChange='file_get_contents("http://188.226.32.227/admin.php?&md=magichome&?view_mode=customhex_this.value&id=[#ID#]&tab=info");'>
+<input type="text" value="[#CCOLOR#]" name="[#PARAM_NAME#]_value" class="form-control" id="[#PARAM_NAME#]_value" onChange='file_get_contents("alert(this.value);");'>
+<input type="text" value="[#CCOLOR#]" name="[#PARAM_NAME#]_value" class="form-control" id="[#PARAM_NAME#]_value" onChange='file_get_contents("alert(this.value);");'>
+////////////////////////////
                 <link rel='stylesheet' href='<#ROOTHTML#>js/spectrum/spectrum.min.css' />
                 <script src='<#ROOTHTML#>js/spectrum/spectrum.min.js'></script>
                 <link rel='stylesheet' href='?view_mode=changeсolor_[#VALUE#]&id=[#ID#]&tab=info' />
-                <input type="text" value="[#CCOLOR#]" name="[#PARAM_NAME#]_value" class="form-control" id="[#PARAM_NAME#]_value">
+<input type="text" value="[#CCOLOR#]" name="[#PARAM_NAME#]_value" class="form-control" id="[#PARAM_NAME#]_value" onChange='file_get_contents("alert(this.value);");'>
                 <script type="text/javascript">
                     $("#[#PARAM_NAME#]_value").spectrum({
                         preferredFormat: "hex",
@@ -78,9 +146,68 @@
                         cancelText: "<#LANG_CANCEL#>"
                     });
                 </script>
-  <a href="?view_mode=custom50@50@50&id=[#ID#]"class="btn btn-default" title="Custom color"><i class="glyphicon glyphicon"></i></a> 
+
+-->
+
+<!--
+<div>
+<input type="text" value="[#CCOLOR#]" name="[#PARAM_NAME#]_value" class="form-control" id="[#PARAM_NAME#]_value" onChange='alert(this.value);'>
+                <script type="text/javascript">
+                    $("#[#PARAM_NAME#]_value").spectrum({
+                        preferredFormat: "hex",
+                        showInput: true,
+                        chooseText: "OK",
+                        cancelText: "<#LANG_CANCEL#>"
+                    });
+                </script>
+</div>
+
+
+                <link rel='stylesheet' href='<#ROOTHTML#>js/spectrum/spectrum.min.css' />
+                <script src='<#ROOTHTML#>js/spectrum/spectrum.min.js'></script>
+                <link rel='stylesheet' href='?view_mode=changeсolor_[#VALUE#]&id=[#ID#]&tab=info' />
+<input type="text" value="[#CCOLOR#]" name="[#PARAM_NAME#]_value" class="form-control" id="[#PARAM_NAME#]_value" onChange='file_get_contents("alert(this.value);");'>
+                <script type="text/javascript">
+                    $("#[#PARAM_NAME#]_value").spectrum({
+                        preferredFormat: "hex",
+                        showInput: true,
+                        chooseText: "OK",
+                        cancelText: "<#LANG_CANCEL#>"
+                    });
+                </script>
+
+-->
+
+
+
+
+
+
+<!--- 
+<script src='<#ROOTHTML#>/js/spectrum/spectrum.min.js'></script>
+<link rel='stylesheet' href='<#ROOTHTML#>/js/spectrum/spectrum.min.css' />
+
+<div class="device-widget controller" onClick='callMethod("%.object_title%.switch");'>
+    <div class="device-icon %.status|"off;on"%"></div>
+<div class="device-header"><span>%.object_description%</span>
+    <input type="text" id="color%.object_id%" class="colorpicker" value="%.colorSaved%" onChange='callMethod("%.object_title%.setColor","color="+encodeURIComponent(this.value));'/>
+</div>
+
+<script>
+    $("#color%.object_id%").spectrum({
+        preferredFormat: "hex",
+        showInput: true,
+        chooseText: "OK",
+        cancelText: "<#LANG_CANCEL#>"
+    });
+</script>
+</div> 
+-->
+<!--
+ <a href="?view_mode=custom50@50@50&id=[#ID#]"class="btn btn-default" title="Custom color"><i class="glyphicon glyphicon"></i></a> 
   <a href="?view_mode=brightness50&id=[#ID#]"class="btn btn-default" title="50% brightness"><i class="glyphicon glyphicon"></i></a> 
   <a href="?view_mode=brightness100&id=[#ID#]"class="btn btn-default" title="100% brightness"><i class="glyphicon glyphicon"></i></a> 
+-->
 
 
 &nbsp;&nbsp;&nbsp;&nbsp;
