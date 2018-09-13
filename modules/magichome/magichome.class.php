@@ -173,7 +173,7 @@ $this->delete_once($this->id);
    $this->getinfo2($this->id, $debug);
     }
 
-  if ($this->view_mode=='cс_red') {
+  if ($this->view_mode=='cСЃ_red') {
 
    $this->set_color($this->id, 255,0,0);
    $this->getinfo2($this->id, $debug);
@@ -205,10 +205,20 @@ $this->delete_once($this->id);
     }
 
 
-  if (substr($this->view_mode,0,6)=='custom') {
-$color=substr($this->view_mode,6);
+  if (substr($this->view_mode,0,9)=='customdec') {
+$color=substr($this->view_mode,10);
 
 $ar=explode("@",$color);
+   $this->set_color($this->id, $ar[0],$ar[1],$ar[2]);
+   $this->getinfo2($this->id, $debug);
+    }
+
+//('test.br', substr($this->view_mode,0,9));
+  if (substr($this->view_mode,0,9)=='customhex') {
+$color=substr($this->view_mode,11);
+
+$ar = hexdec(str_split($color, 2));
+
    $this->set_color($this->id, $ar[0],$ar[1],$ar[2]);
    $this->getinfo2($this->id, $debug);
     }
@@ -224,17 +234,11 @@ $this->brightness($this->id, $brightness);
     }
 
 
-
-
-
-
-
-
   if ($this->view_mode=='getinfo') {
    $this->getinfo2($this->id, $debug);
     }
 
-
+sg('test.bra', $this->view_mode);
 }  
  
 
@@ -324,7 +328,7 @@ socket_sendto($cs, $str, strlen($str), 0, $ip, $port);
                     //socket_recvfrom($sock, $buf,100, 0, $ip, $port);
 		while(socket_recvfrom($cs, $buf, 2048, 0, $ip, $port)){
 
-sg('test.buf',$buf);
+//sg('test.buf',$buf);
 
 
 
@@ -918,8 +922,8 @@ return substr(dechex($csum),-2);
 
 
 //info          81:8a:8b:96
-//вкл 		71:23:0f:a3
-//выкл 		71:24:0f:a4
+//РІРєР» 		71:23:0f:a3
+//РІС‹РєР» 		71:24:0f:a4
 //color         1 1 1 	31:01:01:01:00:f0:0f:33
 //3100:00:00:00:f0:0f:30
 //3100ff0000f00f2f
