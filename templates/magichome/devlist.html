@@ -14,7 +14,10 @@
   <td><b>Online</b></td>
   <td><b>SN</b></td>
   <td><b>Добавлено</b></td>
-  <td><b>Состояние</b></td>
+  <td><b>Сост.</b></td>
+  <td><b>Ур.ярк.</b></td>
+  <td><b>Выбор цвета</b></td>
+  <td><b>Вкл./выкл.</b></td>
  </tr>
 
 
@@ -42,22 +45,29 @@
   <td>[#MAC#]</td>
   <td>[#FIND#]</td>
   <td>
-
 <a href="?view_mode=getinfo&id=[#ID#]" title="Обновить текущую информацию">
-[#if CURRENTCOLOR!=""#]
-<font color="#[#CCOLOR#]" title="#[#CCOLOR#]">
-[#CURRENTCOLOR#]
+[#if TURN="23"#]
+<font style="background-color:#[#CCOLOR#]"	" title="#[#CCOLOR#]  [#CURRENTCOLOR#]">
+on
 </font>
-[#else#]n/a
-	[#endif#]
+[#else#]off[#endif#]</td>
 </a>
-
-</td>
 
   <td>[#BR#]</td>
   <td>
 
-[#if TURN="23"#]on[#else#]off[#endif#]
+
+<script src="<#ROOTHTML#>templates/magichome/jscolor.js"></script>
+<input class="jscolor" onchange="update(this.jscolor)" value="[#CCOLOR#]" size="5">
+  <a href="?view_mode=set_favorit_[#CCOLOR#]&id=[#ID#]&tab=info" class="btn btn-default"  title="Установить любимый цвет [#CCOLOR#]" ><i class="glyphicon  glyphicon-user"></i></a> 
+<script>
+
+function update(jscolor) {
+window.document.location.href='?action=magichome&data_source=<#DATA_SOURCE#>&view_mode=customhex_'+jscolor+'&id=[#ID#]&tab=info';
+}
+</script>
+
+
 </td>
 
 &nbsp;&nbsp;
@@ -65,14 +75,6 @@
   <a href="?view_mode=turnoff&id=[#ID#]&tab=info" class="btn btn-default" title="Выключить"><i class="glyphicon glyphicon-remove"></i></a> 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-<script src="<#ROOTHTML#>templates/magichome/jscolor.js"></script>
-<input class="jscolor" onchange="update(this.jscolor)" value="[#CCOLOR#]" size="5">
-<script>
-
-function update(jscolor) {
-window.document.location.href='?action=magichome&data_source=<#DATA_SOURCE#>&view_mode=customhex_'+jscolor+'&id=[#ID#]&tab=info';
-}
-</script>
 
 
 <!--
@@ -188,6 +190,7 @@ $page = file_get_contents("http://www.domain.com/filename");
 
 
 &nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="?view_mode=cс_favorit&id=[#ID#]&tab=info" class="btn btn-default"  title="Сменить цвет на любимый"><i class="glyphicon glyphicon-star"></i></a> 
   <a href="?view_mode=cс_red&id=[#ID#]&tab=info" class="btn btn-danger" color="red" title="Сменить цвет на красный"><i class="glyphicon glyphicon-asterisk"></i></a> 
   <a href="?view_mode=cc_green&id=[#ID#]&tab=info" class="btn btn-success" title="Сменить цвет на зеленый"><i class="glyphicon glyphicon-asterisk"></i></a> 
   <a href="?view_mode=cc_blue&id=[#ID#]&tab=info" class="btn btn-primary" title="Сменить цвет на синий"><i class="glyphicon glyphicon-asterisk"></i></a> 
