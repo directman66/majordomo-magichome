@@ -111,7 +111,7 @@ $out['MSG_DEBUG']=$debug;
 
 
 
-// $this->search_devices($out);
+ $this->search_devices($out);
 
 
   $this->data=$out;
@@ -132,15 +132,18 @@ function admin(&$out) {
 
  $this->getConfig();
 // $this->search_devices($out);
-$this->search_devices2($out);
-  if ($this->view_mode=='' || $this->view_mode=='info'  || $this->view_mode=='scan') {
+
+  if ($this->view_mode=='' || $this->view_mode=='info') {
 $this->search_devices($out);
   }
 
 
 
+if ($this->view_mode=='scan') {
 
-
+$this->scan();
+//   $this->search_devices($out);
+}  
 
 if ($this->view_mode=='delete_devices') {
 $this->delete_once($this->id);
@@ -174,9 +177,7 @@ $this->delete_once($this->id);
 
    $this->set_color($this->id, 255,0,0);
    $this->getinfo2($this->id, $debug);
-//   $this->search_devices2($out);
-
-      }
+    }
 
   if ($this->view_mode=='cc_green') {
    $this->set_color($this->id, 0,255,0);
@@ -249,8 +250,6 @@ $ar = hexdec(str_split($color, 2));
 
 
 sg('test.bra', $this->view_mode);
-
-
 }  
  
 
@@ -281,11 +280,6 @@ else
 }   
 
 
- function search_devices2(&$out) {
-  $mhdevices=SQLSelect("SELECT *, substr(CURRENTCOLOR,13,6) CCOLOR, substr(CURRENTCOLOR,10,2) BR, substr(CURRENTCOLOR,5,2) TURN FROM magichome_devices");
-  $out['DEVICES']=$mhdevices;
-
-}   
  
 
   
@@ -471,12 +465,6 @@ SQLInsert('magichome_devices', $par);
 
 function delete_once($id) {
   SQLExec("DELETE FROM magichome_devices WHERE id=".$id);
-  $this->redirect("?");
- }
-
-
-function set_favorit($id, $color) {
-  SQLExec("update magichome_devices set FAVORITCOLOR='$color' WHERE id=".$id);
   $this->redirect("?");
  }
 
@@ -796,6 +784,10 @@ SQLexec("update magichome_devices set CURRENTCOLOR='$buf' where id='$id'");
 }
 
 
+function set_favorit($id, $color) {
+  SQLExec("update magichome_devices set FAVORITCOLOR='$color' WHERE id=".$id);
+  $this->redirect("?");
+ }
 
 
 
@@ -965,4 +957,3 @@ return substr(dechex($csum),-2);
 
 
 // sudo tcpdump  ip dst 192.168.1.82 and  ip src 192.168.1.39 -w dump.cap
-
