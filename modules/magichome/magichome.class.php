@@ -237,7 +237,15 @@ $this->brightness($this->id, $brightness);
    $this->getinfo2($this->id, $debug);
     }
 
+  if (substr($this->view_mode,0,11)=='set_favorit') {
+$color=substr($this->view_mode,12);
 
+$ar = hexdec(str_split($color, 2));
+
+   $this->set_favorit($this->id, $color);
+   $this->getinfo2($this->id, $debug);
+
+    }
 
 
 sg('test.bra', $this->view_mode);
@@ -463,6 +471,12 @@ SQLInsert('magichome_devices', $par);
 
 function delete_once($id) {
   SQLExec("DELETE FROM magichome_devices WHERE id=".$id);
+  $this->redirect("?");
+ }
+
+
+function set_favorit($id, $color) {
+  SQLExec("update magichome_devices set FAVORITCOLOR='$color' WHERE id=".$id);
   $this->redirect("?");
  }
 
@@ -845,6 +859,7 @@ function changerandom($id) {
  magichome_devices: MAC varchar(100) NOT NULL DEFAULT ''
  magichome_devices: ONLINE varchar(100) NOT NULL DEFAULT ''
  magichome_devices: LASTPING varchar(100) NOT NULL DEFAULT ''
+ magichome_devices: FAVORITCOLOR varchar(100) NOT NULL DEFAULT ''
  magichome_devices: CURRENTCOLOR varchar(100) NOT NULL DEFAULT ''
  magichome_devices: FIND varchar(100) NOT NULL DEFAULT ''
  magichome_devices: LINKED_OBJECT varchar(100) NOT NULL DEFAULT ''
