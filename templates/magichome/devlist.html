@@ -65,25 +65,20 @@
       <div class="col-sm-5">
 
 <script src="<#ROOTHTML#>templates/magichome/jscolor.js"></script>
-<!--<input class="jscolor" onchange="document.color_change.submit();" value="[#CCOLOR#][#id#]" size="3" name="colorpicker"  id="colorpicker"> -->
-<input class="jscolor" onchange="document.color_change.submit();" value="[#CCOLOR#]" size="3" name="colorpicker"  id="colorpicker">
+<input class="jscolor" onchange="document.color_change.submit();" value="[#CCOLOR#][#id#]" size="3" name="colorpicker"  id="colorpicker"> 
 
-   </div>    </div>
+
+   </div>
+&nbsp;<a href="?view_mode=set_favorit_[#CCOLOR#]&id=[#ID#]&tab=info" class="btn btn-default"  title="Установить любимый цвет [#CCOLOR#]" ><i class="glyphicon  glyphicon-user"></i></a> 
+    </div>
 
 
 </form>
-
-
-<a href="?view_mode=set_favorit_[#CCOLOR#]&id=[#ID#]&tab=info" class="btn btn-default"  title="Установить любимый цвет [#CCOLOR#]" ><i class="glyphicon  glyphicon-user"></i></a> 
-<script>
-
-function update(jscolor) {
-window.document.location.href='?action=magichome&data_source=<#DATA_SOURCE#>&view_mode=customhex_'+jscolor+'&id=[#ID#]&tab=info';
-}
-</script>
-
-
 </td>
+
+
+
+
 
 &nbsp;&nbsp;
   <td><a href="?view_mode=turnon&id=[#ID#]&tab=info" class="btn btn-default" title="Включить"><i class="glyphicon glyphicon-ok"></i></a> 
