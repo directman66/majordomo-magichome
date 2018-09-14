@@ -45,12 +45,14 @@
   <td>[#MAC#]</td>
   <td>[#FIND#]</td>
   <td>
-<a href="?view_mode=getinfo&id=[#ID#]" title="Обновить текущую информацию">
+<a href="?view_mode=getinfo&id=[#ID#]" title="#[#CCOLOR#]  [#CURRENTCOLOR#]" >
 [#if TURN="23"#]
-<font style="background-color:#[#CCOLOR#]"	" title="#[#CCOLOR#]  [#CURRENTCOLOR#]">
-on
-</font>
-[#else#]off[#endif#]</td>
+<font style="background-color:#[#CCOLOR#]"	 title="#[#CCOLOR#]  [#CURRENTCOLOR#]"> 
+&nbsp;<i class="glyphicon glyphicon-ok-circle"></i>&nbsp;
+</font> 
+[#else#]
+&nbsp;<i class="glyphicon  glyphicon-remove-circle"></i>&nbsp;
+[#endif#]</td>
 </a>
 
   <td>[#BR#]</td>
