@@ -1,8 +1,8 @@
 
 
-[#if VIEW_MODE=""#]
+[#if VIEW_MODE!="0"#] 
 
-<script src="<#ROOTHTML#>templates/magichome/jscolor.js"></script>
+
 
 
 
@@ -22,30 +22,6 @@
 
 
 [#begin DEVICES#]
-                <script type="text/javascript">
- function selectServers(){
-   var types = $('select[name="selectType"]').val();
-    $.ajax({
-            type: "POST",
-            url: "/modules/devices/SMediaRenderer_urllist.php",
-            data: {action: 'SERVERS', types: types },
-            cache: false,
-            success: function(responce){ $('div[name="selectDataServer"]').html(responce); }
-            });
- };
-                </script>
-
-                <script type="text/javascript">
-                    $("#[#PARAM_NAME#]_value").spectrum({
-                        preferredFormat: "hex",
-                        showInput: true,
-                        chooseText: "OK",
-                        cancelText: "<#LANG_CANCEL#>"
-                    });
-
-
-
-                </script>
 
  <tr>
   <td>[#TITLE#]</td>
@@ -89,8 +65,15 @@
   <a href="?view_mode=turnoff&id=[#ID#]&tab=info" class="btn btn-default" title="Выключить"><i class="glyphicon glyphicon-remove"></i></a> 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-
+<script src="<#ROOTHTML#>templates/magichome/jscolor.js"></script>
 <input class="jscolor" onchange="update(this.jscolor)" value="[#CCOLOR#]" size="5">
+<script>
+
+function update(jscolor) {
+window.document.location.href='?action=magichome&data_source=<#DATA_SOURCE#>&view_mode=customhex_'+jscolor+'&id=[#ID#]&tab=info';
+}
+</script>
+
 
 <!--
 alert('?view_mode=customhex_'+jscolor+'&id=[#ID#]')
@@ -100,12 +83,6 @@ window.document.location.href='?data_source=<#DATA_SOURCE#>&view_mode=customhex_
 -->
 
 
-<script>
-
-function update(jscolor) {
-window.document.location.href='?action=magichome&data_source=<#DATA_SOURCE#>&view_mode=customhex_'+jscolor+'&id=[#ID#]&tab=info'
-}
-</script>
 
 
 
@@ -223,7 +200,7 @@ $page = file_get_contents("http://www.domain.com/filename");
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-  <a href="?view_mode=delete_devices&id=[#ID#]" onClick="return confirm('Are you sure? Please confirm.')" class="btn btn-default" title="<#LANG_DELETE#>"><i class="glyphicon glyphicon-trash"></i></a> 
+  <a href="?view_mode=delete_devices&id=[#ID#]&tab=info" onClick="return confirm('Are you sure? Please confirm.')" class="btn btn-default" title="<#LANG_DELETE#>"><i class="glyphicon glyphicon-trash"></i></a> 
   </td>
  </tr>
  [#end DEVICES#]
