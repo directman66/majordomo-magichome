@@ -111,7 +111,7 @@ $out['MSG_DEBUG']=$debug;
 
 
 
- $this->search_devices($out);
+// $this->search_devices($out);
 
 
   $this->data=$out;
@@ -132,18 +132,15 @@ function admin(&$out) {
 
  $this->getConfig();
 // $this->search_devices($out);
-
-  if ($this->view_mode=='' || $this->view_mode=='info') {
-$this->search_devices($out);
+$this->search_devices2($out);
+  if ($this->view_mode=='' || $this->view_mode=='info'  || $this->view_mode=='scan') {
+$this->search_devices2($out);
   }
 
 
 
-if ($this->view_mode=='scan') {
 
-$this->scan();
-//   $this->search_devices($out);
-}  
+
 
 if ($this->view_mode=='delete_devices') {
 $this->delete_once($this->id);
@@ -156,52 +153,54 @@ $this->delete_once($this->id);
 
   if ($this->view_mode=='turnon') {
    $this->turnon($this->id);
-   $this->getinfo2($this->id, $debug);
+//   $this->getinfo2($this->id, $debug);
 
     }
 
 
   if ($this->view_mode=='turnoff') {
    $this->turnoff($this->id);
-   $this->getinfo2($this->id, $debug);
+//   $this->getinfo2($this->id, $debug);
     }
 
 
 
   if ($this->view_mode=='changerandom') {
    $this->turnon($this->id);
-   $this->getinfo2($this->id, $debug);
+//   $this->getinfo2($this->id, $debug);
     }
 
-  if ($this->view_mode=='cСЃ_red') {
+  if ($this->view_mode=='cc_red') {
 
    $this->set_color($this->id, 255,0,0);
-   $this->getinfo2($this->id, $debug);
-    }
+//   $this->getinfo2($this->id, $debug);
+//   $this->search_devices2($out);
+
+      }
 
   if ($this->view_mode=='cc_green') {
    $this->set_color($this->id, 0,255,0);
-   $this->getinfo2($this->id, $debug);
+//   $this->getinfo2($this->id, $debug);
     }
 
   if ($this->view_mode=='cc_blue') {
    $this->set_color($this->id, 0,0,255);
-   $this->getinfo2($this->id, $debug);
+//   $this->getinfo2($this->id, $debug);
     }
 
   if ($this->view_mode=='cc_white') {
    $this->set_color($this->id, 255,255,255);
-   $this->getinfo2($this->id, $debug);
+//   $this->getinfo2($this->id, $debug);
     }
 
   if ($this->view_mode=='cc_yellow') {
    $this->set_color($this->id, 255,255,0);
-   $this->getinfo2($this->id, $debug);
+//   $this->getinfo2($this->id, $debug);
     }
 
   if ($this->view_mode=='cc_lightblue') {
    $this->set_color($this->id, 0,255,255);
-   $this->getinfo2($this->id, $debug);
+//   $this->getinfo2($this->id, $debug);
     }
 
 
@@ -210,7 +209,7 @@ $color=substr($this->view_mode,10);
 
 $ar=explode("@",$color);
    $this->set_color($this->id, $ar[0],$ar[1],$ar[2]);
-   $this->getinfo2($this->id, $debug);
+//   $this->getinfo2($this->id, $debug);
     }
 
 //('test.br', substr($this->view_mode,0,9));
@@ -220,7 +219,7 @@ $color=substr($this->view_mode,11);
 $ar = hexdec(str_split($color, 2));
 
    $this->set_color($this->id, $ar[0],$ar[1],$ar[2]);
-   $this->getinfo2($this->id, $debug);
+//   $this->getinfo2($this->id, $debug);
     }
 
 //sg('test.br', substr($this->view_mode,0,10));
@@ -230,15 +229,20 @@ $brightness=substr($this->view_mode,10);
 //sg('test.br', $brightness);
 
 $this->brightness($this->id, $brightness);
-   $this->getinfo2($this->id, $debug);
+//   $this->getinfo2($this->id, $debug);
     }
 
 
   if ($this->view_mode=='getinfo') {
-   $this->getinfo2($this->id, $debug);
+//   $this->getinfo2($this->id, $debug);
     }
 
+
+
+
 sg('test.bra', $this->view_mode);
+
+
 }  
  
 
@@ -269,6 +273,11 @@ else
 }   
 
 
+ function search_devices2(&$out) {
+  $mhdevices=SQLSelect("SELECT *, substr(CURRENTCOLOR,13,6) CCOLOR, substr(CURRENTCOLOR,10,2) BR, substr(CURRENTCOLOR,5,2) TURN FROM magichome_devices");
+  $out['DEVICES']=$mhdevices;
+
+}   
  
 
   
