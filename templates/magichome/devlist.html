@@ -58,9 +58,22 @@
   <td>[#BR#]</td>
   <td>
 
+<form action="?" method="get" class="form-horizontal" name="color_change">
+   <input type="hidden" name="view_mode" value="colorpicker">
+<!--   <div class="form-group"> -->
+  <div class="form-group">
+      <div class="col-sm-5">
 
 <script src="<#ROOTHTML#>templates/magichome/jscolor.js"></script>
-<input class="jscolor" onchange="update(this.jscolor)" value="[#CCOLOR#]" size="5">
+<!--<input class="jscolor" onchange="document.color_change.submit();" value="[#CCOLOR#][#id#]" size="3" name="colorpicker"  id="colorpicker"> -->
+<input class="jscolor" onchange="document.color_change.submit();" value="[#CCOLOR#]" size="3" name="colorpicker"  id="colorpicker">
+
+   </div>    </div>
+
+
+</form>
+
+
 <a href="?view_mode=set_favorit_[#CCOLOR#]&id=[#ID#]&tab=info" class="btn btn-default"  title="Установить любимый цвет [#CCOLOR#]" ><i class="glyphicon  glyphicon-user"></i></a> 
 <script>
 
