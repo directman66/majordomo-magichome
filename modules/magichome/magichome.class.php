@@ -161,6 +161,25 @@ $this->delete_once($this->id);
     }
 
 
+  if ($this->view_mode=='colorpicker') {
+ global $colorpicker;
+sg('test.colorpicker',$colorpicker);
+$colorhex=substr($colorpicker,0,6);
+$cid=substr($colorpicker,7);
+
+
+$cmd_rec = SQLSelect("SELECT * FROM magichome_devices");
+$cid=$cmd_rec[0]['ID'];
+sg('test.cid', $cid);
+
+$ar =(str_split($colorhex, 2));
+
+   $this->set_colorhex($cid, $ar[0],$ar[1],$ar[2]);
+   $this->getinfo2($cid, $debug);
+    }
+
+
+
   if ($this->view_mode=='turnoff') {
    $this->turnoff($this->id);
    $this->getinfo2($this->id, $debug);
@@ -180,7 +199,7 @@ $ar=explode("@",$color);
 sg('test.ccolor',substr($this->view_mode,0,11));
   if (substr($this->view_mode,0,11)=='setcolorhex') {
 $color=substr($this->view_mode,12);
-sg('test.customhex',$color);
+//sg('test.customhex',$color);
 
 $ar =(str_split($color, 2));
 
@@ -977,4 +996,3 @@ return substr(dechex($csum),-2);
 
 
 // sudo tcpdump  ip dst 192.168.1.82 and  ip src 192.168.1.39 -w dump.cap
-
