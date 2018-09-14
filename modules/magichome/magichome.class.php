@@ -166,45 +166,6 @@ $this->delete_once($this->id);
    $this->getinfo2($this->id, $debug);
     }
 
-
-
-  if ($this->view_mode=='changerandom') {
-   $this->turnon($this->id);
-   $this->getinfo2($this->id, $debug);
-    }
-
-  if ($this->view_mode=='cc_red') {
-
-   $this->set_color($this->id, 255,0,0);
-   $this->getinfo2($this->id, $debug);
-    }
-
-  if ($this->view_mode=='cc_green') {
-   $this->set_color($this->id, 0,255,0);
-   $this->getinfo2($this->id, $debug);
-    }
-
-  if ($this->view_mode=='cc_blue') {
-   $this->set_color($this->id, 0,0,255);
-   $this->getinfo2($this->id, $debug);
-    }
-
-  if ($this->view_mode=='cc_white') {
-   $this->set_color($this->id, 255,255,255);
-   $this->getinfo2($this->id, $debug);
-    }
-
-  if ($this->view_mode=='cc_yellow') {
-   $this->set_color($this->id, 255,255,0);
-   $this->getinfo2($this->id, $debug);
-    }
-
-  if ($this->view_mode=='cc_lightblue') {
-   $this->set_color($this->id, 0,255,255);
-   $this->getinfo2($this->id, $debug);
-    }
-
-
   if (substr($this->view_mode,0,9)=='customdec') {
 $color=substr($this->view_mode,10);
 
@@ -214,15 +175,20 @@ $ar=explode("@",$color);
     }
 
 //('test.br', substr($this->view_mode,0,9));
-  if (substr($this->view_mode,0,9)=='customhex') {
-$color=substr($this->view_mode,11);
+//////////////////////////
+//////////////////////////
+sg('test.ccolor',substr($this->view_mode,0,11));
+  if (substr($this->view_mode,0,11)=='setcolorhex') {
+$color=substr($this->view_mode,12);
+sg('test.customhex',$color);
 
-$ar = hexdec(str_split($color, 2));
+$ar =(str_split($color, 2));
 
-   $this->set_color($this->id, $ar[0],$ar[1],$ar[2]);
+   $this->set_colorhex($this->id, $ar[0],$ar[1],$ar[2]);
    $this->getinfo2($this->id, $debug);
     }
-
+//////////////////////////
+//////////////////////////
 //sg('test.br', substr($this->view_mode,0,10));
   if (substr($this->view_mode,0,10)=='brightness') {
 
@@ -249,7 +215,7 @@ $ar = hexdec(str_split($color, 2));
     }
 
 
-sg('test.bra', $this->view_mode);
+//sg('test.bra', $this->view_mode);
 }  
  
 
@@ -541,7 +507,7 @@ if(!socket_connect($sock , $host , $port))
 }
 
 
-function set_color($id, $R,$G,$B) {
+function set_colordec($id, $R,$G,$B) {
 //color         1 1 1 	31:01:01:01:00:f0:0f:33
 
 $cmd_rec = SQLSelectOne("SELECT IP, PORT FROM magichome_devices WHERE id=".$id);
@@ -592,6 +558,60 @@ $hexmessage=hex2bin($message);
         usleep(100);
 socket_close($sock);
 }
+
+
+function set_colorhex($id, $HR,$HG,$HB) {
+//color         1 1 1 	31:01:01:01:00:f0:0f:33
+
+$cmd_rec = SQLSelectOne("SELECT IP, PORT FROM magichome_devices WHERE id=".$id);
+$host=$cmd_rec['IP'];
+
+$port=5577;
+
+
+if(!($sock = socket_create(AF_INET, SOCK_STREAM, getprotobyname("tcp"))))
+{
+    $errorcode = socket_last_error();
+    $errormsg = socket_strerror($errorcode);
+
+    die("Couldn't create socket: [$errorcode] $errormsg \n");
+}
+
+//Connect socket to remote server
+if(!socket_connect($sock , $host , $port))
+{
+    $errorcode = socket_last_error();
+    $errormsg = socket_strerror($errorcode);
+
+
+}
+
+//71:24:0f:a4
+
+//        $broadcast_string = chr(0x71).chr(0x24).chr(0x0f).chr(0xa4);
+
+//color         1 1 1 	31:01:01:01:00:f0:0f:33
+//str_pad (27, 5,"0",STR_PAD_LEFT); 
+//$HR=str_pad(dechex($R),2,"0");
+//$HG=str_pad(dechex($G),2,"0");
+//$HB=str_pad(dechex($B),2,"0");
+
+//$HR=dechex($R);
+//$HG=dechex($G);
+//$HB=dechex($B);
+
+//$message="31:01:01:01:00:f0:0f";
+$message="31:$HR:$HG:$HB:00:f0:0f";
+$message=str_replace(":","",$message);
+$message=$message.$this->csum($message);
+//sg('test.message', $message);
+$hexmessage=hex2bin($message);
+
+        socket_sendto($sock, $hexmessage, strlen($hexmessage), 0, $host, $port);
+        usleep(100);
+socket_close($sock);
+}
+
 
 
 function brightness($id, $brightness) {
