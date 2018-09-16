@@ -149,9 +149,10 @@ if ($this->view_mode=='delete_devices') {
 $this->delete_once($this->id);
 }  
 
-  if ($this->view_mode=='edit_magichome_devices') {
-   $this->edit_magichome_devices($out, $this->id);
+  if ($this->view_mode=='edit_devices') {
+   $this->edit_devices($out, $this->id);
     }
+
 
 
   if ($this->view_mode=='turnon') {
@@ -163,14 +164,14 @@ $this->delete_once($this->id);
 
   if ($this->view_mode=='colorpicker') {
  global $colorpicker;
-sg('test.colorpicker',$colorpicker);
+//sg('test.colorpicker',$colorpicker);
 $colorhex=substr($colorpicker,0,6);
 $cid=substr($colorpicker,7);
 
 
 $cmd_rec = SQLSelect("SELECT * FROM magichome_devices");
 $cid=$cmd_rec[0]['ID'];
-sg('test.cid', $cid);
+//sg('test.cid', $cid);
 
 $ar =(str_split($colorhex, 2));
 
@@ -237,6 +238,10 @@ $ar = hexdec(str_split($color, 2));
 //sg('test.bra', $this->view_mode);
 }  
  
+function edit_devices(&$out, $id) {
+require(DIR_MODULES.$this->name . '/magichome_devices_edit.inc.php');
+}
+
 
  function search_devices(&$out) {
 
@@ -977,8 +982,8 @@ return substr(dechex($csum),-2);
 
 
 //info          81:8a:8b:96
-//РІРєР» 		71:23:0f:a3
-//РІС‹РєР» 		71:24:0f:a4
+//Р Р†Р С”Р В» 		71:23:0f:a3
+//Р Р†РЎвЂ№Р С”Р В» 		71:24:0f:a4
 //color         1 1 1 	31:01:01:01:00:f0:0f:33
 //3100:00:00:00:f0:0f:30
 //3100ff0000f00f2f
