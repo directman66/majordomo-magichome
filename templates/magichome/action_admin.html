@@ -1,228 +1,82 @@
-
-
-[#if VIEW_MODE!="0"#] 
-
-
-
-
-
-
-<table align="center" class="table table-striped">
- <tr>
-  <td><b>Модель</b></td>
-  <td><b>IP-адрес</b></td>
-  <td><b>Online</b></td>
-  <td><b>SN</b></td>
-  <td><b>Добавлено</b></td>
-  <td><b>Сост.</b></td>
-  <td><b>Ур.ярк.</b></td>
-  <td><b>Выбор цвета</b></td>
-  <td><b>Вкл./выкл.</b></td>
- </tr>
-
-
-
-
-
-[#begin DEVICES#]
-
- <tr>
-  <td>[#TITLE#]</td>
-  <td>[#IP#]</td>
-
-  <td style="vertical-align:middle">
-	[#if ONLINE!=""#]
-		[#if ONLINE==1#]
-			<span class="label label-success" title="<#LANG_XIMI_APP_ONLINE#>">Online</span>
-		[#else#]
-			<span class="label label-warning" title="<#LANG_XIMI_APP_OFFLINE#>">Offline</span>
-		[#endif#]
-	[#else#]
-		&nbsp;
-	[#endif#]
- </td> 
-
-  <td>[#MAC#]</td>
-  <td>[#FIND#]</td>
-  <td>
-<a href="?view_mode=getinfo&id=[#ID#]" title="#[#CCOLOR#]  [#CURRENTCOLOR#]" >
-[#if TURN="23"#]
-<font style="background-color:#[#CCOLOR#]"	 title="#[#CCOLOR#]  [#CURRENTCOLOR#]"> 
-&nbsp;<i class="glyphicon glyphicon-ok-circle"></i>&nbsp;
-</font> 
-[#else#]
-&nbsp;<i class="glyphicon  glyphicon-remove-circle"></i>&nbsp;
-[#endif#]</td>
-</a>
-
-  <td>[#BR#]</td>
-  <td>
-
-<form action="?" method="get" class="form-horizontal" name="color_change">
-   <input type="hidden" name="view_mode" value="colorpicker">
-<!--   <div class="form-group"> -->
-  <div class="form-group">
-      <div class="col-sm-5">
-
-<script src="<#ROOTHTML#>templates/magichome/jscolor.js"></script>
-<input class="jscolor" onchange="document.color_change.submit();" value="[#CCOLOR#][#id#]" size="3" name="colorpicker"  id="colorpicker"> 
-
-
-   </div>
-&nbsp;<a href="?view_mode=set_favorit_[#CCOLOR#]&id=[#ID#]&tab=info" class="btn btn-default"  title="Установить любимый цвет [#CCOLOR#]" ><i class="glyphicon  glyphicon-user"></i></a> 
-    </div>
-
-
-</form>
-</td>
-
-
-
-
-
-&nbsp;&nbsp;
-  <td><a href="?view_mode=turnon&id=[#ID#]&tab=info" class="btn btn-default" title="Включить"><i class="glyphicon glyphicon-ok"></i></a> 
-  <a href="?view_mode=turnoff&id=[#ID#]&tab=info" class="btn btn-default" title="Выключить"><i class="glyphicon glyphicon-remove"></i></a> 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-
-
-<!--
-alert('?view_mode=customhex_'+jscolor+'&id=[#ID#]')
-document.location.href = '?data_source=<#DATA_SOURCE#>&view_mode=customhex_'+jscolor+'&id=[#ID#]&tab=info';
-window.document.location.href='?data_source=<#DATA_SOURCE#>&view_mode=customhex_'+jscolor+'&id=[#ID#]&tab=info'
-window.document.location.href='?data_source=<#DATA_SOURCE#>&view_mode=customhex_'+jscolor+'&id=[#ID#]&tab=info'
--->
-
-
-
-
-
-
-<!--               
-                <link rel='stylesheet' href='<#ROOTHTML#>js/spectrum/spectrum.min.css' />
-                <script src='<#ROOTHTML#>js/spectrum/spectrum.min.js'></script>
-                <input type="text" value="[#VALUE#]" name="[#PARAM_NAME#]_value" class="form-control" id="[#PARAM_NAME#]_value">
-<!--               
-<select size="1" name="selectType"  onChange="selectServers()" style="width:160px;">
-
-                <link rel='stylesheet' href='<#ROOTHTML#>js/spectrum/spectrum.min.css' />
-                <script src='<#ROOTHTML#>js/spectrum/spectrum.min.js'></script>
-                <link rel='stylesheet' href='?view_mode=changeсolor_[#VALUE#]&id=[#ID#]&tab=info' />
-                <input type="text" value="[#VALUE#]" name="[#PARAM_NAME#]_value" class="form-control" id="[#PARAM_NAME#]_value">
-                <script type="text/javascript">
-                    $("#[#PARAM_NAME#]_value").spectrum({
-                        preferredFormat: "hex",
-                        showInput: true,
-                        chooseText: "OK",
-                        cancelText: "<#LANG_CANCEL#>"
-                    });
-                </script>
-$page = file_get_contents("http://www.domain.com/filename");
-<input type="text" value="[#CCOLOR#]" name="[#PARAM_NAME#]_value" class="form-control" id="[#PARAM_NAME#]_value" onChange='file_get_contents("http://188.226.32.227/admin.php?&md=magichome&?view_mode=customhex_this.value&id=[#ID#]&tab=info");'>
-<input type="text" value="[#CCOLOR#]" name="[#PARAM_NAME#]_value" class="form-control" id="[#PARAM_NAME#]_value" onChange='file_get_contents("alert(this.value);");'>
-<input type="text" value="[#CCOLOR#]" name="[#PARAM_NAME#]_value" class="form-control" id="[#PARAM_NAME#]_value" onChange='file_get_contents("alert(this.value);");'>
-////////////////////////////
-                <link rel='stylesheet' href='<#ROOTHTML#>js/spectrum/spectrum.min.css' />
-                <script src='<#ROOTHTML#>js/spectrum/spectrum.min.js'></script>
-                <link rel='stylesheet' href='?view_mode=changeсolor_[#VALUE#]&id=[#ID#]&tab=info' />
-<input type="text" value="[#CCOLOR#]" name="[#PARAM_NAME#]_value" class="form-control" id="[#PARAM_NAME#]_value" onChange='file_get_contents("alert(this.value);");'>
-                <script type="text/javascript">
-                    $("#[#PARAM_NAME#]_value").spectrum({
-                        preferredFormat: "hex",
-                        showInput: true,
-                        chooseText: "OK",
-                        cancelText: "<#LANG_CANCEL#>"
-                    });
-                </script>
-
--->
-
-<!--
 <div>
-<input type="text" value="[#CCOLOR#]" name="[#PARAM_NAME#]_value" class="form-control" id="[#PARAM_NAME#]_value" onChange='alert(this.value);'>
-                <script type="text/javascript">
-                    $("#[#PARAM_NAME#]_value").spectrum({
-                        preferredFormat: "hex",
-                        showInput: true,
-                        chooseText: "OK",
-                        cancelText: "<#LANG_CANCEL#>"
-                    });
-                </script>
+
+[#ONLINE#]
+
+<style>
+.raz {
+  border-spacing: 12.5em 1.3em; /* border-collapse наследуется, применяется только к table или inline-table элементам с border-collapse: separate; */ 
+}
+.raz,
+.raz td {
+  border: 0px solid red;
+padding: .3em 1em
+}
+</style>
+
+
+
+<a href="https://play.google.com/store/apps/details?id=com.Zengge.LEDWifiMagicHome"> 
+<img src="../img/modules/magichomeboard.png" width="20%"  > 
+</a>
+&nbsp;&nbsp; &nbsp;&nbsp;
+&nbsp;&nbsp; &nbsp;&nbsp;
+ &nbsp;&nbsp;<a class="btn btn-default" href="?data_source=<#DATA_SOURCE#>&view_mode=scan&tab=info">SCAN</a>
+
+
+
+ &nbsp; 
 </div>
 
 
-                <link rel='stylesheet' href='<#ROOTHTML#>js/spectrum/spectrum.min.css' />
-                <script src='<#ROOTHTML#>js/spectrum/spectrum.min.js'></script>
-                <link rel='stylesheet' href='?view_mode=changeсolor_[#VALUE#]&id=[#ID#]&tab=info' />
-<input type="text" value="[#CCOLOR#]" name="[#PARAM_NAME#]_value" class="form-control" id="[#PARAM_NAME#]_value" onChange='file_get_contents("alert(this.value);");'>
-                <script type="text/javascript">
-                    $("#[#PARAM_NAME#]_value").spectrum({
-                        preferredFormat: "hex",
-                        showInput: true,
-                        chooseText: "OK",
-                        cancelText: "<#LANG_CANCEL#>"
-                    });
-                </script>
 
--->
+	 <ul class="nav nav-tabs">
 
+<br>
+<li [#if TAB=="" || TAB=="info" #] class="active" [#endif#]><a href="?data_source=<#DATA_SOURCE#>&view_mode=&id=<#ID#>&tab=info"><span class="glyphicon glyphicon-list-alt"></span> Информация</a></li>
+<!--<li [#if TAB=="config" #] class="active" [#endif#]><a href="?data_source=<#DATA_SOURCE#>&view_mode=&id=<#ID#>&tab=config"><span class="glyphicon glyphicon-cog"></span> Настройки</a></li>
+<li [#if TAB=="debug" #] class="active" [#endif#]><a href="?view_mode=&tab=debug"><span class="glyphicon glyphicon-inbox"></span> Отладка</a> </li>	
+!-->
+<li [#if TAB=="help" #] class="active" [#endif#]><a href="?view_mode=&tab=help"><span class="glyphicon glyphicon-info-sign"></span> Помощь</a> </li>	
+</ul>
 
+[#if TAB="info"|| TAB==""#] [#inc devlist.html#] [#endif#]
 
+[#if TAB="config"#]
+[#endif#]
 
+[#if TAB="debug"#]
+<br>
+Degug:
+<div>
+[#MSG_DEBUG#]
 
-
-<!--- 
-<script src='<#ROOTHTML#>/js/spectrum/spectrum.min.js'></script>
-<link rel='stylesheet' href='<#ROOTHTML#>/js/spectrum/spectrum.min.css' />
-
-<div class="device-widget controller" onClick='callMethod("%.object_title%.switch");'>
-    <div class="device-icon %.status|"off;on"%"></div>
-<div class="device-header"><span>%.object_description%</span>
-    <input type="text" id="color%.object_id%" class="colorpicker" value="%.colorSaved%" onChange='callMethod("%.object_title%.setColor","color="+encodeURIComponent(this.value));'/>
 </div>
 
-<script>
-    $("#color%.object_id%").spectrum({
-        preferredFormat: "hex",
-        showInput: true,
-        chooseText: "OK",
-        cancelText: "<#LANG_CANCEL#>"
-    });
-</script>
-</div> 
--->
-<!--
- <a href="?view_mode=custom50@50@50&id=[#ID#]"class="btn btn-default" title="Custom color"><i class="glyphicon glyphicon"></i></a> 
-  <a href="?view_mode=brightness50&id=[#ID#]"class="btn btn-default" title="50% brightness"><i class="glyphicon glyphicon"></i></a> 
-  <a href="?view_mode=brightness100&id=[#ID#]"class="btn btn-default" title="100% brightness"><i class="glyphicon glyphicon"></i></a> 
--->
+ [#endif#]
+
+[#if TAB="help"#] [#inc help.html#] [#endif#]
 
 
-&nbsp;&nbsp;&nbsp;&nbsp;
-  <a href="?view_mode=setcolorhex_[#FAVORITCOLOR#]&id=[#ID#]&tab=info" class="btn btn-default"  title="Сменить цвет на любимый [#FAVORITCOLOR#]"><i class="glyphicon glyphicon-star"></i></a> 
-  <a href="?view_mode=setcolorhex_ff0000&id=[#ID#]&tab=info" class="btn btn-danger" color="red" title="Сменить цвет на красный"><i class="glyphicon glyphicon-asterisk"></i></a> 
-  <a href="?view_mode=setcolorhex_00ff00&id=[#ID#]&tab=info" class="btn btn-success" title="Сменить цвет на зеленый"><i class="glyphicon glyphicon-asterisk"></i></a> 
-  <a href="?view_mode=setcolorhex_0000ff&id=[#ID#]&tab=info" class="btn btn-primary" title="Сменить цвет на синий"><i class="glyphicon glyphicon-asterisk"></i></a> 
-  <a href="?view_mode=setcolorhex_ffffff&id=[#ID#]&tab=info" class="btn btn-default" title="Сменить цвет на белый"><i class="glyphicon glyphicon-asterisk"></i></a> 
-  <a href="?view_mode=setcolorhex_ffff00&id=[#ID#]&tab=info" class="btn btn-warning" title="Сменить цвет на желтый"><i class="glyphicon glyphicon-asterisk"></i></a> 
-  <a href="?view_mode=setcolorhex_00ffff&id=[#ID#]&tab=info" class="btn btn-info" title="Сменить цвет на голубой"><i class="glyphicon glyphicon-asterisk"></i></a> 
-
-
-
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  <a href="?data_source=<#DATA_SOURCE#>&view_mode=edit_devices&id=[#ID#]" class="btn btn-default" title="Редактировать"><i class="glyphicon glyphicon-pencil"></i></a>
-  <a href="?view_mode=delete_devices&id=[#ID#]&tab=info" onClick="return confirm('Are you sure? Please confirm.')" class="btn btn-default" title="<#LANG_DELETE#>"><i class="glyphicon glyphicon-trash"></i></a> 
-  </td>
- </tr>
- [#end DEVICES#]
-</table>
-[#else DEVICES#]
-<p>No devices discovered yet</p>
-[#endif DEVICES#]
-
-
-
+[#if VIEW_MODE="edit_devices"#]
+   [#if ID!=""#]
+      [#if TITLE!=""#]<h4>[#TITLE#]</h4>[#endif TITLE#]
+      <ul class="nav nav-tabs">
+         <li [#if TAB=""#] class="active"[#endif#]>
+            <a href="?data_source=<#DATA_SOURCE#>&view_mode=<#VIEW_MODE#>&id=<#ID#>&tab=info"><#LANG_GENERAL#></a>
+         </li>
+         <li [#if TAB="data"#] class="active"[#endif#]>
+            <a href="?data_source=<#DATA_SOURCE#>&view_mode=<#VIEW_MODE#>&id=<#ID#>&tab=data"><#LANG_DATA#></a>
+         </li>
+      </ul>
+      &nbsp;
+      <br/>
+   [#endif ID#]
+   
+   [#if TAB="info"#]
+      [#inc devices_edit_default.html#]
+   [#endif TAB#]
+   
+   [#if TAB="data"#]
+      [#inc devices_edit_data.html#]
+   [#endif TAB#]
 [#endif VIEW_MODE#]
-
