@@ -322,7 +322,7 @@ echo "error socket";
 
 socket_sendto($cs, $str, strlen($str), 0, $ip, $port);
                     //socket_recvfrom($sock, $buf,100, 0, $ip, $port);
-		while(socket_recvfrom($cs, $buf, 2048, 0, $ip, $port)){
+		while(@socket_recvfrom($cs, $buf, 1024, 0, $ip, $port)){
 
 //sg('test.buf',$buf);
 
