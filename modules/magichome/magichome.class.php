@@ -237,6 +237,18 @@ $ar = hexdec(str_split($color, 2));
 
 //sg('test.bra', $this->view_mode);
 }  
+
+
+ function propertySetHandle($object, $property, $value) {
+   $my_properties=SQLSelect("SELECT ID FROM magichome_devices WHERE LINKED_OBJECT LIKE '".DBSafe($object)."' AND LINKED_PROPERTY LIKE '".DBSafe($property)."'");
+   $total=count($my_properties);
+   if ($total) {
+    for($i=0;$i<$total;$i++) {
+     $this->setProperty($my_properties[$i]['ID'], $value);
+    }
+   }  
+ }
+
  
 function edit_devices(&$out, $id) {
 require(DIR_MODULES.$this->name . '/magichome_devices_edit.inc.php');
@@ -339,24 +351,49 @@ if ($ip) {
 $par=explode(",",$buf);
 
   $mhdevices=SQLSelect("SELECT * FROM magichome_devices where MAC='".$par[1]."' and IP='$ip'");
-  if ($mhdevices[0]['ID']) {} else 
+ if ($mhdevices[0]['ID']) {} else 
 
-{  $mhdevices=SQLSelect("SELECT max(ID) ID FROM magichome_devices");
-  if ($mhdevices[0]['ID']) {
-   $id=$mhdevices[0]['ID']+1;} else $id=0;
+{ 
+//$id=0;
+// $mhdevices=SQLSelect("SELECT max(ID) ID FROM magichome_devices");
+//  if ($mhdevices[0]['ID']) {
+//   $id=$mhdevices[0]['ID']+1;} 
 
+//$id=100;
 
-$par['ID'] = $id;
+$mac=$par[1];
+
+$par1=array();
+//$par1['ID'] = $id;
 //$par['TITLE'] = 'RGB LED';
 
-$par['TITLE'] = $par[2];
-$par['IP'] = $ip;
-$par['PORT'] = $port;
-$par['MAC'] = $par[1];
-$par['FIND'] = date('m/d/Y H:i:s',time());		
-SQLInsert('magichome_devices', $par);		 
+$par1['TITLE'] = $par[2];
+$par1['IP'] = $ip;
+$par1['PORT'] = $port;
+//$par1['MODEL'] = 'RGB DIMMER';
+$par1['MAC'] = $mac;
+$par1['FIND'] = date('m/d/Y H:i:s',time());		
+SQLInsert('magichome_devices', $par1);		 
+
+
+$id=SQLSelectOne("SELECT ID FROM magichome_devices where MAC='$mac'")['ID'];
+
+$cmd=SQLSelect("SELECT max(ID) ID FROM magichome_commands where DEVICE_ID='$id'");
+  if ( $cmd[0]['ID']) { null;} else {
+
+
+$commands=array('status','level', 'color');
+$total = count($commands);
+     for ($i = 0; $i < $total; $i++) {
+
+                $cmd_rec=array();
+               $cmd_rec['DEVICE_ID']=$id;
+               $cmd_rec['TITLE']=$commands[$i];
+               SQLInsert('magichome_commands',$cmd_rec);
+           
 }
 }
+}}
  			}
 		}
 
@@ -898,6 +935,7 @@ function changerandom($id) {
  magichome_devices: FAVORITCOLOR varchar(100) NOT NULL DEFAULT ''
  magichome_devices: CURRENTCOLOR varchar(100) NOT NULL DEFAULT ''
  magichome_devices: FIND varchar(100) NOT NULL DEFAULT ''
+ magichome_devices: MODEL varchar(100) NOT NULL DEFAULT ''
  magichome_devices: LINKED_OBJECT varchar(100) NOT NULL DEFAULT ''
  magichome_devices: LINKED_PROPERTY varchar(100) NOT NULL DEFAULT ''
 EOD;
