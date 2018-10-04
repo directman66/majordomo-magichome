@@ -437,10 +437,10 @@ SQLInsert('magichome_devices', $par1);
 
 $sql="SELECT ID FROM magichome_devices where MAC='$mac'";
 //sg( 'test.sql', $sql);
-$id=SQLSelectOne($sql)['ID'];
+$idd=SQLSelectOne($sql)['ID'];
 //sg( 'test.sql', $id);
-$mainid=$id;
-$cmd=SQLSelect("SELECT max(ID) ID FROM magichome_commands where DEVICE_ID='$id'");
+
+$cmd=SQLSelect("SELECT max(ID) ID FROM magichome_commands where DEVICE_ID='$idd'");
   if ( $cmd[0]['ID']) { null;} else {
 
 
@@ -449,7 +449,7 @@ $total = count($commands);
      for ($i = 0; $i < $total; $i++) {
 
                $cmd_rec=array();
-               $cmd_rec['DEVICE_ID']=$mainid;
+               $cmd_rec['DEVICE_ID']=$idd;
                $cmd_rec['TITLE']=$commands[$i];
 //               $cmd_rec['MODEL']=$commands[$i];
                SQLInsert('magichome_commands',$cmd_rec);
@@ -791,11 +791,12 @@ socket_close($sock);
 
 
 
-function getinfo2($id) {
+function getinfo2($id=0) {
 $cmd_rec = SQLSelectOne("SELECT IP, PORT FROM magichome_devices WHERE id=".$id);
 $host=$cmd_rec['IP'];
-
+$globalid=$id;
 $port=5577;
+
 
 
 if(!($sock = socket_create(AF_INET, SOCK_STREAM, getprotobyname("tcp"))))
@@ -920,26 +921,30 @@ $buf= $receiveStrHex;
 
 // }
 //sg('test.rgbbuf', $host.":".$port.":".$buf);
+$tempid=$id;
+//$tempid=8;
 SQLexec("update magichome_devices set CURRENTCOLOR='$buf' where id='$id'");
 //echo substr($buf,5,2);
 //echo $buf;
 
 
+//echo  $tempid;
+$sql="select * from  magichome_commands where device_id='".$tempid."' and title='status'" ;
+sg('test.sql',$sql);
+$myrec=SQLSelectOne($sql);
 
 
-$myrec=SQLSelectOne("select * from  magichome_commands where device_id='$id' and title='status'" );
-
-
-if (substr($buf,4,2)=='23') {$turn=1;}
-else {$turn=0;}
+if (substr($buf,4,2)=='23') {$turn=1;} else {$turn=0;}
 $myrec['VALUE']=$turn;
+
 if ($myrec['LINKED_OBJECT']!='' && $myrec['LINKED_PROPERTY']!='') {
 setGlobal($myrec['LINKED_OBJECT'].'.'.$myrec['LINKED_PROPERTY'], $turn);
 }
+
 SQLUpdate('magichome_commands', $myrec);
 
 $color=substr($buf,13,6);
-$myrec=SQLSelectOne("select * from  magichome_commands where device_id='$id' and title='color'" );
+$myrec=SQLSelectOne("select * from  magichome_commands where device_id='$globalid' and title='color'" );
 $myrec['VALUE']=$color;
 $myrec['UPDATED']=date('Y-m-d H:i:s');
 if ($myrec['LINKED_OBJECT']!='' && $myrec['LINKED_PROPERTY']!='') {
@@ -949,7 +954,7 @@ SQLUpdate('magichome_commands', $myrec);
 
 
 $level=substr($buf,10,3);
-$myrec=SQLSelectOne("select * from  magichome_commands where device_id='$id' and title='level'" );
+$myrec=SQLSelectOne("select * from  magichome_commands where device_id='$globalid' and title='level'" );
 $myrec['VALUE']=$level;
 $myrec['UPDATED']=date('Y-m-d H:i:s');
 if ($myrec['LINKED_OBJECT']!='' && $myrec['LINKED_PROPERTY']!='') {
@@ -958,13 +963,12 @@ setGlobal($myrec['LINKED_OBJECT'].'.'.$myrec['LINKED_PROPERTY'], $turn);
 SQLUpdate('magichome_commands', $myrec);
 
 
-$myrec=SQLSelectOne("select * from  magichome_commands where device_id='$id' and title='answer'" );
+$myrec=SQLSelectOne("select * from  magichome_commands where device_id='$globalid' and title='answer'" );
 $myrec['VALUE']=$buf;
 $myrec['UPDATED']=date('Y-m-d H:i:s');
 SQLUpdate('magichome_commands', $myrec);
 
-
-
+      
 
 
 }
