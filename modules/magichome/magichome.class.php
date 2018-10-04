@@ -301,7 +301,7 @@ sg('test.mycommand', "command:".$command." value:".$value." type:".$type);
 				             }
 
                  }  //model
-              } //цикл девайсов
+              } //С†РёРєР» РґРµРІР°Р№СЃРѕРІ
  }//if total
 
 }
@@ -435,9 +435,11 @@ $par1['MAC'] = $mac;
 $par1['FIND'] = date('m/d/Y H:i:s',time());		
 SQLInsert('magichome_devices', $par1);		 
 
-
-$id=SQLSelectOne("SELECT ID FROM magichome_devices where MAC='$mac'")['ID'];
-
+$sql="SELECT ID FROM magichome_devices where MAC='$mac'";
+//sg( 'test.sql', $sql);
+$id=SQLSelectOne($sql)['ID'];
+//sg( 'test.sql', $id);
+$mainid=$id;
 $cmd=SQLSelect("SELECT max(ID) ID FROM magichome_commands where DEVICE_ID='$id'");
   if ( $cmd[0]['ID']) { null;} else {
 
@@ -446,17 +448,13 @@ $commands=array('status','level', 'color', 'answer', 'command');
 $total = count($commands);
      for ($i = 0; $i < $total; $i++) {
 
-                $cmd_rec=array();
-               $cmd_rec['DEVICE_ID']=$id;
+               $cmd_rec=array();
+               $cmd_rec['DEVICE_ID']=$mainid;
                $cmd_rec['TITLE']=$commands[$i];
-               $cmd_rec['MODEL']=$commands[$i];
+//               $cmd_rec['MODEL']=$commands[$i];
                SQLInsert('magichome_commands',$cmd_rec);
            
-}
-}
-}}
- 			}
-		}
+}}}}}}
 
 		@socket_shutdown($cs, 2);
 		socket_close($cs);
@@ -1125,8 +1123,8 @@ return substr(dechex($csum),-2);
 
 
 //info          81:8a:8b:96
-//Р В Р вЂ Р В РЎвЂќР В Р’В» 		71:23:0f:a3
-//Р В Р вЂ Р РЋРІР‚в„–Р В РЎвЂќР В Р’В» 		71:24:0f:a4
+//Р В Р’В Р В РІР‚В Р В Р’В Р РЋРІР‚СњР В Р’В Р вЂ™Р’В» 		71:23:0f:a3
+//Р В Р’В Р В РІР‚В Р В Р Р‹Р Р†Р вЂљРІвЂћвЂ“Р В Р’В Р РЋРІР‚СњР В Р’В Р вЂ™Р’В» 		71:24:0f:a4
 //color         1 1 1 	31:01:01:01:00:f0:0f:33
 //3100:00:00:00:f0:0f:30
 //3100ff0000f00f2f
