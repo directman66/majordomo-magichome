@@ -31,7 +31,7 @@
    $new_id=0;
    global $delete_id;
    if ($delete_id) {
-    SQLExec("DELETE FROM milight_commands WHERE ID='".(int)$delete_id."'");
+    SQLExec("DELETE FROM magichome_commands WHERE ID='".(int)$delete_id."'");
    }
    $properties=SQLSelect("SELECT * FROM magichome_commands WHERE DEVICE_ID='".$rec['ID']."' ORDER BY ID");
    $total=count($properties);
@@ -52,22 +52,18 @@
 
       $old_linked_object=$properties[$i]['LINKED_OBJECT'];
       $old_linked_property=$properties[$i]['LINKED_PROPERTY'];
+//удаление linked
+
       if ($old_linked_object && $old_linked_object!=$properties[$i]['LINKED_OBJECT'] && $old_linked_property && $old_linked_property!=$properties[$i]['LINKED_PROPERTY']) {
        removeLinkedProperty($old_linked_object, $old_linked_property, $this->name);
       }
-     }
-
+     }///update
+//добавление linked
        if ($properties[$i]['LINKED_OBJECT'] && $properties[$i]['LINKED_PROPERTY']) {
            addLinkedProperty($properties[$i]['LINKED_OBJECT'], $properties[$i]['LINKED_PROPERTY'], $this->name);
        }
        
-     if ($properties[$i]['TITLE']=='status') {
-         $properties[$i]['SDEVICE_TYPE']='relay';
-     } elseif ($properties[$i]['TITLE']=='color') {
-         $properties[$i]['SDEVICE_TYPE']='rgb';
-     } elseif ($properties[$i]['TITLE']=='level') {
-         $properties[$i]['SDEVICE_TYPE']='dimmer';
-     }  
+       
        
    }
    $out['PROPERTIES']=$properties;   
