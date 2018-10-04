@@ -430,7 +430,7 @@ $par1=array();
 $par1['TITLE'] = $par[2];
 $par1['IP'] = $ip;
 $par1['PORT'] = $port;
-//$par1['MODEL'] = 'RGB DIMMER';
+$par1['MODEL'] = $par[2];
 $par1['MAC'] = $mac;
 $par1['FIND'] = date('m/d/Y H:i:s',time());		
 SQLInsert('magichome_devices', $par1);		 
