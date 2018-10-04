@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="../templates/xiaomimiio/css/bootstrap-select.min.css">
 
 <form action="?" method="post" enctype="multipart/form-data" name="frmEdit" class="form-horizontal">
 	[#if OK#]
@@ -7,9 +8,7 @@
 	[#if ERR#]
 	<div class="alert alert-error"><#LANG_FILLOUT_REQURED#></div>
 	[#endif ERR#]
-	
-
-<table width="100%"><tr><td>
+<table width="100%"><tr><td>	
 	<fieldset>
 		[#if ID=""#]
 		<legend><#LANG_ADD#> <#LANG_DEVICE#></legend>
@@ -17,12 +16,10 @@
 
 		<div class="form-group">
 			<label class="col-lg-3 control-label"[#if ERR_TITLE#] style="color:red;font-weight:bold"[#endif#]>
-				TITLE (*):
+				<#LANG_TITLE#> (*):
 			</label>
 			<div class="col-lg-4"><input type="text" class="form-control" name="title" value="[#TITLE#]" id="title"></div>
 		</div>
-
-
 
 		<div class="form-group">
 			<label class="col-lg-3 control-label"[#if ERR_IP#] style="color:red;font-weight:bold"[#endif#]>
@@ -32,21 +29,12 @@
 		</div>
 
 
-		<div class="form-group">
-			<label class="col-lg-3 control-label"[#if ERR_PASSWORD#] style="color:red;font-weight:bold"[#endif#]>
-				PASSWORD (*):
-			</label>
-			<div class="col-lg-4"><input type="text" class="form-control" name="password" value="[#PASSWORD#]" id="password"></div>
-		</div>
-
-
-
-		[#if SERIAL!=""#]
+		[#if TITLE!=""#]
 		<div class="form-group">
 			<label class="col-lg-3 control-label">
-				<#LANG_SERIAL#>:
+				Модель:
 			</label>
-			<div class="col-lg-4">[#SERIAL#]</div>
+			<div class="col-lg-4">[#TITLE#]</div>
 		</div>
 		[#endif#]
 
@@ -59,8 +47,6 @@
 		</div>
 		[#endif#]
 
-
-
 		[#if MAC!=""#]
 		<div class="form-group">
 			<label class="col-lg-3 control-label"[#if ERR_MAC#] style="color:red;font-weight:bold"[#endif#]>
@@ -69,31 +55,10 @@
 			<div class="col-lg-4">[#MAC#]</div>
 		</div>
 		[#endif#]
-
-
-
-
-
+		
 
 		
-		[#if MODEL!=""#]
-		<div class="form-group">
-			<label class="col-lg-3 control-label"[#if ERR_MODEL#] style="color:red;font-weight:bold"[#endif#]>
-				MODEL:
-			</label>
-			<div class="col-lg-4">[#MODEL#]</div>
-		</div>
-		[#endif#]
-		
-		[#if HW_VER!=""#]
-		<div class="form-group">
-			<label class="col-lg-3 control-label"[#if ERR_HW_VER#] style="color:red;font-weight:bold"[#endif#]>
-				HW_VER:
-			</label>
-			<div class="col-lg-4">[#HW_VER#]</div>
-		</div>
-		[#endif#]
-		
+
 
 		
 		<div class="form-group">
@@ -114,6 +79,8 @@
 		</div>
 	</fieldset>
 </form>
+
 </td><td>
-<img src="../img/modules/img_[#MODEL#].png" width="400">
+<img src="../img/modules/[#TITLE#].png" width="400">
 </td></tr></table>
+
