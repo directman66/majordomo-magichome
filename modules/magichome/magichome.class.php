@@ -941,6 +941,7 @@ SQLUpdate('magichome_commands', $myrec);
 $color=substr($buf,13,6);
 $myrec=SQLSelectOne("select * from  magichome_commands where device_id='$id' and title='color'" );
 $myrec['VALUE']=$color;
+$myrec['UPDATED']=date('Y-m-d H:i:s');
 if ($myrec['LINKED_OBJECT']!='' && $myrec['LINKED_PROPERTY']!='') {
 setGlobal($myrec['LINKED_OBJECT'].'.'.$myrec['LINKED_PROPERTY'], $turn);
 }
@@ -950,6 +951,7 @@ SQLUpdate('magichome_commands', $myrec);
 $level=substr($buf,10,3);
 $myrec=SQLSelectOne("select * from  magichome_commands where device_id='$id' and title='level'" );
 $myrec['VALUE']=$level;
+$myrec['UPDATED']=date('Y-m-d H:i:s');
 if ($myrec['LINKED_OBJECT']!='' && $myrec['LINKED_PROPERTY']!='') {
 setGlobal($myrec['LINKED_OBJECT'].'.'.$myrec['LINKED_PROPERTY'], $turn);
 }
@@ -958,6 +960,7 @@ SQLUpdate('magichome_commands', $myrec);
 
 $myrec=SQLSelectOne("select * from  magichome_commands where device_id='$id' and title='answer'" );
 $myrec['VALUE']=$buf;
+$myrec['UPDATED']=date('Y-m-d H:i:s');
 SQLUpdate('magichome_commands', $myrec);
 
 
