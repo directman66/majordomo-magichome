@@ -117,6 +117,9 @@ $out['MSG_DEBUG']=$debug;
   $this->data=$out;
 //  $this->checkSettings();
 
+
+
+
   
   $p=new parser(DIR_TEMPLATES.$this->name."/".$this->name.".html", $this->data, $this);
   $this->result=$p->result;
@@ -239,17 +242,74 @@ $ar = hexdec(str_split($color, 2));
 }  
 
 
- function propertySetHandle($object, $property, $value) {
-   $my_properties=SQLSelect("SELECT ID FROM magichome_devices WHERE LINKED_OBJECT LIKE '".DBSafe($object)."' AND LINKED_PROPERTY LIKE '".DBSafe($property)."'");
-   $total=count($my_properties);
-   if ($total) {
-    for($i=0;$i<$total;$i++) {
-     $this->setProperty($my_properties[$i]['ID'], $value);
-    }
-   }  
- }
 
- 
+
+ function propertySetHandle($object, $property, $value) {
+$sql="SELECT magichome_commands.* FROM magichome_commands WHERE magichome_commands.LINKED_OBJECT LIKE '" . DBSafe($object) . "' AND magichome_commands.LINKED_PROPERTY LIKE '" . DBSafe($property) . "'";
+//sg('test.sql',$sql);
+
+     $properties = SQLSelect($sql);
+     $total = count($properties);
+     if ($total) {
+
+         for ($i = 0; $i < $total; $i++) {
+$sql="SELECT * FROM magichome_devices WHERE ID=".(int)$properties[$i]['DEVICE_ID'];
+//sg('test.sql2',$sql);
+             $device=SQLSelectOne($sql);
+             $host=$device['IP'];
+	     $deviceid=$device['DEVICE_ID'];
+             $type=$device['MODEL']; //0 = white, 1 = rgb
+             $command=$properties[$i]['TITLE'];
+             /*
+             if ($command=='color') {
+                 $value=preg_replace('/^#/','',$value);
+             }
+             if ($command=='color' && $value=='000000') {
+                 $command='off';
+             } else if ($command=='color' && $value=='ffffff') {
+                 $command='on';
+             } elseif ($command=='status' && $value) {
+                 $command='on';
+             } elseif ($command=='status' && !$value) {
+                 $command='off';
+             } elseif ($command=='command') {
+                 $command=$value;
+             }
+*/
+
+             $magichomeObject = new magichome();
+             $properties[$i]['VALUE']=$value;
+             $properties[$i]['UPDATED']=date('Y-m-d H:i:s');
+
+             SQLUpdate('magichome_commands',$properties[$i]);
+
+sg('test.mycommand', "command:".$command." value:".$value." type:".$type); 
+             if ($type=='AK001-ZJ100') {
+                     if ($command=='status'&& $value=='1') {
+                         $magichomeObject->turnon($deviceid);
+			 $magichomeObject->getinfo2($deviceid);
+                     }
+                     if ($command=='status'&& $value=='0') {
+                         $magichomeObject->turnoff($deviceid);
+			 $magichomeObject->getinfo2($deviceid);
+                     }
+                       if ($command=='color') {
+                        $colorhex=$value;
+			$ar =(str_split($colorhex, 2));
+			$magichomeObject->set_colorhex($cid, $ar[0],$ar[1],$ar[2]);
+			$magichomeObject->getinfo2($cid, $debug);
+				             }
+
+                 }  //model
+              } //цикл девайсов
+ }//if total
+
+}
+
+
+            
+
+   
 function edit_devices(&$out, $id) {
 require(DIR_MODULES.$this->name . '/magichome_devices_edit.inc.php');
 }
@@ -382,13 +442,14 @@ $cmd=SQLSelect("SELECT max(ID) ID FROM magichome_commands where DEVICE_ID='$id'"
   if ( $cmd[0]['ID']) { null;} else {
 
 
-$commands=array('status','level', 'color');
+$commands=array('status','level', 'color', 'answer', 'command');
 $total = count($commands);
      for ($i = 0; $i < $total; $i++) {
 
                 $cmd_rec=array();
                $cmd_rec['DEVICE_ID']=$id;
                $cmd_rec['TITLE']=$commands[$i];
+               $cmd_rec['MODEL']=$commands[$i];
                SQLInsert('magichome_commands',$cmd_rec);
            
 }
@@ -492,6 +553,7 @@ SQLInsert('magichome_devices', $par);
 
 function delete_once($id) {
   SQLExec("DELETE FROM magichome_devices WHERE id=".$id);
+  SQLExec("DELETE FROM magichome_commands WHERE DEVICE_ID='$id'");
   $this->redirect("?");
  }
 
@@ -861,6 +923,48 @@ $buf= $receiveStrHex;
 // }
 //sg('test.rgbbuf', $host.":".$port.":".$buf);
 SQLexec("update magichome_devices set CURRENTCOLOR='$buf' where id='$id'");
+//echo substr($buf,5,2);
+//echo $buf;
+
+
+
+
+$myrec=SQLSelectOne("select * from  magichome_commands where device_id='$id' and title='status'" );
+
+
+if (substr($buf,4,2)=='23') {$turn=1;}
+else {$turn=0;}
+$myrec['VALUE']=$turn;
+if ($myrec['LINKED_OBJECT']!='' && $myrec['LINKED_PROPERTY']!='') {
+setGlobal($myrec['LINKED_OBJECT'].'.'.$myrec['LINKED_PROPERTY'], $turn);
+}
+SQLUpdate('magichome_commands', $myrec);
+
+$color=substr($buf,13,6);
+$myrec=SQLSelectOne("select * from  magichome_commands where device_id='$id' and title='color'" );
+$myrec['VALUE']=$color;
+if ($myrec['LINKED_OBJECT']!='' && $myrec['LINKED_PROPERTY']!='') {
+setGlobal($myrec['LINKED_OBJECT'].'.'.$myrec['LINKED_PROPERTY'], $turn);
+}
+SQLUpdate('magichome_commands', $myrec);
+
+
+$level=substr($buf,10,3);
+$myrec=SQLSelectOne("select * from  magichome_commands where device_id='$id' and title='level'" );
+$myrec['VALUE']=$level;
+if ($myrec['LINKED_OBJECT']!='' && $myrec['LINKED_PROPERTY']!='') {
+setGlobal($myrec['LINKED_OBJECT'].'.'.$myrec['LINKED_PROPERTY'], $turn);
+}
+SQLUpdate('magichome_commands', $myrec);
+
+
+$myrec=SQLSelectOne("select * from  magichome_commands where device_id='$id' and title='answer'" );
+$myrec['VALUE']=$buf;
+SQLUpdate('magichome_commands', $myrec);
+
+
+
+
 
 }
 
@@ -936,6 +1040,7 @@ function changerandom($id) {
  magichome_devices: CURRENTCOLOR varchar(100) NOT NULL DEFAULT ''
  magichome_devices: FIND varchar(100) NOT NULL DEFAULT ''
  magichome_devices: MODEL varchar(100) NOT NULL DEFAULT ''
+ magichome_devices: ZONE varchar(100) NOT NULL DEFAULT ''
  magichome_devices: LINKED_OBJECT varchar(100) NOT NULL DEFAULT ''
  magichome_devices: LINKED_PROPERTY varchar(100) NOT NULL DEFAULT ''
 EOD;
@@ -1020,8 +1125,8 @@ return substr(dechex($csum),-2);
 
 
 //info          81:8a:8b:96
-//Р Р†Р С”Р В» 		71:23:0f:a3
-//Р Р†РЎвЂ№Р С”Р В» 		71:24:0f:a4
+//Р В Р вЂ Р В РЎвЂќР В Р’В» 		71:23:0f:a3
+//Р В Р вЂ Р РЋРІР‚в„–Р В РЎвЂќР В Р’В» 		71:24:0f:a4
 //color         1 1 1 	31:01:01:01:00:f0:0f:33
 //3100:00:00:00:f0:0f:30
 //3100ff0000f00f2f
