@@ -10,7 +10,8 @@
   if ($this->mode=='update') {
    $ok=1;
   // step: default
-  if ($this->tab=='') {
+//echo $this->tab;
+  if ($this->tab=='info') {
   //updating '<%LANG_TITLE%>' (varchar, required)
    global $title;
    $rec['TITLE']=$title;
@@ -18,16 +19,18 @@
     $out['ERR_TITLE']=1;
     $ok=0;
    }
-
    global $ip;
    $rec['IP']=$ip;
    if ($rec['IP']=='') {
     $out['ERR_IP']=1;
     $ok=0;
    }
+}
 
+    if ($ok=1)
+    SQLUpdate('magichome_devices', $rec);
 
-}}
+}
   // step: data
   if ($this->tab=='data') {
   }
@@ -35,7 +38,6 @@
   // step: default
   if ($this->tab=='') {
   }
-
   if ($this->tab=='data') {
    //dataset2
    $new_id=0;
@@ -59,11 +61,9 @@
       global ${'linked_property'.$properties[$i]['ID']};
       $properties[$i]['LINKED_PROPERTY']=trim(${'linked_property'.$properties[$i]['ID']});
       SQLUpdate('magichome_commands', $properties[$i]);
-
       $old_linked_object=$properties[$i]['LINKED_OBJECT'];
       $old_linked_property=$properties[$i]['LINKED_PROPERTY'];
 //СѓРґР°Р»РµРЅРёРµ linked
-
       if ($old_linked_object && $old_linked_object!=$properties[$i]['LINKED_OBJECT'] && $old_linked_property && $old_linked_property!=$properties[$i]['LINKED_PROPERTY']) {
        removeLinkedProperty($old_linked_object, $old_linked_property, $this->name);
       }
