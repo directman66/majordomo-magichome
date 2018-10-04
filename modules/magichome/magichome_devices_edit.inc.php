@@ -17,7 +17,17 @@
    if ($rec['TITLE']=='') {
     $out['ERR_TITLE']=1;
     $ok=0;
-   }}}
+   }
+
+   global $ip;
+   $rec['IP']=$ip;
+   if ($rec['IP']=='') {
+    $out['ERR_IP']=1;
+    $ok=0;
+   }
+
+
+}}
   // step: data
   if ($this->tab=='data') {
   }
@@ -52,13 +62,13 @@
 
       $old_linked_object=$properties[$i]['LINKED_OBJECT'];
       $old_linked_property=$properties[$i]['LINKED_PROPERTY'];
-//удаление linked
+//СѓРґР°Р»РµРЅРёРµ linked
 
       if ($old_linked_object && $old_linked_object!=$properties[$i]['LINKED_OBJECT'] && $old_linked_property && $old_linked_property!=$properties[$i]['LINKED_PROPERTY']) {
        removeLinkedProperty($old_linked_object, $old_linked_property, $this->name);
       }
      }///update
-//добавление linked
+//РґРѕР±Р°РІР»РµРЅРёРµ linked
        if ($properties[$i]['LINKED_OBJECT'] && $properties[$i]['LINKED_PROPERTY']) {
            addLinkedProperty($properties[$i]['LINKED_OBJECT'], $properties[$i]['LINKED_PROPERTY'], $this->name);
        }
