@@ -270,7 +270,12 @@ $sql="SELECT * FROM magichome_devices WHERE ID=".(int)$properties[$i]['DEVICE_ID
              SQLUpdate('magichome_commands',$properties[$i]);	
 
 //sg('test.mycommand', "command:".$command." value:".$value." type:".$type); 
-             if ($type=='AK001-ZJ100') {
+//             if ($type=='AK001-ZJ100') {
+//             if ($type=='AK001-ZJ100') {
+//sg('test.substr', substr($type,0,8));
+           if (substr($type,0,8)=='AK001-ZJ') {
+
+  
                      if ($command=='status'&& $value=='1') {
                          $magichomeObject->turnon($deviceid);
 			 $magichomeObject->getinfo2($deviceid);
