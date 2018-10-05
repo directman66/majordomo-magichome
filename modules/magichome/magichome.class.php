@@ -280,14 +280,15 @@ $sql="SELECT * FROM magichome_devices WHERE ID=".(int)$properties[$i]['DEVICE_ID
 			 $magichomeObject->getinfo2($deviceid);
                      }
                        if ($command=='color') {
-                        $colorhex=$value;
+                        $colorhex=str_replace('#','',$value);
 			$ar =(str_split($colorhex, 2));
-			$magichomeObject->set_colorhex($cid, $ar[0],$ar[1],$ar[2]);
-			$magichomeObject->getinfo2($cid, $debug);
+sg('test.newcolor',$colorhex);
+			$magichomeObject->set_colorhex($deviceid, $ar[0],$ar[1],$ar[2]);
+			$magichomeObject->getinfo2($deviceid, $debug);
 				             }
 
                  }  //model
-              } //С†РёРєР» РґРµРІР°Р№СЃРѕРІ
+              } //цикл девайсов
  }//if total
 
 
@@ -779,7 +780,7 @@ $sql="select * from  magichome_commands where device_id='".$tempid."'";
 if ($properties[$i]['TITLE']=='status') {
 if (substr($buf,4,2)=='23') {$newvalue=1;} else {$newvalue=0;}
 } 
-elseif ($properties[$i]['TITLE']=='color')  $newvalue=substr($buf,13,6);
+elseif ($properties[$i]['TITLE']=='color')  {$newvalue='#'.str_replace('#','',substr($buf,12,6));}
 elseif ($properties[$i]['TITLE']=='level')  $newvalue=substr($buf,10,3);
 else $newvalue=$buf; 
 
@@ -963,8 +964,8 @@ return substr(dechex($csum),-2);
 
 
 //info          81:8a:8b:96
-//Р В Р’В Р В РІР‚В Р В Р’В Р РЋРІР‚СњР В Р’В Р вЂ™Р’В» 		71:23:0f:a3
-//Р В Р’В Р В РІР‚В Р В Р Р‹Р Р†Р вЂљРІвЂћвЂ“Р В Р’В Р РЋРІР‚СњР В Р’В Р вЂ™Р’В» 		71:24:0f:a4
+//Р В Р вЂ Р В РЎвЂќР В Р’В» 		71:23:0f:a3
+//Р В Р вЂ Р РЋРІР‚в„–Р В РЎвЂќР В Р’В» 		71:24:0f:a4
 //color         1 1 1 	31:01:01:01:00:f0:0f:33
 //3100:00:00:00:f0:0f:30
 //3100ff0000f00f2f
