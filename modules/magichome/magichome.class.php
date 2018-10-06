@@ -287,13 +287,13 @@ $sql="SELECT * FROM magichome_devices WHERE ID=".(int)$properties[$i]['DEVICE_ID
                        if ($command=='color') {
                         $colorhex=str_replace('#','',$value);
 			$ar =(str_split($colorhex, 2));
-sg('test.newcolor',$colorhex);
+//sg('test.newcolor',$colorhex);
 			$magichomeObject->set_colorhex($deviceid, $ar[0],$ar[1],$ar[2]);
 			$magichomeObject->getinfo2($deviceid, $debug);
 				             }
 
                  }  //model
-              } //цикл девайсов
+              } //С†РёРєР» РґРµРІР°Р№СЃРѕРІ
  }//if total
 
 
@@ -786,7 +786,15 @@ if ($properties[$i]['TITLE']=='status') {
 if (substr($buf,4,2)=='23') {$newvalue=1;} else {$newvalue=0;}
 } 
 elseif ($properties[$i]['TITLE']=='color')  {$newvalue='#'.str_replace('#','',substr($buf,12,6));}
-elseif ($properties[$i]['TITLE']=='level')  $newvalue=substr($buf,10,3);
+elseif ($properties[$i]['TITLE']=='level')  
+{
+$tempclolor=str_replace('#','',substr($buf,12,6));
+$ar =(str_split($tempclolor, 2));
+//$newvalue=((hexdec($ar[0]/255))+(hexdec($ar[1]/255))+(hexdec($ar[2]/255)))/3;
+//$newvalue=round(hexdec((int)max($ar[0],$ar[1],$ar[2]))/255,2)*100;
+
+$newvalue=round(max(hexdec($ar[0]),hexdec($ar[1]),hexdec($ar[2]))/255,2)*100;
+}
 else $newvalue=$buf; 
 
 
@@ -802,6 +810,23 @@ SQLUpdate('magichome_commands', $myrec);
 if ($myrec['LINKED_OBJECT']!='' && $myrec['LINKED_PROPERTY']!='') {
 setGlobal($myrec['LINKED_OBJECT'].'.'.$myrec['LINKED_PROPERTY'], $newvalue,array($this->name => '0'));
 }
+
+
+
+     if ($myrec['LINKED_OBJECT'] && $myrec['LINKED_METHOD']) { // && $old_value!=$prop['CURRENT_VALUE_STRING']
+      $params=array();
+      $params=$_REQUEST;
+      $params['TITLE']=$properties[$i]['TITLE'];
+      $params['VALUE']=$newvalue;
+
+
+      $methodRes=callMethod($myrec['LINKED_OBJECT'].'.'.$myrec['LINKED_METHOD'], $params);
+
+      if (is_string($methodRes)) {
+       $ecmd=$methodRes;
+      }
+
+     }
 
 
 
@@ -969,8 +994,8 @@ return substr(dechex($csum),-2);
 
 
 //info          81:8a:8b:96
-//Р В Р вЂ Р В РЎвЂќР В Р’В» 		71:23:0f:a3
-//Р В Р вЂ Р РЋРІР‚в„–Р В РЎвЂќР В Р’В» 		71:24:0f:a4
+//Р В Р’В Р В РІР‚В Р В Р’В Р РЋРІР‚СњР В Р’В Р вЂ™Р’В» 		71:23:0f:a3
+//Р В Р’В Р В РІР‚В Р В Р Р‹Р Р†Р вЂљРІвЂћвЂ“Р В Р’В Р РЋРІР‚СњР В Р’В Р вЂ™Р’В» 		71:24:0f:a4
 //color         1 1 1 	31:01:01:01:00:f0:0f:33
 //3100:00:00:00:f0:0f:30
 //3100ff0000f00f2f
