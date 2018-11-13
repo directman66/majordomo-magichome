@@ -275,8 +275,11 @@ $sql="SELECT * FROM magichome_devices WHERE ID=".(int)$properties[$i]['DEVICE_ID
 //             if ($type=='AK001-ZJ100') {
 //             if ($type=='AK001-ZJ100') {
 //sg('test.substr', substr($type,0,8));
+//sg('test.mg', substr($type,0,8).":". $command.":".$value);
            if (substr($type,0,8)=='AK001-ZJ') {
-
+//sg('test.mg', substr($type,0,8).":". $command.":".$value);
+                                   
+/*
 
                      if ($meth=='turnOn') {
                          $magichomeObject->turnon($deviceid);
@@ -294,10 +297,10 @@ $sql="SELECT * FROM magichome_devices WHERE ID=".(int)$properties[$i]['DEVICE_ID
                        else { $magichomeObject->turnoff($deviceid);} 
 			 $magichomeObject->getinfo2($deviceid);
                      }
+*/
 
 
 
-  
                      if ($command=='status'&& $value=='1') {
                          $magichomeObject->turnon($deviceid);
 			 $magichomeObject->getinfo2($deviceid);
