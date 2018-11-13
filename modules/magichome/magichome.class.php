@@ -259,10 +259,12 @@ $sql="SELECT * FROM magichome_devices WHERE ID=".(int)$properties[$i]['DEVICE_ID
 //sg('test.sql2',$sql);
              $device=SQLSelectOne($sql);
              $host=$device['IP'];
+
 	     $deviceid=$device['ID'];
              $type=$device['MODEL']; //0 = white, 1 = rgb
              $command=$properties[$i]['TITLE'];
-
+             $meth=$properties[$i]['LINKED_METHOD'];
+             $state=$properties[$i]['VALUE'];             
              $magichomeObject = new magichome();
              $properties[$i]['VALUE']=$value;
              $properties[$i]['UPDATED']=date('Y-m-d H:i:s');
@@ -274,6 +276,26 @@ $sql="SELECT * FROM magichome_devices WHERE ID=".(int)$properties[$i]['DEVICE_ID
 //             if ($type=='AK001-ZJ100') {
 //sg('test.substr', substr($type,0,8));
            if (substr($type,0,8)=='AK001-ZJ') {
+
+
+                     if ($meth=='turnOn') {
+                         $magichomeObject->turnon($deviceid);
+			 $magichomeObject->getinfo2($deviceid);
+                     }
+
+                     if ($meth=='turnOff') {
+                         $magichomeObject->turnoff($deviceid);
+			 $magichomeObject->getinfo2($deviceid);
+                     }
+
+
+                     if ($meth=='switch') {
+		if ($state==0) { $magichomeObject->turnon($deviceid);} 
+                       else { $magichomeObject->turnoff($deviceid);} 
+			 $magichomeObject->getinfo2($deviceid);
+                     }
+
+
 
   
                      if ($command=='status'&& $value=='1') {
@@ -293,7 +315,7 @@ $sql="SELECT * FROM magichome_devices WHERE ID=".(int)$properties[$i]['DEVICE_ID
 				             }
 
                  }  //model
-              } //С†РёРєР» РґРµРІР°Р№СЃРѕРІ
+              } //РЎвЂ Р С‘Р С”Р В» Р Т‘Р ВµР Р†Р В°Р в„–РЎРѓР С•Р Р†
  }//if total
 
 
@@ -994,8 +1016,8 @@ return substr(dechex($csum),-2);
 
 
 //info          81:8a:8b:96
-//Р В Р’В Р В РІР‚В Р В Р’В Р РЋРІР‚СњР В Р’В Р вЂ™Р’В» 		71:23:0f:a3
-//Р В Р’В Р В РІР‚В Р В Р Р‹Р Р†Р вЂљРІвЂћвЂ“Р В Р’В Р РЋРІР‚СњР В Р’В Р вЂ™Р’В» 		71:24:0f:a4
+//Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р вЂ™Р’В Р В Р Р‹Р Р†Р вЂљРЎСљР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В» 		71:23:0f:a3
+//Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р В Р вЂ№Р В Р вЂ Р В РІР‚С™Р Р†РІР‚С›РІР‚вЂњР В Р’В Р вЂ™Р’В Р В Р Р‹Р Р†Р вЂљРЎСљР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В» 		71:24:0f:a4
 //color         1 1 1 	31:01:01:01:00:f0:0f:33
 //3100:00:00:00:f0:0f:30
 //3100ff0000f00f2f
