@@ -336,23 +336,19 @@ $m3=hexdec($ar[2]);
 
 $textcolor=$this->rgb2text($m1,$m2,$m3);
 $nextcolor=$this->nextcolor($m1,$m2,$m3);
-$arr =(str_split($nextcolor, 2));
+$arr =str_split($nextcolor, 2);
 
 
-$m1=$arr[0];
-$m2=$arr[1];
-$m3=$arr[2];
+$new1=$arr[0];
+$new2=$arr[1];
+$new3=$arr[2];
 
 
 
-if ($m1>255) $m1=255;
-if ($m2>255) $m2=255;
-if ($m3>255) $m3=255;
-
-$new1=str_pad(dechex($m1), 2, "0", STR_PAD_LEFT);
-$new2=str_pad(dechex($m2), 2, "0", STR_PAD_LEFT);
-$new3=str_pad(dechex($m3), 2, "0", STR_PAD_LEFT);
-//sg('test.mh',$deviceid.":".$command.":".$value.":".$oldcolor.":".$new1.":".$new2.":".$new3.":".$textcolor.":".$nextcolor);
+//$new1=str_pad(dechex($m1), 2, "0", STR_PAD_LEFT);
+//$new2=str_pad(dechex($m2), 2, "0", STR_PAD_LEFT);
+//$new3=str_pad(dechex($m3), 2, "0", STR_PAD_LEFT);
+sg('test.mh',$deviceid.":".$command.":".$value.":".$oldcolor.":".$nextcolor.":".$new1.":".$new2.":".$new3.":".$textcolor);
 
 			$magichomeObject->set_colorhex($deviceid, $new1,$new2,$new3);
 			$magichomeObject->getinfo2($deviceid, $debug);
