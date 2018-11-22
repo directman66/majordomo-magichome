@@ -317,8 +317,51 @@ $sql="SELECT * FROM magichome_devices WHERE ID=".(int)$properties[$i]['DEVICE_ID
 			$magichomeObject->getinfo2($deviceid, $debug);
 				             }
 
+//sg('test.mh',$command.":".$value.":");
+//sg('test.mh',$command.":".$value.":".$oldcolor);
+                       if ($command=="command" && $value=='changecolor') {
+   $this->getinfo2($deviceid);
+
+  $oldcolor=SQLSelectOne("SELECT *, substr(CURRENTCOLOR,13,6) CCOLOR, substr(CURRENTCOLOR,10,2) BR, substr(CURRENTCOLOR,5,2) TURN FROM magichome_devices where ID=$deviceid")['CCOLOR'];
+
+//sg('test.mh',$deviceid.":".$command.":".$value.":".$oldcolor);
+
+                        $colorhex=str_replace('#','',$oldcolor);
+			$ar =(str_split($colorhex, 2));
+//sg('test.newcolor',$colorhex);
+$koef=50;
+$m1=hexdec($ar[0]);
+$m2=hexdec($ar[1]);
+$m3=hexdec($ar[2]);
+
+$textcolor=$this->rgb2text($m1,$m2,$m3);
+$nextcolor=$this->nextcolor($m1,$m2,$m3);
+$arr =(str_split($nextcolor, 2));
+
+
+$m1=$arr[0];
+$m2=$arr[1];
+$m3=$arr[2];
+
+
+
+if ($m1>255) $m1=255;
+if ($m2>255) $m2=255;
+if ($m3>255) $m3=255;
+
+$new1=str_pad(dechex($m1), 2, "0", STR_PAD_LEFT);
+$new2=str_pad(dechex($m2), 2, "0", STR_PAD_LEFT);
+$new3=str_pad(dechex($m3), 2, "0", STR_PAD_LEFT);
+//sg('test.mh',$deviceid.":".$command.":".$value.":".$oldcolor.":".$new1.":".$new2.":".$new3.":".$textcolor.":".$nextcolor);
+
+			$magichomeObject->set_colorhex($deviceid, $new1,$new2,$new3);
+			$magichomeObject->getinfo2($deviceid, $debug);
+				             }
+
+
+
                  }  //model
-              } //РЎвЂ Р С‘Р С”Р В» Р Т‘Р ВµР Р†Р В°Р в„–РЎРѓР С•Р Р†
+              } //╨а╨О╨▓╨В┬а╨а┬а╨бтАШ╨а┬а╨бтАЭ╨а┬а╨Т┬╗ ╨а┬а╨втАШ╨а┬а╨Т┬╡╨а┬а╨атАа╨а┬а╨Т┬░╨а┬а╨▓тАЮтАУ╨а╨О╨а╤У╨а┬а╨бтАв╨а┬а╨атАа
  }//if total
 
 
@@ -1003,6 +1046,224 @@ return substr(dechex($csum),-2);
 }
 
 
+function rgb2text($r,$g,$b){
+//определяем, что сейчас за цвет
+//http://www.manhunter.ru/webmaster/1028_opredelenie_osnovnogo_cveta_izobrazheniya_na_php.html
+
+// Перевести RGB в HSV
+$R=($r/255);
+$G=($g/255);
+$B=($b/255);
+ 
+$maxRGB=max(array($R, $G, $B));
+$minRGB=min(array($R, $G, $B));
+$delta=$maxRGB-$minRGB;
+ 
+// Цветовой тон
+if ($delta!=0) {
+    if ($maxRGB==$R) {
+        $h=(($G-$B)/$delta);
+    }
+    elseif ($maxRGB==$G) {
+        $h=2+($B-$R)/$delta;
+    }
+    elseif ($maxRGB==$B) {
+        $h=4+($R-$G)/$delta;
+    }
+    $hue=round($h*60);
+    if ($hue<0) { $hue+=360; }
+}
+else {
+    $hue=0;
+}
+ 
+// Насыщенность
+if ($maxRGB!=0) {
+    $saturation=round($delta/$maxRGB*100);
+}
+else {
+    $saturation=0;
+}
+ 
+// Яркость
+$value=round($maxRGB*100);
+
+// Яркость меньше 30%
+if ($value<30) {
+    // Черный
+//    $color='#000000';
+$textcolor='черный';
+}
+// Яркость больше 85% и насыщенность меньше 15%
+elseif ($value>85 && $saturation<15) {
+    // Белый
+//    $color='#FFFFFF';
+$textcolor='белый';
+
+}
+// Насыщенность меньше 25%
+elseif ($saturation<25) {
+    // Серый
+//    $color='#909090';
+$textcolor='серый';
+}
+// Определить цвет по цветовому тону
+else {
+    // Красный
+    if ($hue>320 || $hue<=40) {
+//        $color='#FF0000';
+$textcolor='красный';
+    }
+    // Розовый
+    elseif ($hue>260 && $hue<=320) {
+//        $color='#FF00FF';
+$textcolor='розовый';
+    }
+    // Синий
+    elseif ($hue>190 && $hue<=260) {
+//        $color='#0000FF';
+$textcolor='синий';
+    }
+    // Голубой
+    elseif ($hue>175 && $hue<=190) {
+//        $color='#00FFFF';
+$textcolor='голубой';
+    }
+    // Зеленый
+    elseif ($hue>70 && $hue<=175) {
+//        $color='#00FF00';
+$textcolor='зеленый';
+    }
+    // Желтый
+    else {
+//        $color='#FFFF00';
+$textcolor='желтый';
+    }
+
+}
+return $textcolor;
+}
+
+
+
+
+
+
+
+
+
+
+function nextcolor($r,$g,$b){
+//определяем, что сейчас за цвет
+//http://www.manhunter.ru/webmaster/1028_opredelenie_osnovnogo_cveta_izobrazheniya_na_php.html
+
+// Перевести RGB в HSV
+$R=($r/255);
+$G=($g/255);
+$B=($b/255);
+ 
+$maxRGB=max(array($R, $G, $B));
+$minRGB=min(array($R, $G, $B));
+$delta=$maxRGB-$minRGB;
+ 
+// Цветовой тон
+if ($delta!=0) {
+    if ($maxRGB==$R) {
+        $h=(($G-$B)/$delta);
+    }
+    elseif ($maxRGB==$G) {
+        $h=2+($B-$R)/$delta;
+    }
+    elseif ($maxRGB==$B) {
+        $h=4+($R-$G)/$delta;
+    }
+    $hue=round($h*60);
+    if ($hue<0) { $hue+=360; }
+}
+else {
+    $hue=0;
+}
+ 
+// Насыщенность
+if ($maxRGB!=0) {
+    $saturation=round($delta/$maxRGB*100);
+}
+else {
+    $saturation=0;
+}
+ 
+// Яркость
+$value=round($maxRGB*100);
+
+// Яркость меньше 30%
+if ($value<30) {
+    // Черный
+//    $color='#000000';
+
+$textcolor='черный';
+$ncolor='FFFFFF';
+}
+// Яркость больше 85% и насыщенность меньше 15%
+elseif ($value>85 && $saturation<15) {
+    // Белый
+//    $color='#FFFFFF';
+$textcolor='белый';
+$ncolor='909090';
+
+}
+// Насыщенность меньше 25%
+elseif ($saturation<25) {
+    // Серый
+//    $color='#909090';
+$textcolor='серый';
+$ncolor='FF00FF';
+}
+// Определить цвет по цветовому тону
+else {
+    // Красный
+    if ($hue>320 || $hue<=40) {
+//        $color='#FF0000';
+$textcolor='красный';
+$ncolor='FF00FF';
+    }
+    // Розовый
+    elseif ($hue>260 && $hue<=320) {
+//        $color='#FF00FF';
+$textcolor='розовый';
+$ncolor='0000FF';
+    }
+    // Синий
+    elseif ($hue>190 && $hue<=260) {
+//        $color='#0000FF';
+$textcolor='синий';
+$ncolor='00FFFF';
+    }
+    // Голубой
+    elseif ($hue>175 && $hue<=190) {
+//        $color='#00FFFF';
+$textcolor='голубой';
+$ncolor='00FF00';
+    }
+    // Зеленый
+    elseif ($hue>70 && $hue<=175) {
+//        $color='#00FF00';
+$textcolor='зеленый';
+$ncolor='FFFF00';
+    }
+    // Желтый
+    else {
+//        $color='#FFFF00';
+$textcolor='желтый';
+$ncolor='000000';
+    }
+}
+
+
+return $ncolor;
+}
+  
+
+
 
 
 
@@ -1019,8 +1280,8 @@ return substr(dechex($csum),-2);
 
 
 //info          81:8a:8b:96
-//Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р вЂ™Р’В Р В Р Р‹Р Р†Р вЂљРЎСљР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В» 		71:23:0f:a3
-//Р В Р’В Р вЂ™Р’В Р В Р’В Р Р†Р вЂљР’В Р В Р’В Р В Р вЂ№Р В Р вЂ Р В РІР‚С™Р Р†РІР‚С›РІР‚вЂњР В Р’В Р вЂ™Р’В Р В Р Р‹Р Р†Р вЂљРЎСљР В Р’В Р вЂ™Р’В Р В РІР‚в„ўР вЂ™Р’В» 		71:24:0f:a4
+//╨а┬а╨Т┬а╨атАЩ╨Т┬а╨а┬а╨▓╨ВтДв╨атАЩ╨Т┬а╨а┬а╨Т┬а╨атАЩ╨Т┬а╨а┬а╨атАа╨а┬а╨▓╨В╤Щ╨атАЩ╨Т┬а╨а┬а╨Т┬а╨атАЩ╨Т┬а╨а┬а╨▓╨ВтДв╨атАЩ╨Т┬а╨а┬а╨Т┬а╨а┬а╨атА╣╨а┬а╨атАа╨а┬а╨▓╨В╤Щ╨а╨О╨б╤Щ╨а┬а╨Т┬а╨атАЩ╨Т┬а╨а┬а╨▓╨ВтДв╨атАЩ╨Т┬а╨а┬а╨Т┬а╨а╨Ж╨атАЪ╨▓тАЮ╤Ю╨а┬а╨▓╨ВтДв╨атАЩ╨Т┬╗ 		71:23:0f:a3
+//╨а┬а╨Т┬а╨атАЩ╨Т┬а╨а┬а╨▓╨ВтДв╨атАЩ╨Т┬а╨а┬а╨Т┬а╨атАЩ╨Т┬а╨а┬а╨атАа╨а┬а╨▓╨В╤Щ╨атАЩ╨Т┬а╨а┬а╨Т┬а╨атАЩ╨Т┬а╨а┬а╨Т┬а╨а┬а╨▓╨ВтДЦ╨а┬а╨Т┬а╨а┬а╨▓╨В┬а╨а┬а╨Т┬а╨а╨Ж╨атАЪ╨бтДв╨а┬а╨атАа╨а╨Ж╨атАЪ╨бтА║╨а╨Ж╨атАЪ╨▓╨В╤Ъ╨а┬а╨Т┬а╨атАЩ╨Т┬а╨а┬а╨▓╨ВтДв╨атАЩ╨Т┬а╨а┬а╨Т┬а╨а┬а╨атА╣╨а┬а╨атАа╨а┬а╨▓╨В╤Щ╨а╨О╨б╤Щ╨а┬а╨Т┬а╨атАЩ╨Т┬а╨а┬а╨▓╨ВтДв╨атАЩ╨Т┬а╨а┬а╨Т┬а╨а╨Ж╨атАЪ╨▓тАЮ╤Ю╨а┬а╨▓╨ВтДв╨атАЩ╨Т┬╗ 		71:24:0f:a4
 //color         1 1 1 	31:01:01:01:00:f0:0f:33
 //3100:00:00:00:f0:0f:30
 //3100ff0000f00f2f
