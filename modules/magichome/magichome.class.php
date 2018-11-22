@@ -320,16 +320,36 @@ $sql="SELECT * FROM magichome_devices WHERE ID=".(int)$properties[$i]['DEVICE_ID
 //sg('test.mh',$command.":".$value.":");
 //sg('test.mh',$command.":".$value.":".$oldcolor);
                        if ($command=="command" && $value=='changecolor') {
+$this->changecolordevice($deviceid);
+				             }
+
+
+
+                 }  //model
+              } //╨а╨О╨▓╨В┬а╨а┬а╨бтАШ╨а┬а╨бтАЭ╨а┬а╨Т┬╗ ╨а┬а╨втАШ╨а┬а╨Т┬╡╨а┬а╨атАа╨а┬а╨Т┬░╨а┬а╨▓тАЮтАУ╨а╨О╨а╤У╨а┬а╨бтАв╨а┬а╨атАа
+ }//if total
+
+
+
+}
+
+
+            
+
+   
+function edit_devices(&$out, $id) {
+require(DIR_MODULES.$this->name . '/magichome_devices_edit.inc.php');
+}
+
+
+function changecolordevice($deviceid){
+
    $this->getinfo2($deviceid);
-
   $oldcolor=SQLSelectOne("SELECT *, substr(CURRENTCOLOR,13,6) CCOLOR, substr(CURRENTCOLOR,10,2) BR, substr(CURRENTCOLOR,5,2) TURN FROM magichome_devices where ID=$deviceid")['CCOLOR'];
-
-//sg('test.mh',$deviceid.":".$command.":".$value.":".$oldcolor);
 
                         $colorhex=str_replace('#','',$oldcolor);
 			$ar =(str_split($colorhex, 2));
-//sg('test.newcolor',$colorhex);
-$koef=50;
+
 $m1=hexdec($ar[0]);
 $m2=hexdec($ar[1]);
 $m3=hexdec($ar[2]);
@@ -350,26 +370,9 @@ $new3=$arr[2];
 //$new3=str_pad(dechex($m3), 2, "0", STR_PAD_LEFT);
 sg('test.mh',$deviceid.":".$command.":".$value.":".$oldcolor.":".$nextcolor.":".$new1.":".$new2.":".$new3.":".$textcolor);
 
-			$magichomeObject->set_colorhex($deviceid, $new1,$new2,$new3);
-			$magichomeObject->getinfo2($deviceid, $debug);
-				             }
-
-
-
-                 }  //model
-              } //╨а╨О╨▓╨В┬а╨а┬а╨бтАШ╨а┬а╨бтАЭ╨а┬а╨Т┬╗ ╨а┬а╨втАШ╨а┬а╨Т┬╡╨а┬а╨атАа╨а┬а╨Т┬░╨а┬а╨▓тАЮтАУ╨а╨О╨а╤У╨а┬а╨бтАв╨а┬а╨атАа
- }//if total
-
-
-
-}
-
-
-            
-
-   
-function edit_devices(&$out, $id) {
-require(DIR_MODULES.$this->name . '/magichome_devices_edit.inc.php');
+//     $magichomeObject = new magichome();
+     $this->set_colorhex($deviceid, $new1,$new2,$new3);
+     $this->getinfo2($deviceid, $debug);
 }
 
 
