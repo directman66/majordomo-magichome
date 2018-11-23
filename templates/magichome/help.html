@@ -53,16 +53,18 @@
 		<p>
 
 1) В классе простых устройств создаем метод Changecolor. В методе "changecolor" объекта (RGB01), привязанного к RGB устройству Magichome прописываем следующий код:<br>
-
+<br>
 			<code>$this->setProperty('command','changecolor');</code><br>
+			<br>
 2) В модуле Magichome в режиме просмотра метрик привязываем для метрики "command" связку со объектом RGB01 и свойством command.<br>
 3) Теперь при вызове метода объекта cm('RGB01.changecolor'); цвет ленты будет меняться в по кругу.<br>
 4) Метод changecolor можно привязать к кнопке MiHome (повесить на двойное нажатие правой кнопки беспроводного выключателя).<br>
 
-Также этот процесс можно вызвать из сценария:<br>
-<code>$magichomeObject = new magichome();<br>
-$magichomeObject->changecolordevice($deviceid);<br>
-	</code>
+Также этот процесс можно вызвать из сценария:<br><br>
+<code>
+$mh = new magichome();<br>
+$mh->changecolordevice($deviceid);<br>
+	</code><br><br>
 где $deviceid -номер устройства модуля.
 		</div> </div> </div>
 
