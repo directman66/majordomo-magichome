@@ -27,6 +27,44 @@
 <a href="https://play.google.com/store/apps/details?id=com.Zengge.LEDWifiMagicHome"> приложение.</a>
 		</div> </div> </div>
 
+
+<div class="panel-group" id="accordion">
+	<div class="panel panel-info">
+		<div class="panel-heading">
+		<a data-toggle="collapse" data-parent="#accordion" href="#nach">Включение/выключение по физической кнопке.</a>
+		</div>
+		<div class="panel-body collapse" id="nach">
+		<p>
+1) Создаем простое устройство RGB с именем RGB01 или другим.<br>
+2) Привязываем в модуле mihome метрику нужной кнопки включения/выключения к нужному объекту RGB01, поле status оставляем пустым. В поле метода выбираем switch.<br>
+3) Добавляем контроллер в модуле MagicHome. В свойствах контроллера на вкладке данные привязываем наше устройство к ПУ RGB01 к свойству status.
+
+		</div> </div> </div>
+
+
+<div class="panel-group" id="accordion">
+	<div class="panel panel-info">
+		<div class="panel-heading">
+		<a data-toggle="collapse" data-parent="#accordion" href="#nach">Изменение цвета RGB ленты по нажатию кнопки.</a>
+		</div>
+		<div class="panel-body collapse" id="nach">
+		<p>
+
+1) В классе простых устройств создаем метод Changecolor. В методе "changecolor" объекта (RGB01), привязанного к RGB устройству Magichome прописываем следующий код:<br>
+
+			<code>$this->setProperty('command','changecolor');</code><br>
+2) В модуле Magichome в режиме просмотра метрик привязываем для метрики "command" связку со объектом RGB01 и свойством command.<br>
+3) Теперь при вызове метода объекта cm('RGB01.changecolor'); цвет ленты будет меняться в по кругу.<br>
+4) Метод changecolor можно привязать к кнопке MiHome (повесить на двойное нажатие правой кнопки беспроводного выключателя).<br>
+
+Также этот процесс можно вызвать из сценария:<br>
+<code>$magichomeObject = new magichome();<br>
+$magichomeObject->changecolordevice($deviceid);<br>
+	</code>
+где $deviceid -номер устройства модуля.
+		</div> </div> </div>
+
+
 		
 <div class="panel-group" id="accordion">
 	<div class="panel panel-info">
