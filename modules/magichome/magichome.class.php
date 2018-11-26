@@ -320,7 +320,8 @@ $sql="SELECT * FROM magichome_devices WHERE ID=".(int)$properties[$i]['DEVICE_ID
 //sg('test.mh',$command.":".$value.":");
 //sg('test.mh',$command.":".$value.":".$oldcolor);
                        if ($command=="command" && $value=='changecolor') {
-$this->changecolordevice($deviceid);
+                       $magichomeObject->turnon($deviceid);
+  		       $this->changecolordevice($deviceid);
 				             }
 
 
@@ -1253,7 +1254,7 @@ $ncolor='FFFF00';
     else {
 //        $color='#FFFF00';
 $textcolor='желтый';
-$ncolor='000000';
+$ncolor='909090';
     }
 }
 
