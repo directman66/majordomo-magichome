@@ -1,6 +1,7 @@
 <?php
 /**
 * magichome module by dmitriy sannikov for majordomo
+* sannikovdi@yandex.ru
 * @package project
 * @author Wizard <sergejey@gmail.com>
 * @copyright http://majordomo.smartliving.ru/ (c)
