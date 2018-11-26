@@ -1,6 +1,6 @@
 <?php
 /**
-* milur 
+* magichome module by dmitriy sannikov for majordomo
 * @package project
 * @author Wizard <sergejey@gmail.com>
 * @copyright http://majordomo.smartliving.ru/ (c)
@@ -9,6 +9,7 @@
 //
 //
 //ini_set('max_execution_time', '600');
+ini_set ('display_errors', 'off');
 class magichome extends module {
 /**
 * milur
