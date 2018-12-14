@@ -165,9 +165,11 @@ $this->delete_once($this->id);
 //echo "mode:".$this->mode."<br>";
 //echo "command_id:".$this->command_id."<br>";
 global $command_id;
+global $speed;
 //echo "command_id:".$command_id."<br>";
 //echo "id:".$this->id."<br>";
-$this->set_command($this->id,$command_id);
+echo "speed:".$speed."<br>";
+$this->set_command($this->id,$command_id, $speed);
 
     }
 
@@ -697,7 +699,7 @@ socket_close($sock);
 }
 
 
-function set_command($id, $command) {
+function set_command($id, $command, $speed) {
 
 $cmd_rec = SQLSelectOne("SELECT IP, PORT FROM magichome_devices WHERE id=".$id);
 $host=$cmd_rec['IP'];
@@ -730,8 +732,9 @@ if(!socket_connect($sock , $host , $port))
 $CMD=SQLSelectOne('select * from magichome_effects where ID='.$command)['CODE'];
 $CM=explode("x",$CMD)[1];
 
-$message="61:$CM:01:F0";
-//echo $message;
+//$message="61:$CM:01:F0";
+$message="61:$CM:$speed:F0";
+echo $message;
 $message=str_replace(":","",$message);
 $message=$message.$this->csum($message);
 $hexmessage=hex2bin($message);
