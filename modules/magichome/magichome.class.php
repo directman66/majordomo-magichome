@@ -159,6 +159,20 @@ $this->delete_once($this->id);
     }
 
 
+  if ($this->view_mode=='command') {
+//   $this->edit_devices($out, $this->id);
+//echo "view_mode:".$this->view_mode."<br>";
+//echo "mode:".$this->mode."<br>";
+//echo "command_id:".$this->command_id."<br>";
+global $command_id;
+//echo "command_id:".$command_id."<br>";
+//echo "id:".$this->id."<br>";
+$this->set_command($this->id,$command_id);
+
+    }
+
+
+
 
   if ($this->view_mode=='turnon') {
    $this->turnon($this->id);
@@ -675,6 +689,51 @@ $message="31:$HR:$HG:$HB:00:f0:0f";
 $message=str_replace(":","",$message);
 $message=$message.$this->csum($message);
 //sg('test.message', $message);
+$hexmessage=hex2bin($message);
+
+        socket_sendto($sock, $hexmessage, strlen($hexmessage), 0, $host, $port);
+        usleep(100);
+socket_close($sock);
+}
+
+
+function set_command($id, $command) {
+
+$cmd_rec = SQLSelectOne("SELECT IP, PORT FROM magichome_devices WHERE id=".$id);
+$host=$cmd_rec['IP'];
+
+$port=5577;
+
+
+if(!($sock = socket_create(AF_INET, SOCK_STREAM, getprotobyname("tcp"))))
+{
+    $errorcode = socket_last_error();
+    $errormsg = socket_strerror($errorcode);
+
+    die("Couldn't create socket: [$errorcode] $errormsg \n");
+}
+
+//Connect socket to remote server
+if(!socket_connect($sock , $host , $port))
+{
+    $errorcode = socket_last_error();
+    $errormsg = socket_strerror($errorcode);
+
+
+}
+//0x61	command of setting builted-in mode	
+//Send	【0x61】+【8bit mode value】+【8bit speed value】+【0xF0 remote,0x0F local】+【check digit】(length of command:5)	
+//Return	If command is local(0x0F):no return
+//	If command is remote (0xF0):【0xF0 remote】+ 【0X61】+【0x00】+【check digit】"	
+//	Note:mode value refers to definition in the end of file,range of speed value is 0x01--0x1F	
+
+$CMD=SQLSelectOne('select * from magichome_effects where ID='.$command)['CODE'];
+$CM=explode("x",$CMD)[1];
+
+$message="61:$CM:01:F0";
+//echo $message;
+$message=str_replace(":","",$message);
+$message=$message.$this->csum($message);
 $hexmessage=hex2bin($message);
 
         socket_sendto($sock, $hexmessage, strlen($hexmessage), 0, $host, $port);
