@@ -17,6 +17,7 @@
   <td><b>Сост.</b></td>
   <td><b>Ур.ярк.</b></td>
   <td><b>Команда</b></td>
+  <td><b>Скорость</b></td>
   <td><b></b></td>
   <td><b>Выбор цвета</b></td>
   <td><b>Вкл./выкл.</b></td>
@@ -62,18 +63,65 @@
 
 <td>
 <form action="?" method="post" enctype="multipart/form-data" name="frmEdit" class="form-horizontal">
-  <select name="selecteduser" class="form-control" >
+  <select name="command_id" class="form-control" >
   <option value="">[#COMMAND#]
   [#begin COMMANDS#]
   <option value="[#ID#]"[#if SELECTED#] selected[#endif#]>[#TITLE#]
   [#end COMMANDS#]
   </select>
 </td><td>
+
+  <select name="speed" class="form-control" >
+  <option>01
+  <option>02
+  <option>03
+  <option>04
+  <option>05
+  <option>06
+  <option>07
+  <option>08
+  <option>09
+  <option>0A
+  <option>0B
+  <option>0C
+  <option>0D
+  <option>0E
+  <option>0F
+  <option>10
+  <option>11
+  <option>12
+  <option>13
+  <option>14
+  <option>15
+  <option>10
+  <option>11
+  <option>12
+  <option>13
+  <option>14
+  <option>15
+  <option>10
+  <option>11
+  <option>12
+  <option>13
+  <option>14
+  <option>15
+  <option>16
+  <option>17
+  <option>18
+  <option>19
+  <option>1A
+  <option>1B
+  <option>1C
+  <option>1D
+  <option>1E
+  <option>1F
+  </select>
+</td><td>
+
 <button type="submit" name="subm" value="Submit" class="btn btn-default"  >ОК</button>
-<input type="hidden" name="view_mode" value="saveuser">	
-<input type="hidden" name="mode" value="confirm">
-<input type="hidden" name="tab" value="users">
-<input type="hidden" name="filename" value="[#FILE#]">
+<input type="hidden" name="view_mode" value="command">	
+<input type="hidden" name="mode" value="run">
+<input type="hidden" name="tab" value="info">
 <input type="hidden" name="id" value="[#ID#]">
 </form>
 </td>
