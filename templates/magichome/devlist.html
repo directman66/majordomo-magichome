@@ -16,6 +16,8 @@
   <td><b>Добавлено</b></td>
   <td><b>Сост.</b></td>
   <td><b>Ур.ярк.</b></td>
+  <td><b>Команда</b></td>
+  <td><b></b></td>
   <td><b>Выбор цвета</b></td>
   <td><b>Вкл./выкл.</b></td>
  </tr>
@@ -56,6 +58,27 @@
 </a>
 
   <td>[#BR#]</td>
+
+
+<td>
+<form action="?" method="post" enctype="multipart/form-data" name="frmEdit" class="form-horizontal">
+  <select name="selecteduser" class="form-control" >
+  <option value="">[#COMMAND#]
+  [#begin COMMANDS#]
+  <option value="[#ID#]"[#if SELECTED#] selected[#endif#]>[#TITLE#]
+  [#end COMMANDS#]
+  </select>
+</td><td>
+<button type="submit" name="subm" value="Submit" class="btn btn-default"  >ОК</button>
+<input type="hidden" name="view_mode" value="saveuser">	
+<input type="hidden" name="mode" value="confirm">
+<input type="hidden" name="tab" value="users">
+<input type="hidden" name="filename" value="[#FILE#]">
+<input type="hidden" name="id" value="[#ID#]">
+</form>
+</td>
+
+
   <td>
 
 <form action="?" method="get" class="form-horizontal" name="color_change">
