@@ -398,7 +398,15 @@ else
 
 
   $mhdevices=SQLSelect("SELECT *, substr(CURRENTCOLOR,13,6) CCOLOR, substr(CURRENTCOLOR,10,2) BR, substr(CURRENTCOLOR,5,2) TURN FROM magichome_devices");
+     $total = count($mhdevices);
+         for ($i = 0; $i < $total; $i++) {
+
+  $mhdevices[$i]['COMMANDS']=SQLSelect('select * from magichome_effects');
+}
+
+
   if ($mhdevices[0]['ID']) {
+
    $out['DEVICES']=$mhdevices;
 
     }
@@ -998,6 +1006,17 @@ EOD;
 EOD;
   parent::dbInstall($data);
 
+
+ $data = <<<EOD
+ magichome_effects: ID int(10) unsigned NOT NULL auto_increment
+ magichome_effects: TITLE varchar(100) NOT NULL DEFAULT ''
+ magichome_effects: CODE varchar(255) NOT NULL DEFAULT ''
+ magichome_effects: DEVICE_TYPE varchar(100) NOT NULL DEFAULT ''
+EOD;
+  parent::dbInstall($data);
+
+
+
  $data = <<<EOD
  magichome_config: parametr  varchar(300) 
  magichome_config: value varchar(10000)  
@@ -1005,10 +1024,8 @@ EOD;
   parent::dbInstall($data);
 
   $mhdevices=SQLSelect("SELECT *  FROM magichome_commands");
-  if ($mhdevices[0]['ID']) 
-
-{}else{
-
+  if (!$mhdevices[0]['ID']) 
+{
 $par=array();		 
 $par['TITLE'] = 'command';
 $par['ID'] = "1";		 
@@ -1034,14 +1051,170 @@ SQLInsert('magichome_config', $par2);
 }
 
 
+$par1=SQLSelectOne ("select * from magichome_effects where ID=1");
+
+if (!$par1['ID']) {
+
+
+$par1['ID'] = 1;
+$par1['TITLE'] = '7 colors gradual change';
+$par1['CODE'] = '0x25';
+$par1['DEVICE_TYPE'] = 'AK001-ZJ100';
+SQLInsert('magichome_effects',$par1);
+
+$par1['ID'] = 2;
+$par1['TITLE'] = 'red gradual change';
+$par1['CODE'] = '0x26';
+$par1['DEVICE_TYPE'] = 'AK001-ZJ100';
+SQLInsert('magichome_effects',$par1);
+
+$par1['ID'] = 3;
+$par1['TITLE'] = 'green gradual change';
+$par1['CODE'] = '0x27';
+$par1['DEVICE_TYPE'] = 'AK001-ZJ100';
+SQLInsert('magichome_effects',$par1);
+
+
+$par1['ID'] = 4;
+$par1['TITLE'] = 'glue gradual change';
+$par1['CODE'] = '0x28';
+$par1['DEVICE_TYPE'] = 'AK001-ZJ100';
+SQLInsert('magichome_effects',$par1);
+
+
+$par1['ID'] = 5;
+$par1['TITLE'] = 'yellow gradual change';
+$par1['CODE'] = '0x29';
+$par1['DEVICE_TYPE'] = 'AK001-ZJ100';
+SQLInsert('magichome_effects',$par1);
+
+
+$par1['ID'] = 6;
+$par1['TITLE'] = 'cyan gradual change';
+$par1['CODE'] = '0x2A';
+$par1['DEVICE_TYPE'] = 'AK001-ZJ100';
+SQLInsert('magichome_effects',$par1);
+
+
+
+$par1['ID'] = 7;
+$par1['TITLE'] = 'purple gradual change';
+$par1['CODE'] = '0x2B';
+$par1['DEVICE_TYPE'] = 'AK001-ZJ100';
+SQLInsert('magichome_effects',$par1);
+
+
+$par1['ID'] = 8;
+$par1['TITLE'] = 'white gradual change';
+$par1['CODE'] = '0x2C';
+$par1['DEVICE_TYPE'] = 'AK001-ZJ100';
+SQLInsert('magichome_effects',$par1);
+
+
+$par1['ID'] = 9;
+$par1['TITLE'] = 'red and green gradual change';
+$par1['CODE'] = '0x2D';
+$par1['DEVICE_TYPE'] = 'AK001-ZJ100';
+SQLInsert('magichome_effects',$par1);
+
+
+$par1['ID'] = 10;
+$par1['TITLE'] = 'red and blue gradual change';
+$par1['CODE'] = '0x2E';
+$par1['DEVICE_TYPE'] = 'AK001-ZJ100';
+SQLInsert('magichome_effects',$par1);
+
+$par1['ID'] = 11;
+$par1['TITLE'] = 'green and blue gradual change';
+$par1['CODE'] = '0x2F';
+$par1['DEVICE_TYPE'] = 'AK001-ZJ100';
+SQLInsert('magichome_effects',$par1);
+
+$par1['ID'] = 12;
+$par1['TITLE'] = '7 colors stroboflash';
+$par1['CODE'] = '0x30';
+$par1['DEVICE_TYPE'] = 'AK001-ZJ100';
+SQLInsert('magichome_effects',$par1);
+
+$par1['ID'] = 13;
+$par1['TITLE'] = 'red stroboflash';
+$par1['CODE'] = '0x31';
+$par1['DEVICE_TYPE'] = 'AK001-ZJ100';
+SQLInsert('magichome_effects',$par1);
+
+
+$par1['ID'] = 14;
+$par1['TITLE'] = 'green stroboflash';
+$par1['CODE'] = '0x32';
+$par1['DEVICE_TYPE'] = 'AK001-ZJ100';
+SQLInsert('magichome_effects',$par1);
+
+
+$par1['ID'] = 15;
+$par1['TITLE'] = 'glue stroboflash';
+$par1['CODE'] = '0x33';
+$par1['DEVICE_TYPE'] = 'AK001-ZJ100';
+SQLInsert('magichome_effects',$par1);
+
+
+$par1['ID'] = 16;
+$par1['TITLE'] = 'yellow stroboflash';
+$par1['CODE'] = '0x34';
+$par1['DEVICE_TYPE'] = 'AK001-ZJ100';
+SQLInsert('magichome_effects',$par1);
+
+
+
+$par1['ID'] = 17;
+$par1['TITLE'] = 'cyan stroboflash';
+$par1['CODE'] = '0x35';
+$par1['DEVICE_TYPE'] = 'AK001-ZJ100';
+SQLInsert('magichome_effects',$par1);
+
+
+$par1['ID'] = 18;
+$par1['TITLE'] = 'purple stroboflash	0x36';
+$par1['CODE'] = '0x36';
+$par1['DEVICE_TYPE'] = 'AK001-ZJ100';
+SQLInsert('magichome_effects',$par1);
+
+
+$par1['ID'] = 19;
+$par1['TITLE'] = 'white stroboflash';
+$par1['CODE'] = '0x37';
+$par1['DEVICE_TYPE'] = 'AK001-ZJ100';
+SQLInsert('magichome_effects',$par1);
+
+
+$par1['ID'] = 20;
+$par1['TITLE'] = '7 colors jump change';
+$par1['CODE'] = '0x38';
+$par1['DEVICE_TYPE'] = 'AK001-ZJ100';
+SQLInsert('magichome_effects',$par1);
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
  }
 
 function csum($str)
 {
 $ar=str_split ($str,2);
 
- $csum=0;
- for ($j = 0; $j <count ($ar); $j++) {
+$csum=0;
+for ($j = 0; $j <count ($ar); $j++) {
  $csum=$csum+hexdec($ar[$j]);
  }
 return substr(dechex($csum),-2);
