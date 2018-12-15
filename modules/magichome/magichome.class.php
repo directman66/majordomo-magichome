@@ -168,7 +168,7 @@ global $command_id;
 global $speed;
 //echo "command_id:".$command_id."<br>";
 //echo "id:".$this->id."<br>";
-echo "speed:".$speed."<br>";
+//echo "speed:".$speed."<br>";
 $this->set_command($this->id,$command_id, $speed);
 
     }
@@ -341,6 +341,13 @@ $sql="SELECT * FROM magichome_devices WHERE ID=".(int)$properties[$i]['DEVICE_ID
                        $magichomeObject->turnon($deviceid);
   		       $this->changecolordevice($deviceid);
 				             }
+
+                       if ($command=="command" && $value!='changecolor') {
+                       $magichomeObject->turnon($deviceid);
+  		       $this->changecolordevice($deviceid);
+                       $this->set_command($deviceid,$value, '01');
+				             }
+
 
 
 
@@ -734,7 +741,7 @@ $CM=explode("x",$CMD)[1];
 
 //$message="61:$CM:01:F0";
 $message="61:$CM:$speed:F0";
-echo $message;
+//echo $message;
 $message=str_replace(":","",$message);
 $message=$message.$this->csum($message);
 $hexmessage=hex2bin($message);
