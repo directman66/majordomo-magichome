@@ -10,15 +10,12 @@
 <table align="center" class="table table-striped">
  <tr>
   <td><b>Модель</b></td>
-  <td><b>IP-адрес</b></td>
   <td><b>Online</b></td>
   <td><b>SN</b></td>
   <td><b>Добавлено</b></td>
   <td><b>Сост.</b></td>
   <td><b>Ур.ярк.</b></td>
-  <td><b>Команда</b></td>
-  <td><b>Скорость</b></td>
-  <td><b></b></td>
+  <td><b>Команда/Скорость</b></td>
   <td><b>Выбор цвета</b></td>
   <td><b>Вкл./выкл.</b></td>
  </tr>
@@ -30,10 +27,10 @@
 [#begin DEVICES#]
 
  <tr>
-  <td>[#TITLE#]</td>
-  <td>[#IP#]</td>
+  <td>[#TITLE#]<br>
+[#IP#]</td>
 
-  <td style="vertical-align:middle">
+  <td style="vertical-align:top">
 	[#if ONLINE!=""#]
 		[#if ONLINE==1#]
 			<span class="label label-success" title="<#LANG_XIMI_APP_ONLINE#>">Online</span>
@@ -62,16 +59,29 @@
 
 
 <td>
+<table cellspacing="0" cellpadding="0" border=0><tr><td>
 <form action="?" method="post" enctype="multipart/form-data" name="frmEdit" class="form-horizontal">
-  <select name="command_id" class="form-control" >
+  <select name="command_id" class="form-control" style="width: 70px;">
   <option value="">[#COMMAND#]
   [#begin COMMANDS#]
   <option value="[#ID#]"[#if SELECTED#] selected[#endif#]>[#TITLE#]
   [#end COMMANDS#]
   </select>
-</td><td>
+</td>
 
-  <select name="speed" class="form-control" >
+<td>
+<button type="submit" name="subm" value="Submit" class="btn btn-default"  >ОК</button>
+<input type="hidden" name="view_mode" value="command">	
+<input type="hidden" name="mode" value="run">
+<input type="hidden" name="tab" value="info">
+<input type="hidden" name="id" value="[#ID#]">
+</form>
+</td>
+</td>
+
+</tr><tr>	<td>
+
+  <select name="speed" class="form-control" style="width: 70px;">
   <option>01
   <option>02
   <option>03
@@ -116,16 +126,10 @@
   <option>1E
   <option>1F
   </select>
-</td><td>
 
-<button type="submit" name="subm" value="Submit" class="btn btn-default"  >ОК</button>
-<input type="hidden" name="view_mode" value="command">	
-<input type="hidden" name="mode" value="run">
-<input type="hidden" name="tab" value="info">
-<input type="hidden" name="id" value="[#ID#]">
-</form>
-</td>
+</td></tr>
 
+</table>
 
   <td>
 
@@ -136,25 +140,30 @@
       <div class="col-sm-5">
 
 <script src="<#ROOTHTML#>templates/magichome/jscolor.js"></script>
-<input class="jscolor" onchange="document.color_change.submit();" value="[#CCOLOR#][#id#]" size="3" name="colorpicker"  id="colorpicker"> 
+<input class="jscolor" onchange="document.color_change.submit();" value="[#CCOLOR#][#id#]" size="12" name="colorpicker"  id="colorpicker"> 
 
 
-   </div>
-&nbsp;<a href="?view_mode=set_favorit_[#CCOLOR#]&id=[#ID#]&tab=info" class="btn btn-default"  title="Установить любимый цвет [#CCOLOR#]" ><i class="glyphicon  glyphicon-user"></i></a> 
-    </div>
 
 
 </form>
+<br>
+<table><tr><td>
+<a href="?view_mode=set_favorit_[#CCOLOR#]&id=[#ID#]&tab=info" class="btn btn-default"  title="Установить любимый цвет [#CCOLOR#]" ><i class="glyphicon  glyphicon-user"></i></a> 
+</td><td>
+
+<a href="?view_mode=setcolorhex_[#FAVORITCOLOR#]&id=[#ID#]&tab=info" class="btn btn-default"  title="Сменить цвет на любимый [#FAVORITCOLOR#]"><i class="glyphicon glyphicon-star"></i></a> 
+</td><tr></table>
+
 </td>
 
 
 
 
 
-&nbsp;&nbsp;
+
   <td><a href="?view_mode=turnon&id=[#ID#]&tab=info" class="btn btn-default" title="Включить"><i class="glyphicon glyphicon-ok"></i></a> 
   <a href="?view_mode=turnoff&id=[#ID#]&tab=info" class="btn btn-default" title="Выключить"><i class="glyphicon glyphicon-remove"></i></a> 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
 
 
 
@@ -268,21 +277,25 @@ $page = file_get_contents("http://www.domain.com/filename");
   <a href="?view_mode=brightness50&id=[#ID#]"class="btn btn-default" title="50% brightness"><i class="glyphicon glyphicon"></i></a> 
   <a href="?view_mode=brightness100&id=[#ID#]"class="btn btn-default" title="100% brightness"><i class="glyphicon glyphicon"></i></a> 
 -->
-
-
-&nbsp;&nbsp;&nbsp;&nbsp;
-  <a href="?view_mode=setcolorhex_[#FAVORITCOLOR#]&id=[#ID#]&tab=info" class="btn btn-default"  title="Сменить цвет на любимый [#FAVORITCOLOR#]"><i class="glyphicon glyphicon-star"></i></a> 
+</td><td>
+<table border=0>
+<tr><td>
   <a href="?view_mode=setcolorhex_ff0000&id=[#ID#]&tab=info" class="btn btn-danger" color="red" title="Сменить цвет на красный"><i class="glyphicon glyphicon-asterisk"></i></a> 
+</td><td>
   <a href="?view_mode=setcolorhex_00ff00&id=[#ID#]&tab=info" class="btn btn-success" title="Сменить цвет на зеленый"><i class="glyphicon glyphicon-asterisk"></i></a> 
+</td><td>
   <a href="?view_mode=setcolorhex_0000ff&id=[#ID#]&tab=info" class="btn btn-primary" title="Сменить цвет на синий"><i class="glyphicon glyphicon-asterisk"></i></a> 
+</td></tr><tr><td>
   <a href="?view_mode=setcolorhex_ffffff&id=[#ID#]&tab=info" class="btn btn-default" title="Сменить цвет на белый"><i class="glyphicon glyphicon-asterisk"></i></a> 
+</td><td>
   <a href="?view_mode=setcolorhex_ffff00&id=[#ID#]&tab=info" class="btn btn-warning" title="Сменить цвет на желтый"><i class="glyphicon glyphicon-asterisk"></i></a> 
+</td><td>
   <a href="?view_mode=setcolorhex_00ffff&id=[#ID#]&tab=info" class="btn btn-info" title="Сменить цвет на голубой"><i class="glyphicon glyphicon-asterisk"></i></a> 
+</tr></table>
+
+</td><td>
 
 
-
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   <a href="?data_source=<#DATA_SOURCE#>&view_mode=edit_devices&id=[#ID#]&tab=info" class="btn btn-default" title="Редактировать"><i class="glyphicon glyphicon-pencil"></i></a>
   <a href="?view_mode=delete_devices&id=[#ID#]&tab=info" onClick="return confirm('Are you sure? Please confirm.')" class="btn btn-default" title="<#LANG_DELETE#>"><i class="glyphicon glyphicon-trash"></i></a> 
   </td>
