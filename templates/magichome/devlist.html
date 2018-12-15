@@ -59,7 +59,8 @@
 
 
 <td>
-<table cellspacing="0" cellpadding="0" border=0><tr><td>
+<table><td>
+
 <form action="?" method="post" enctype="multipart/form-data" name="frmEdit" class="form-horizontal">
   <select name="command_id" class="form-control" style="width: 70px;">
   <option value="">[#COMMAND#]
@@ -67,20 +68,7 @@
   <option value="[#ID#]"[#if SELECTED#] selected[#endif#]>[#TITLE#]
   [#end COMMANDS#]
   </select>
-</td>
-
-<td>
-<button type="submit" name="subm" value="Submit" class="btn btn-default"  >ОК</button>
-<input type="hidden" name="view_mode" value="command">	
-<input type="hidden" name="mode" value="run">
-<input type="hidden" name="tab" value="info">
-<input type="hidden" name="id" value="[#ID#]">
-</form>
-</td>
-</td>
-
-</tr><tr>	<td>
-
+<br>
   <select name="speed" class="form-control" style="width: 70px;">
   <option>01
   <option>02
@@ -127,9 +115,20 @@
   <option>1F
   </select>
 
-</td></tr>
+</td><td>
 
-</table>
+<button type="submit" name="subm" value="Submit" class="btn btn-default"  >ОК</button>
+<input type="hidden" name="view_mode" value="command">	
+<input type="hidden" name="mode" value="run">
+<input type="hidden" name="tab" value="info">
+<input type="hidden" name="id" value="[#ID#]">
+</form>
+
+ </td></table>
+
+
+
+
 
   <td>
 
