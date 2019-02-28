@@ -412,12 +412,29 @@ $ip=$mhdevices[$i]['IP'];
 $lastping=$mhdevices[$i]['LASTPING'];
 //echo time()-$lastping;
 if (time()-$lastping>300) {
+
+
+$cmd='
+$online=ping(processTitle('.$ip.'));
+if ($online) 
+{SQLexec("update magichome_devices set ONLINE="1", LASTPING=".time()." where IP='.$ip.'");} 
+else 
+{SQLexec("update magichome_devices set ONLINE="0", LASTPING=".time()." where IP='.$ip.'");}
+}
+';
+ SetTimeOut('magichome_ping',$cmd, '10'); 
+
+/*
 $online=ping(processTitle($ip));
     if ($online) 
 {SQLexec("update magichome_devices set ONLINE='1', LASTPING=".time()." where IP='$ip'");} 
 else 
 {SQLexec("update magichome_devices set ONLINE='0', LASTPING=".time()." where IP='$ip'");}
-}}
+*/
+
+}
+
+}
 
 
   $mhdevices=SQLSelect("SELECT *, substr(CURRENTCOLOR,13,6) CCOLOR, substr(CURRENTCOLOR,10,2) BR, substr(CURRENTCOLOR,5,2) TURN FROM magichome_devices");
