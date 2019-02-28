@@ -414,15 +414,17 @@ $lastping=$mhdevices[$i]['LASTPING'];
 if (time()-$lastping>300) {
 
 
+
 $cmd='
-$online=ping(processTitle('.$ip.'));
+$online=ping(processTitle("'.$ip.'"));
 if ($online) 
-{SQLexec("update magichome_devices set ONLINE="1", LASTPING=".time()." where IP='.$ip.'");} 
+{SQLexec("update camshoter_devices set ONLINE=1, LASTPING='.time().' where IP=\''.$ip.'\'");} 
 else 
-{SQLexec("update magichome_devices set ONLINE="0", LASTPING=".time()." where IP='.$ip.'");}
-}
+{SQLexec("update camshoter_devices set ONLINE=0, LASTPING='.time().' where IP=\''.$ip.'\'");}
+
 ';
- SetTimeOut('magichome_ping',$cmd, '10'); 
+ SetTimeOut('magichome_ping',$cmd, '1'); 
+
 
 /*
 $online=ping(processTitle($ip));
