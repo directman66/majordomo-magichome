@@ -360,6 +360,36 @@ $sql="SELECT * FROM magichome_devices WHERE ID=".(int)$properties[$i]['DEVICE_ID
 }
 
 
+ function processCycle() {
+//   $every=$this->config['EVERY'];
+
+$cmd_rec = SQLSelectOne("SELECT VALUE FROM magichome_config where parametr='ENABLE'");
+$enable=$cmd_rec['VALUE'];
+
+$enable=1;
+$cmd_rec = SQLSelectOne("SELECT VALUE FROM magichome_config where parametr='EVERY'");
+$every=$cmd_rec['VALUE'];
+
+
+$cmd_rec = SQLSelectOne("SELECT VALUE FROM magichome_config where parametr='LASTCYCLE_TS'");
+$latest=$cmd_rec['VALUE'];
+
+   $tdev = time()-$latest;
+   $has = $tdev>$every*60;
+   if ($tdev < 0) {$has = true;}
+   
+   if ($has) {  
+
+$cmd_rec = SQLSelect("SELECT ID FROM magichome_devices");
+foreach ($cmd_rec as $cmd_r)
+{
+$myid=$cmd_r['ID'];
+$this->getinfo2($myid);
+}}
+  } 
+  
+
+
             
 
    
@@ -1115,9 +1145,11 @@ EOD;
 EOD;
   parent::dbInstall($data);
 
+//  $mhdevices=SQLSelect("SELECT *  FROM magichome_commands");
   $mhdevices=SQLSelect("SELECT *  FROM magichome_commands");
   if (!$mhdevices[0]['ID']) 
 {
+
 $par=array();		 
 $par['TITLE'] = 'command';
 $par['ID'] = "1";		 
@@ -1135,12 +1167,41 @@ $par['TITLE'] = 'status';
 $par['ID'] = "4";		 
 SQLInsert('magichome_commands', $par);		 
 
+}
 
-$par2=array();		 
+
+$par2=SQLSelectOne("SELECT *  FROM magichome_config where parametr='DEBUG'");
+if (!par2['value']) {
 $par2['parametr'] = 'DEBUG';
 $par2['value'] = "";		 
 SQLInsert('magichome_config', $par2);		 
 }
+
+
+$par2=SQLSelectOne("SELECT *  FROM magichome_config where parametr='EVERY'");
+if (!par2['value']) {
+$par2['parametr'] = 'EVERY';
+$par2['value'] = "300";		 
+SQLInsert('magichome_config', $par2);		 
+}
+
+$par2=SQLSelectOne("SELECT *  FROM magichome_config where parametr='LASTCYCLE_TS'");
+if (!par2['value']) {
+
+$par2['parametr'] = 'LASTCYCLE_TS';
+$par2['value'] = "";		 
+SQLInsert('magichome_config', $par2);		 
+}
+
+$par2=SQLSelectOne("SELECT *  FROM magichome_config where parametr='ENABLE'");
+if (!par2['value']) {
+
+$par2['parametr'] = 'ENABLE';
+$par2['value'] = "1";		 
+SQLInsert('magichome_config', $par2);		 
+}
+
+
 
 
 $par1=SQLSelectOne ("select * from magichome_effects where ID=1");
