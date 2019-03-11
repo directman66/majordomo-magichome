@@ -441,7 +441,10 @@ for ($i = 0; $i < $total; $i++)
 $ip=$mhdevices[$i]['IP'];
 $lastping=$mhdevices[$i]['LASTPING'];
 //echo time()-$lastping;
-if (time()-$lastping>300) {
+if ((!$lastping)||(time()-$lastping>300))
+
+
+{
 
 
 
@@ -453,16 +456,8 @@ else
 {SQLexec("update magichome_devices set ONLINE=0, LASTPING='.time().' where IP=\''.$ip.'\'");}
 
 ';
- SetTimeOut('magichome_ping',$cmd, '1'); 
+ SetTimeOut('magichome_ping'.$i,$cmd, '1'); 
 
-
-/*
-$online=ping(processTitle($ip));
-    if ($online) 
-{SQLexec("update magichome_devices set ONLINE='1', LASTPING=".time()." where IP='$ip'");} 
-else 
-{SQLexec("update magichome_devices set ONLINE='0', LASTPING=".time()." where IP='$ip'");}
-*/
 
 }
 
