@@ -1166,7 +1166,7 @@ SQLInsert('magichome_commands', $par);
 
 
 $par2=SQLSelectOne("SELECT *  FROM magichome_config where parametr='DEBUG'");
-if (!par2['value']) {
+if (!$par2['value']) {
 $par2['parametr'] = 'DEBUG';
 $par2['value'] = "";		 
 SQLInsert('magichome_config', $par2);		 
@@ -1174,14 +1174,14 @@ SQLInsert('magichome_config', $par2);
 
 
 $par2=SQLSelectOne("SELECT *  FROM magichome_config where parametr='EVERY'");
-if (!par2['value']) {
+if (!$par2['value']) {
 $par2['parametr'] = 'EVERY';
 $par2['value'] = "300";		 
 SQLInsert('magichome_config', $par2);		 
 }
 
 $par2=SQLSelectOne("SELECT *  FROM magichome_config where parametr='LASTCYCLE_TS'");
-if (!par2['value']) {
+if (!$par2['value']) {
 
 $par2['parametr'] = 'LASTCYCLE_TS';
 $par2['value'] = "";		 
@@ -1189,7 +1189,7 @@ SQLInsert('magichome_config', $par2);
 }
 
 $par2=SQLSelectOne("SELECT *  FROM magichome_config where parametr='ENABLE'");
-if (!par2['value']) {
+if (!$par2['value']) {
 
 $par2['parametr'] = 'ENABLE';
 $par2['value'] = "1";		 
