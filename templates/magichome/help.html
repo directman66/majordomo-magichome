@@ -47,7 +47,7 @@
 <div class="panel-group" id="accordion">
 	<div class="panel panel-info">
 		<div class="panel-heading">
-		<a data-toggle="collapse" data-parent="#accordion" href="#changecolor2">Изменение цвета RGB ленты по нажатию кнопки.</a>
+		<a data-toggle="collapse" data-parent="#accordion" href="#changecolor2">Изменение цвета RGB ленты по нажатию кнопки (карусель).</a>
 		</div>
 		<div class="panel-body collapse" id="changecolor2">
 		<p>
@@ -61,12 +61,35 @@
 4) Метод changecolor можно привязать к кнопке MiHome (повесить на двойное нажатие правой кнопки беспроводного выключателя).<br>
 
 Также этот процесс можно вызвать из сценария:<br><br>
-<code>
+<code><br>
 include_once(DIR_MODULES . 'magichome/magichome.class.php');<br>
 $mh = new magichome();<br>
 $mh->changecolordevice($deviceid);<br>
 	</code><br><br>
 где $deviceid -номер устройства модуля.
+		</div> </div> </div>
+
+
+
+<div class="panel-group" id="accordion">
+	<div class="panel panel-info">
+		<div class="panel-heading">
+		<a data-toggle="collapse" data-parent="#accordion" href="#changecolor3">Изменение яркости .</a>
+		</div>
+		<div class="panel-body collapse" id="changecolor3">
+		<p>
+
+
+Яркость ленты меняется следующим методом:<br>
+<code><br>
+include_once(DIR_MODULES . 'magichome/magichome.class.php');<br>
+$mh = new magichome();<br>
+$mh->brightness($deviceid,$brightness);<br>
+</code>
+
+где:<br>
+$deviceid -номер устройства модуля.<br>
+$brightness - уровень яркости, от 0 до 100.
 		</div> </div> </div>
 
 
@@ -81,7 +104,7 @@ $mh->changecolordevice($deviceid);<br>
 
 Предуставленные эффекты можно включить из метода или сценария:
 <br><br>
-<code>
+<code> <br>
 include_once(DIR_MODULES . 'magichome/magichome.class.php');<br>
 $mh = new magichome();<br>
 $mh->set_command($deviceid,$value, '01');<br>
