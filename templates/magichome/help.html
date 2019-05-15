@@ -47,9 +47,9 @@
 <div class="panel-group" id="accordion">
 	<div class="panel panel-info">
 		<div class="panel-heading">
-		<a data-toggle="collapse" data-parent="#accordion" href="#changecolor">Изменение цвета RGB ленты по нажатию кнопки.</a>
+		<a data-toggle="collapse" data-parent="#accordion" href="#changecolor2">Изменение цвета RGB ленты по нажатию кнопки.</a>
 		</div>
-		<div class="panel-body collapse" id="changecolor">
+		<div class="panel-body collapse" id="changecolor2">
 		<p>
 
 1) В классе простых устройств создаем метод Changecolor. В методе "changecolor" объекта (RGB01), привязанного к RGB устройству Magichome прописываем следующий код:<br>
@@ -62,12 +62,36 @@
 
 Также этот процесс можно вызвать из сценария:<br><br>
 <code>
-include_once(DIR_MODULES . 'magichome/magichome.class.php');
+include_once(DIR_MODULES . 'magichome/magichome.class.php');<br>
 $mh = new magichome();<br>
 $mh->changecolordevice($deviceid);<br>
 	</code><br><br>
 где $deviceid -номер устройства модуля.
 		</div> </div> </div>
+
+
+<div class="panel-group" id="accordion">
+	<div class="panel panel-info">
+		<div class="panel-heading">
+		<a data-toggle="collapse" data-parent="#accordion" href="#changecolor">Включение эффекта из предустановленных.</a>
+		</div>
+		<div class="panel-body collapse" id="changecolor">
+		<p>
+
+
+Предуставленные эффекты можно включить из метода или сценария:
+<br><br>
+<code>
+include_once(DIR_MODULES . 'magichome/magichome.class.php');<br>
+$mh = new magichome();<br>
+$mh->set_command($deviceid,$value, '01');<br>
+	</code><br><br>
+где:<br>
+$deviceid -номер устройства модуля.<br>
+$value - номер эффекта<br>
+01 - скорость изменения эффекта.<br>
+		</div> </div> </div>
+
 
 
 		
