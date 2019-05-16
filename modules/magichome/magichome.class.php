@@ -495,9 +495,9 @@ else
 */
 function usual(&$out) {
  
- if ($this->owner->action=='apps') {
-  $this->redirect(ROOTHTML."module/".$this->name.".html");
- } else 
+// if ($this->owner->action=='apps') {
+//  $this->redirect(ROOTHTML."module/".$this->name.".html");
+// } else 
  $this->admin($out);
 
 }
