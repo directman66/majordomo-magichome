@@ -28,7 +28,7 @@ padding: .3em 1em
 </div>
 
 
-[#if VIEW_MODE=""#]
+
 	 <ul class="nav nav-tabs">
 
 <br>
@@ -39,9 +39,9 @@ padding: .3em 1em
 <li [#if TAB=="help" #] class="active" [#endif#]><a href="?view_mode=&tab=help"><span class="glyphicon glyphicon-info-sign"></span> Помощь</a> </li>	
 </ul>
 
-[#endif#]
 
-[#if TAB==""#] [#inc devlist.html#] [#endif#]
+
+[#if TAB==""|TAB=="info"#] [#inc devlist.html#] [#endif#]
 
 [#if TAB="config"#]
 [#endif#]
