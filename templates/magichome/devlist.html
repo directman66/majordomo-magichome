@@ -51,9 +51,9 @@
   <td>[#MAC#]</td>
   <td>[#FIND#]</td>
   <td>
-<a href="?view_mode=getinfo&id=[#ID#]" title="#[#CCOLOR#]  [#CURRENTCOLOR#]" >
+<a href="?view_mode=getinfo&id=[#ID#]" title="[#RGBCURRENT#]" >
 [#if TURN="23"#]
-<font style="background-color:#[#CCOLOR#]"	 title="#[#CCOLOR#]  [#CURRENTCOLOR#]"> 
+<font style="background-color:#[#RGBCURRENT#]"	 title="[#RGBCURRENT#]"> 
 &nbsp;<i class="glyphicon glyphicon-ok-circle"></i>&nbsp;
 </font> 
 [#else#]
@@ -145,7 +145,7 @@
       <div class="col-sm-5">
 
 <script src="<#ROOTHTML#>templates/magichome/jscolor.js"></script>
-<input class="jscolor" onchange="document.color_change.submit();" value="[#CCOLOR#][#id#]" size="12" name="colorpicker"  id="colorpicker"> 
+<input class="jscolor" onchange="document.color_change.submit();" value="[#RGBCURRENT#][#id#]" size="12" name="colorpicker"  id="colorpicker"> 
 
 
 
@@ -153,7 +153,7 @@
 </form>
 <br>
 <table><tr><td>
-<a href="?view_mode=set_favorit_[#CCOLOR#]&id=[#ID#]&tab=" class="btn btn-default"  title="Установить любимый цвет [#CCOLOR#]" ><i class="glyphicon  glyphicon-user"></i></a> 
+<a href="?view_mode=set_favorit_[#CCOLOR#]&id=[#ID#]&tab=" class="btn btn-default"  title="Установить любимый цвет [#RGBCURRENT#]" ><i class="glyphicon  glyphicon-user"></i></a> 
 </td><td>
 
 <a href="?view_mode=setcolorhex_[#FAVORITCOLOR#]&id=[#ID#]&tab=" class="btn btn-default"  title="Сменить цвет на любимый [#FAVORITCOLOR#]"><i class="glyphicon glyphicon-star"></i></a> 
