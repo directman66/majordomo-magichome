@@ -55,6 +55,23 @@
 			<div class="col-lg-4">[#MAC#]</div>
 		</div>
 		[#endif#]
+		<div class="form-group">
+	<label class="col-lg-3 control-label">
+				Расположение контактов [#RGB#]:
+			</label>
+
+		<div class="col-lg-4">
+  <select class="form-control" name="rgb" >
+   <option  [#if RGB="RGB"#] selected[#endif#]>RGB
+   <option  [#if RGB="RBG"#] selected[#endif#]>RBG
+   <option  [#if RGB="GRB"#] selected[#endif#]>GRB
+   <option  [#if RGB="GBR"#] selected[#endif#]>GBR
+   <option  [#if RGB="BRG"#] selected[#endif#]>BRG
+   <option  [#if RGB="BGR"#] selected[#endif#]>BGR
+  </select>
+
+</div>
+		</div>
 		
 
 		
