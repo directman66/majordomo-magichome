@@ -25,6 +25,15 @@
     $out['ERR_IP']=1;
     $ok=0;
    }
+
+
+
+   global $rgb;
+   $rec['RGB']=$rgb;
+   if ($rec['RGB']=='') {
+    $rec['RGB']=='RGB';
+
+   }
 }
 
     if ($ok=1)
@@ -68,12 +77,12 @@
       SQLUpdate('magichome_commands', $properties[$i]);
       $old_linked_object=$properties[$i]['LINKED_OBJECT'];
       $old_linked_property=$properties[$i]['LINKED_PROPERTY'];
-//РЎС“Р Т‘Р В°Р В»Р ВµР Р…Р С‘Р Вµ linked
+//Р РЋРЎвЂњР В РўвЂР В Р’В°Р В Р’В»Р В Р’ВµР В Р вЂ¦Р В РЎвЂР В Р’Вµ linked
       if ($old_linked_object && $old_linked_object!=$properties[$i]['LINKED_OBJECT'] && $old_linked_property && $old_linked_property!=$properties[$i]['LINKED_PROPERTY']) {
        removeLinkedProperty($old_linked_object, $old_linked_property, $this->name);
       }
      }///update
-//Р Т‘Р С•Р В±Р В°Р Р†Р В»Р ВµР Р…Р С‘Р Вµ linked
+//Р В РўвЂР В РЎвЂўР В Р’В±Р В Р’В°Р В Р вЂ Р В Р’В»Р В Р’ВµР В Р вЂ¦Р В РЎвЂР В Р’Вµ linked
        if ($properties[$i]['LINKED_OBJECT'] && $properties[$i]['LINKED_PROPERTY']) {
            addLinkedProperty($properties[$i]['LINKED_OBJECT'], $properties[$i]['LINKED_PROPERTY'], $this->name);
        }
